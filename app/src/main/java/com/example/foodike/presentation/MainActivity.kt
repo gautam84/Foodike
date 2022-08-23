@@ -12,7 +12,9 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.foodike.presentation.cart.Cart
 import com.example.foodike.presentation.common.SplashViewModel
+import com.example.foodike.presentation.history.History
 import com.example.foodike.presentation.home.HomeScreen
 import com.example.foodike.presentation.login.LoginScreen
 import com.example.foodike.presentation.onboarding.OnBoarding
@@ -32,7 +34,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         installSplashScreen().setKeepOnScreenCondition {
-           splashViewModel.isLoading.value
+            splashViewModel.isLoading.value
         }
 
         setContent {
@@ -73,9 +75,17 @@ fun SetupNavigation(startDestination: String) {
         ) {
             HomeScreen()
         }
+        composable(
+            route = Screen.History.route
+        ) {
+            History()
+        }
+        composable(
+            route = Screen.Cart.route
+        ) {
+            Cart()
+        }
     }
-
-
 }
 
 

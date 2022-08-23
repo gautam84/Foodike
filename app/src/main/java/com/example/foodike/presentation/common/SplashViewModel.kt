@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.foodike.domain.repository.LoginRepository
 import com.example.foodike.presentation.util.Screen
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -32,7 +31,6 @@ class SplashViewModel @Inject constructor(
                 } else {
                     _startDestination.value = Screen.Onboarding.route
                 }
-
             }
         }
         _isLoading.value = false
