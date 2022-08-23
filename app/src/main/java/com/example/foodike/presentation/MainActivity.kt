@@ -23,6 +23,7 @@ import com.example.foodike.presentation.login.LoginScreen
 import com.example.foodike.presentation.onboarding.OnBoarding
 import com.example.foodike.presentation.util.Graph
 import com.example.foodike.presentation.util.Screen
+import com.example.foodike.presentation.util.SetupNavigation
 import com.example.foodike.ui.theme.FoodikeTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -53,51 +54,6 @@ class MainActivity : ComponentActivity() {
                     )
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun SetupNavigation(startDestination: String) {
-    val navController = rememberNavController()
-
-    NavHost(
-        navController = navController,route=Graph.Root.route, startDestination = startDestination
-    ) {
-        composable(
-            route = Screen.Onboarding.route,
-        ) {
-            OnBoarding(navController = navController)
-        }
-        composable(
-            route = Screen.LoginScreen.route,
-        ) {
-            LoginScreen(navController = navController)
-        }
-        homeNavGraph(navController = navController)
-
-    }
-}
-
-fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
-    navigation(
-        route = Graph.Home.route,
-        startDestination = Screen.HomeScreen.route
-    ) {
-        composable(
-            route = Screen.HomeScreen.route
-        ) {
-            HomeScreen()
-        }
-        composable(
-            route = Screen.History.route
-        ) {
-            History()
-        }
-        composable(
-            route = Screen.Cart.route
-        ) {
-            Cart()
         }
     }
 }
