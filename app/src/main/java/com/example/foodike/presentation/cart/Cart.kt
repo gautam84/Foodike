@@ -18,6 +18,6 @@ fun Cart(){
     context.window.navigationBarColor = Color.White.toArgb()
 
     Column {
-        Text(text = "home")
+        Text(text = "cart")
     }
 }

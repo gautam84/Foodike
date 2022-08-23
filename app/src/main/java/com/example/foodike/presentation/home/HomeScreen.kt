@@ -2,6 +2,7 @@ package com.example.foodike.presentation.home
 
 import android.app.Activity
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material.BottomNavigation
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -20,4 +21,6 @@ fun HomeScreen(){
     Column {
         Text(text = "home")
     }
+
+
 }

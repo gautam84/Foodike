@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.foodike.R
+import com.example.foodike.presentation.util.Graph
 import com.example.foodike.presentation.util.Screen
 
 @Composable
@@ -129,7 +130,7 @@ fun LoginScreen(
         Button(
             modifier = Modifier.width(200.dp),
             onClick = {
-                navController.navigate(Screen.HomeScreen.route)
+                navController.navigate(Graph.Home.route)
                 navController.popBackStack()
                 viewModel.saveOnBoardingState(completed = true)
 
