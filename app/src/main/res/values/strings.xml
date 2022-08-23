@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Foodike</string>
+
+    <string name="onboardingHeading1">Choose your favourite food</string>
+    <string name="onboardingHeading2">Vaccinated delivery partners</string>
+    <string name="onboardingHeading3">Expect Delivery in 20 minutes</string>
+
+    <string name="onboardingText1">Choose from a range of restaurants and hotels near you</string>
+    <string name="onboardingText2">Vaccinated delivery partners ensure the health and security of the customer</string>
+    <string name="onboardingText3">Fast and easy to track delivery to ease the experience of the customer</string>
+
+
+
+
+</resources>
