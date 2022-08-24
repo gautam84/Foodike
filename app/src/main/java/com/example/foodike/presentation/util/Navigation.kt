@@ -34,6 +34,7 @@ fun SetupNavigation(startDestination: String) {
         homeNavGraph(navController = navController)
 
     }
+
 }
 
 fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
