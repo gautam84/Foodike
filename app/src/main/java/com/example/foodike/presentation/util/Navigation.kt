@@ -1,14 +1,13 @@
 package com.example.foodike.presentation.util
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navigation
 import com.example.foodike.presentation.cart.Cart
 import com.example.foodike.presentation.history.History
+import com.example.foodike.presentation.home.Home
 import com.example.foodike.presentation.home.HomeScreen
 import com.example.foodike.presentation.login.LoginScreen
 import com.example.foodike.presentation.onboarding.OnBoarding
@@ -31,21 +30,25 @@ fun SetupNavigation(startDestination: String) {
         ) {
             LoginScreen(navController = navController)
         }
-        homeNavGraph(navController = navController)
 
+        composable(route = Graph.Home.route) {
+            HomeScreen()
+        }
     }
 
 }
 
-fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
-    navigation(
+@Composable
+fun HomeScreenNav(navController: NavHostController){
+    NavHost(
+        navController = navController,
         route = Graph.Home.route,
-        startDestination = Screen.HomeScreen.route
+        startDestination = Screen.Home.route
     ) {
         composable(
-            route = Screen.HomeScreen.route
+            route = Screen.Home.route
         ) {
-            HomeScreen()
+            Home()
         }
         composable(
             route = Screen.History.route
@@ -59,3 +62,4 @@ fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
         }
     }
 }
+
