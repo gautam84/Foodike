@@ -1,25 +1,40 @@
 package com.example.foodike.presentation.home
 
 import android.app.Activity
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.outlined.Menu
+import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.foodike.R
+import com.example.foodike.presentation.home.components.FoodikeBottomNavigation
 import com.example.foodike.presentation.util.HomeScreenNav
-
+import com.example.foodike.presentation.util.Screen
 
 
 @Composable
 fun HomeScreen(navController: NavHostController = rememberNavController()) {
 
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
     val context = LocalContext.current as Activity
 
@@ -27,14 +42,40 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
     context.window.navigationBarColor = Color.White.toArgb()
 
     Scaffold(
-        bottomBar = { BottomBar(navController = navController) }
+        bottomBar = {
+            if (currentRoute != Screen.Cart.route) {
+                Column(
+                    modifier = Modifier.padding(115.dp, 25.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+
+                    Box(
+                        contentAlignment = Alignment.Center
+                    ) {
+                        BottomBar(navController = navController)
+                        Column {
+                            FloatingActionButton(
+                                onClick = {
+                                    navController.navigate(Screen.Cart.route)
+
+                                },
+                                backgroundColor = MaterialTheme.colors.primary
+                            ) {
+                                Icon(Icons.Outlined.ShoppingCart, "Cart")
+                            }
+                            Spacer(modifier = Modifier.height(32.dp))
+                        }
+                    }
+                }
+            }
+        }
     ) {
         HomeScreenNav(navController = navController)
     }
 }
 
 @Composable
-fun Home(){
+fun Home() {
     Column {
         Text(text = "home")
     }
@@ -45,7 +86,79 @@ fun BottomBar(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-    BottomNavigation() {
+    FoodikeBottomNavigation(
+        backgroundColor = Color(0xFFE1E1E1)
+
+    ) {
+        BottomNavigationItem(
+            icon =
+            {
+                Icon(
+                    imageVector = Icons.Filled.Home,
+                    contentDescription = "Home",
+                )
+            },
+
+            selectedContentColor = Color.Black,
+            unselectedContentColor = Color.White,
+            alwaysShowLabel = false,
+            selected = currentRoute == Screen.Home.route,
+
+            onClick = {
+                navController.navigate(Screen.Home.route) {
+                    // Pop up to the start destination of the graph to
+                    // avoid building up a large stack of destinations
+                    // on the back stack as users select items
+                    navController.graph.startDestinationRoute?.let { route ->
+                        popUpTo(route) {
+                            saveState = true
+                        }
+                    }
+                    // Avoid multiple copies of the same destination when
+                    // re-selecting the same item
+                    launchSingleTop = true
+                    // Restore state when reselecting a previously selected item
+                    restoreState = true
+                }
+            }
+        )
+
+        Row() {
+            Spacer(modifier = Modifier.width(56.dp))
+        }
+
+
+        BottomNavigationItem(
+            icon =
+            {
+                Icon(
+                    painter = painterResource(R.drawable.ic_baseline_assignment_24),
+                    contentDescription = "History",
+                )
+            },
+
+            selectedContentColor = Color.Black,
+            unselectedContentColor = Color.White,
+            alwaysShowLabel = false,
+            selected = currentRoute == Screen.History.route,
+            onClick = {
+                navController.navigate(Screen.History.route) {
+                    // Pop up to the start destination of the graph to
+                    // avoid building up a large stack of destinations
+                    // on the back stack as users select items
+                    navController.graph.startDestinationRoute?.let { route ->
+                        popUpTo(route) {
+                            saveState = true
+                        }
+                    }
+                    // Avoid multiple copies of the same destination when
+                    // re-selecting the same item
+                    launchSingleTop = true
+                    // Restore state when reselecting a previously selected item
+                    restoreState = true
+                }
+            }
+        )
 
     }
 
