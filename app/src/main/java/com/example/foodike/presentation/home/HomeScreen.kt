@@ -1,19 +1,22 @@
 package com.example.foodike.presentation.home
 
 import android.app.Activity
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -71,13 +74,6 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
         }
     ) {
         HomeScreenNav(navController = navController)
-    }
-}
-
-@Composable
-fun Home() {
-    Column {
-        Text(text = "home")
     }
 }
 
@@ -163,3 +159,43 @@ fun BottomBar(navController: NavHostController) {
     }
 
 }
+
+@Composable
+fun Home() {
+    Column(
+        modifier =
+        Modifier.padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = { /*TODO*/ }) {
+                Image(
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clip(CircleShape),
+                    painter = painterResource(id = R.drawable.ic_profile),
+                    contentDescription = "Display picture")
+            }
+
+            Row(modifier = Modifier.clickable { }) {
+                Row {
+                    Icon(
+                        imageVector = Icons.Outlined.LocationOn,
+                        contentDescription = "Location",
+
+                        )
+                    Text(text = "Guwahati")
+                }
+            }
+
+        }
+
+
+    }
+}
+
