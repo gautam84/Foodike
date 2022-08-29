@@ -2,28 +2,30 @@ package com.example.foodike.presentation.home
 
 import android.app.Activity
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.LocationOn
-import androidx.compose.material.icons.outlined.Menu
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.ShoppingCart
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -31,6 +33,7 @@ import com.example.foodike.R
 import com.example.foodike.presentation.home.components.FoodikeBottomNavigation
 import com.example.foodike.presentation.util.HomeScreenNav
 import com.example.foodike.presentation.util.Screen
+import java.util.*
 
 
 @Composable
@@ -166,21 +169,22 @@ fun Home() {
         modifier =
         Modifier.padding(16.dp),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.Start
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = { /*TODO*/ }) {
-                Image(
-                    modifier = Modifier
-                        .size(24.dp)
-                        .clip(CircleShape),
-                    painter = painterResource(id = R.drawable.ic_profile),
-                    contentDescription = "Display picture")
-            }
+            Image(
+                modifier = Modifier
+                    .size(32.dp)
+                    .clip(CircleShape)
+                    .clickable { },
+                painter = painterResource(id = R.drawable.ic_profile),
+                contentDescription = "Display picture"
+            )
+
 
             Row(modifier = Modifier.clickable { }) {
                 Row {
@@ -194,8 +198,77 @@ fun Home() {
             }
 
         }
+        Spacer(modifier = Modifier.height(16.dp))
+        val c: Calendar = Calendar.getInstance()
+        val timeOfDay: Int = c.get(Calendar.HOUR_OF_DAY)
+        Text(
+            text = when (timeOfDay) {
+                in 0..11 -> {
+                    "Good Morning!"
+                }
+                in 12..15 -> {
+                    "Good Afternoon!"
+                }
+                else -> {
+                    "Good Evening!"
+                }
+            },
+            fontSize = 32.sp,
+            fontWeight = FontWeight.Light
+        )
+        Text(
+            text = "Andrew",
+            fontSize = 32.sp,
+            fontWeight = FontWeight.Light
+        )
+        Spacer(modifier = Modifier.height(24.dp))
+
+        SearchBar()
+        Spacer(modifier = Modifier.height(24.dp))
+        AdSection()
 
 
     }
+}
+
+@Composable
+fun AdSection() {
+    Text(
+        text = "Recommended for you...",
+        fontSize = 24.sp,
+
+        fontWeight = FontWeight.Light
+    )
+}
+
+@Composable
+fun SearchBar() {
+    var text by remember { mutableStateOf("") }
+
+    TextField(
+        value = text,
+        onValueChange = { text = it },
+        modifier = Modifier.fillMaxWidth(),
+        placeholder = {
+            Text(
+                text = "Search",
+                modifier = Modifier.alpha(0.5f)
+            )
+        },
+        leadingIcon = { Icon(imageVector = Icons.Outlined.Search, contentDescription = "Search") },
+
+        shape = CircleShape,
+        colors = TextFieldDefaults.textFieldColors(
+            backgroundColor = Color(0xFFE1E1E1),
+            cursorColor = Color.White,
+
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+        ),
+        keyboardOptions = KeyboardOptions.Default.copy(
+            imeAction = ImeAction.Next
+        ),
+        singleLine = true
+    )
 }
 
