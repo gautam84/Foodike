@@ -171,36 +171,75 @@ fun Home() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.Start
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                modifier = Modifier
-                    .size(32.dp)
-                    .clip(CircleShape)
-                    .clickable { },
-                painter = painterResource(id = R.drawable.ic_profile),
-                contentDescription = "Display picture"
-            )
-
-
-            Row(modifier = Modifier.clickable { }) {
-                Row {
-                    Icon(
-                        imageVector = Icons.Outlined.LocationOn,
-                        contentDescription = "Location",
-
-                        )
-                    Text(text = "Guwahati")
-                }
-            }
-
-        }
+        TopSection()
+        Spacer(modifier = Modifier.height(8.dp))
+        GreetingSection()
+        Spacer(modifier = Modifier.height(24.dp))
+        SearchBar()
         Spacer(modifier = Modifier.height(16.dp))
-        val c: Calendar = Calendar.getInstance()
-        val timeOfDay: Int = c.get(Calendar.HOUR_OF_DAY)
+        AdSection()
+        Spacer(modifier = Modifier.height(16.dp))
+        RecommendedSection()
+        Spacer(modifier = Modifier.height(16.dp))
+        FavouriteSection()
+        MainSection()
+    }
+}
+
+@Composable
+fun MainSection() {
+    Text(text = "hjkm")
+}
+
+@Composable
+fun FavouriteSection() {
+    Text(text = "jn")
+}
+
+@Composable
+fun RecommendedSection() {
+    Text(text = "vdv")
+}
+
+@Composable
+fun TopSection() {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            modifier = Modifier
+                .size(32.dp)
+                .clip(CircleShape)
+                .clickable { },
+            painter = painterResource(id = R.drawable.ic_profile),
+            contentDescription = "Display picture"
+        )
+
+
+        Row(modifier = Modifier.clickable { }) {
+            Row {
+                Icon(
+                    imageVector = Icons.Outlined.LocationOn,
+                    contentDescription = "Location",
+
+                    )
+                Text(text = "Guwahati")
+            }
+        }
+
+    }
+
+}
+
+@Composable
+fun GreetingSection(
+    userName: String = "Andrew"
+) {
+    val c: Calendar = Calendar.getInstance()
+    val timeOfDay: Int = c.get(Calendar.HOUR_OF_DAY)
+    Column(modifier = Modifier.padding(8.dp, 0.dp)) {
         Text(
             text = when (timeOfDay) {
                 in 0..11 -> {
@@ -213,32 +252,50 @@ fun Home() {
                     "Good Evening!"
                 }
             },
-            fontSize = 32.sp,
+            fontSize = 28.sp,
             fontWeight = FontWeight.Light
         )
         Text(
-            text = "Andrew",
-            fontSize = 32.sp,
+            text = userName,
+            fontSize = 28.sp,
             fontWeight = FontWeight.Light
         )
-        Spacer(modifier = Modifier.height(24.dp))
-
-        SearchBar()
-        Spacer(modifier = Modifier.height(24.dp))
-        AdSection()
-
-
     }
 }
 
+
 @Composable
 fun AdSection() {
-    Text(
-        text = "Recommended for you...",
-        fontSize = 24.sp,
+    Column(modifier = Modifier.padding(8.dp, 0.dp))
+    {
+        Text(
+            text = "Recommended for you...",
+            fontSize = 20.sp,
 
-        fontWeight = FontWeight.Light
-    )
+            fontWeight = FontWeight.Light
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Row() {
+            Card(
+                shape = RoundedCornerShape(24.dp),
+                backgroundColor = Color(0xFFE89191)
+            ) {
+                Row(Modifier.padding(16.dp)) {
+                    Column {
+                        Text(text = "Offers for you")
+                        Text(text = "Upto 20% discount for you")
+                    }
+                    Image(
+                        painter = painterResource(id = R.drawable.goog_icon),
+                        contentDescription = "Ad"
+                    )
+                }
+
+            }
+
+        }
+    }
 }
 
 @Composable
