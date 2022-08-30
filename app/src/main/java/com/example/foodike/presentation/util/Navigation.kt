@@ -1,5 +1,6 @@
 package com.example.foodike.presentation.util
 
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -18,7 +19,7 @@ fun SetupNavigation(startDestination: String) {
     val navController = rememberNavController()
 
     NavHost(
-        navController = navController,route=Graph.Root.route, startDestination = startDestination
+        navController = navController, route = Graph.Root.route, startDestination = startDestination
     ) {
         composable(
             route = Screen.Onboarding.route,
@@ -39,7 +40,7 @@ fun SetupNavigation(startDestination: String) {
 }
 
 @Composable
-fun HomeScreenNav(navController: NavHostController){
+fun HomeScreenNav(navController: NavHostController, scrollState: LazyListState) {
     NavHost(
         navController = navController,
         route = Graph.Home.route,
@@ -48,7 +49,7 @@ fun HomeScreenNav(navController: NavHostController){
         composable(
             route = Screen.Home.route
         ) {
-            Home()
+            Home(scrollState = scrollState)
         }
         composable(
             route = Screen.History.route

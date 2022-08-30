@@ -6,7 +6,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -35,6 +38,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.foodike.R
+import com.example.foodike.presentation.components.RestaurantCard
 import com.example.foodike.presentation.home.components.FoodikeBottomNavigation
 import com.example.foodike.presentation.util.HomeScreenNav
 import com.example.foodike.presentation.util.Screen
@@ -52,9 +56,12 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
     context.window.statusBarColor = Color.Gray.toArgb()
     context.window.navigationBarColor = Color.White.toArgb()
 
+    val scrollState = rememberLazyListState()
+
+
     Scaffold(
         bottomBar = {
-            if (currentRoute != Screen.Cart.route) {
+            if (currentRoute != Screen.Cart.route && scrollState.firstVisibleItemIndex == 0) {
                 Column(
                     modifier = Modifier.padding(115.dp, 25.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -81,7 +88,7 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
             }
         }
     ) {
-        HomeScreenNav(navController = navController)
+        HomeScreenNav(navController = navController, scrollState = scrollState)
     }
 }
 
@@ -169,10 +176,12 @@ fun BottomBar(navController: NavHostController) {
 }
 
 @Composable
-fun Home() {
+fun Home(scrollState: LazyListState) {
+
     LazyColumn(
         modifier =
-        Modifier.padding(8.dp,0.dp),
+        Modifier.padding(8.dp, 0.dp),
+        state = scrollState,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.Start
     ) {
@@ -204,6 +213,25 @@ fun Home() {
         item {
             MainSection()
         }
+        item {
+            RestaurantCard(
+                name = "Saffron Express",
+                rating = "4.6",
+                customers = "100+",
+                time = "59 mins",
+                variety = "North Indian, Chinese, Tandoori",
+                place = "Mahabhairab"
+            )
+            RestaurantCard(
+                name = "KF",
+                rating = "4.2",
+                customers = "50+",
+                time = "28 mins",
+                variety = "Biryani, Chinese, Tandoori",
+                place = "Ketekibari"
+            )
+
+        }
 
     }
 
@@ -218,6 +246,8 @@ fun MainSection() {
             fontSize = 20.sp,
             fontWeight = FontWeight.Light
         )
+        Spacer(modifier = Modifier.height(8.dp))
+
     }
 }
 
@@ -234,9 +264,9 @@ fun FavouriteSection() {
 
         Row {
             FavouriteCard()
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(12.dp))
             FavouriteCard()
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(12.dp))
             FavouriteCard()
 
 
@@ -253,7 +283,7 @@ fun FavouriteCard() {
         Image(
             painter = painterResource(id = R.drawable.chinese), contentDescription = "Restaurant",
             modifier = Modifier
-                .size(110.dp, 150.dp)
+                .size(100.dp, 130.dp)
                 .shadow(elevation = 0.dp, shape = RoundedCornerShape(8.dp), clip = true),
             contentScale = ContentScale.Crop
         )
@@ -279,8 +309,6 @@ fun RecommendedSection() {
             RecommendedCard()
             Spacer(modifier = Modifier.width(8.dp))
             RecommendedCard()
-
-
         }
     }
 }
@@ -294,7 +322,7 @@ fun RecommendedCard() {
         Image(
             painter = painterResource(id = R.drawable.burger), contentDescription = "Restaurant",
             modifier = Modifier
-                .size(90.dp)
+                .size(80.dp)
                 .shadow(elevation = 0.dp, shape = CircleShape, clip = true),
             contentScale = ContentScale.Crop
         )
