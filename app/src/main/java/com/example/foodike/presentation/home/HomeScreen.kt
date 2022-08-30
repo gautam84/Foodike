@@ -3,7 +3,10 @@ package com.example.foodike.presentation.home
 import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -18,8 +21,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -69,7 +74,7 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
                             ) {
                                 Icon(Icons.Outlined.ShoppingCart, "Cart")
                             }
-                            Spacer(modifier = Modifier.height(32.dp))
+                            Spacer(modifier = Modifier.height(26.dp))
                         }
                     }
                 }
@@ -165,41 +170,138 @@ fun BottomBar(navController: NavHostController) {
 
 @Composable
 fun Home() {
-    Column(
+    LazyColumn(
         modifier =
-        Modifier.padding(16.dp),
+        Modifier.padding(8.dp,0.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.Start
     ) {
-        TopSection()
-        Spacer(modifier = Modifier.height(8.dp))
-        GreetingSection()
-        Spacer(modifier = Modifier.height(24.dp))
-        SearchBar()
-        Spacer(modifier = Modifier.height(16.dp))
-        AdSection()
-        Spacer(modifier = Modifier.height(16.dp))
-        RecommendedSection()
-        Spacer(modifier = Modifier.height(16.dp))
-        FavouriteSection()
-        MainSection()
+        item {
+            Spacer(modifier = Modifier.height(8.dp))
+            TopSection()
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+        item {
+            GreetingSection()
+            Spacer(modifier = Modifier.height(24.dp))
+        }
+        item {
+            SearchBar()
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+        item {
+            AdSection()
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+        item {
+            RecommendedSection()
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+        item {
+            FavouriteSection()
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+        item {
+            MainSection()
+        }
+
     }
+
 }
 
 @Composable
 fun MainSection() {
-    Text(text = "hjkm")
+    Column(modifier = Modifier.padding(8.dp, 0.dp))
+    {
+        Text(
+            text = "All around you..",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Light
+        )
+    }
 }
 
 @Composable
 fun FavouriteSection() {
-    Text(text = "jn")
+    Column(modifier = Modifier.padding(8.dp, 0.dp))
+    {
+        Text(
+            text = "Order from favourites..",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Light
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Row {
+            FavouriteCard()
+            Spacer(modifier = Modifier.width(8.dp))
+            FavouriteCard()
+            Spacer(modifier = Modifier.width(8.dp))
+            FavouriteCard()
+
+
+        }
+    }
+}
+
+@Composable
+fun FavouriteCard() {
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.chinese), contentDescription = "Restaurant",
+            modifier = Modifier
+                .size(110.dp, 150.dp)
+                .shadow(elevation = 0.dp, shape = RoundedCornerShape(8.dp), clip = true),
+            contentScale = ContentScale.Crop
+        )
+        Text(text = "Burger")
+
+    }
 }
 
 @Composable
 fun RecommendedSection() {
-    Text(text = "vdv")
+    Column(modifier = Modifier.padding(8.dp, 0.dp))
+    {
+        Text(
+            text = "Recommended for you...",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Light
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Row {
+            RecommendedCard()
+            Spacer(modifier = Modifier.width(8.dp))
+            RecommendedCard()
+            Spacer(modifier = Modifier.width(8.dp))
+            RecommendedCard()
+
+
+        }
+    }
 }
+
+@Composable
+fun RecommendedCard() {
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.burger), contentDescription = "Restaurant",
+            modifier = Modifier
+                .size(90.dp)
+                .shadow(elevation = 0.dp, shape = CircleShape, clip = true),
+            contentScale = ContentScale.Crop
+        )
+        Text(text = "Burger")
+    }
+}
+
 
 @Composable
 fun TopSection() {
@@ -268,31 +370,27 @@ fun GreetingSection(
 fun AdSection() {
     Column(modifier = Modifier.padding(8.dp, 0.dp))
     {
-        Text(
-            text = "Recommended for you...",
-            fontSize = 20.sp,
 
-            fontWeight = FontWeight.Light
-        )
         Spacer(modifier = Modifier.height(8.dp))
 
-        Row() {
-            Card(
-                shape = RoundedCornerShape(24.dp),
-                backgroundColor = Color(0xFFE89191)
-            ) {
-                Row(Modifier.padding(16.dp)) {
-                    Column {
-                        Text(text = "Offers for you")
-                        Text(text = "Upto 20% discount for you")
-                    }
-                    Image(
-                        painter = painterResource(id = R.drawable.goog_icon),
-                        contentDescription = "Ad"
-                    )
-                }
+        LazyRow(
+        ) {
+            item {
+                AdCard(
+                    titleText = "Offers for you",
+                    contentText = "Upto 20% discount for you",
+                    color = Color(0xFFE89191)
 
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                AdCard(
+                    titleText = "Free delivery",
+                    contentText = "Free delivery for selected restaurants...",
+                    color = Color(0xFFDBE891)
+
+                )
             }
+
 
         }
     }
@@ -327,5 +425,47 @@ fun SearchBar() {
         ),
         singleLine = true
     )
+}
+
+@Composable
+fun AdCard(
+    titleText: String,
+    contentText: String,
+    color: Color
+) {
+    Card(
+        shape = RoundedCornerShape(24.dp),
+        backgroundColor = color
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(16.dp)
+                .size(210.dp, 140.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(modifier = Modifier.weight(0.5f)) {
+                Text(
+                    text = titleText,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = contentText,
+                    fontWeight = FontWeight.Light
+                )
+            }
+            Image(
+                painter = painterResource(id = R.drawable.chinese_bowl),
+                contentDescription = "Ad",
+                modifier = Modifier
+                    .size(150.dp)
+                    .weight(0.5f)
+            )
+        }
+
+    }
 }
 
