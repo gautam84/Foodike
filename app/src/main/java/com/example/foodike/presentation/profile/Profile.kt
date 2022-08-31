@@ -1,16 +1,24 @@
 package com.example.foodike.presentation.profile
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.foodike.R
 
 @Composable
 fun Profile(navController: NavHostController) {
@@ -18,13 +26,152 @@ fun Profile(navController: NavHostController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Row(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+        ) {
             IconButton(onClick = { navController.navigateUp() }) {
                 Icon(imageVector = Icons.Outlined.ArrowBack, contentDescription = "Back")
             }
         }
-        Row(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier
+                .padding(16.dp, 0.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.7f)
+            ) {
+                Text(
+                    text = "Andrew Howard",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+                Text(
+                    text = "andrewhoward@gmail.com ",
+                    modifier = Modifier.alpha(0.5f),
+                )
+
+            }
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.End,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.3f)
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+
+                    ) {
+                    Image(
+                        modifier = Modifier
+                            .size(90.dp)
+                            .clip(CircleShape),
+                        painter = painterResource(id = R.drawable.ic_profile),
+                        contentDescription = "Display picture"
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = "Edit",
+                        color = MaterialTheme.colors.primary,
+                        modifier = Modifier.clickable {
+
+                        },
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+
+            }
+
 
         }
+        Divider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            color = Color.Black
+        )
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Spacer(modifier = Modifier.height(24.dp))
+
+            ProfileCard(
+                title = "Saved Addresses",
+                subtext = "Add, edit and delete saved addresses",
+                onClick = {
+
+                }
+            )
+            ProfileCard(
+                title = "Payments & Refunds",
+                subtext = "Information about refunds and payments",
+                onClick = {
+
+                }
+            )
+            ProfileCard(
+                title = "Online Ordering Help",
+                subtext = "Information about ordering food",
+                onClick = {
+
+                }
+            )
+            ProfileCard(
+                title = "About",
+                subtext = "About the app",
+                onClick = {
+
+                },
+                dividerVisibility = false
+            )
+
+
+        }
+        Column(
+            modifier = Modifier
+                .padding(32.dp, 0.dp)
+        ) {
+
+        }
+    }
+}
+
+@Composable
+fun ProfileCard(
+    title: String,
+    subtext: String,
+    onClick: () -> Unit,
+    dividerVisibility: Boolean = true
+) {
+    Column(
+        modifier = Modifier
+            .padding(32.dp, 0.dp)
+            .clickable {
+                onClick
+            }
+    ) {
+        Text(
+            text = title,
+            fontSize = 20.sp
+        )
+        Text(
+            text = subtext,
+            modifier = Modifier.alpha(0.5f)
+        )
+        if (dividerVisibility) {
+            Divider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(0.dp, 8.dp)
+            )
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+
     }
 }
