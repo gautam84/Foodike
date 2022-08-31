@@ -39,6 +39,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.foodike.R
 import com.example.foodike.presentation.components.RestaurantCard
+import com.example.foodike.presentation.home.components.ChipBar
 import com.example.foodike.presentation.home.components.FoodikeBottomNavigation
 import com.example.foodike.presentation.util.HomeScreenNav
 import com.example.foodike.presentation.util.Screen
@@ -61,7 +62,8 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
 
     Scaffold(
         bottomBar = {
-            if (currentRoute != Screen.Cart.route && scrollState.firstVisibleItemIndex == 0) {
+            if (currentRoute != Screen.Cart.route && scrollState.firstVisibleItemIndex == 0 && currentRoute != Screen.Profile.route) {
+
                 Column(
                     modifier = Modifier.padding(115.dp, 25.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -176,7 +178,7 @@ fun BottomBar(navController: NavHostController) {
 }
 
 @Composable
-fun Home(scrollState: LazyListState) {
+fun Home(navController: NavHostController,scrollState: LazyListState) {
 
     LazyColumn(
         modifier =
@@ -187,7 +189,7 @@ fun Home(scrollState: LazyListState) {
     ) {
         item {
             Spacer(modifier = Modifier.height(8.dp))
-            TopSection()
+            TopSection(navController = navController)
             Spacer(modifier = Modifier.height(8.dp))
         }
         item {
@@ -241,6 +243,7 @@ fun Home(scrollState: LazyListState) {
 fun MainSection() {
     Column(modifier = Modifier.padding(8.dp, 0.dp))
     {
+//        ChipBar()
         Text(
             text = "All around you..",
             fontSize = 20.sp,
@@ -250,6 +253,8 @@ fun MainSection() {
 
     }
 }
+
+
 
 @Composable
 fun FavouriteSection() {
@@ -332,7 +337,7 @@ fun RecommendedCard() {
 
 
 @Composable
-fun TopSection() {
+fun TopSection(navController: NavHostController) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -342,7 +347,9 @@ fun TopSection() {
             modifier = Modifier
                 .size(32.dp)
                 .clip(CircleShape)
-                .clickable { },
+                .clickable {
+                    navController.navigate(Screen.Profile.route)
+                },
             painter = painterResource(id = R.drawable.ic_profile),
             contentDescription = "Display picture"
         )

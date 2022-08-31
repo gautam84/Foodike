@@ -12,6 +12,7 @@ import com.example.foodike.presentation.home.Home
 import com.example.foodike.presentation.home.HomeScreen
 import com.example.foodike.presentation.login.LoginScreen
 import com.example.foodike.presentation.onboarding.OnBoarding
+import com.example.foodike.presentation.profile.Profile
 
 
 @Composable
@@ -49,7 +50,7 @@ fun HomeScreenNav(navController: NavHostController, scrollState: LazyListState) 
         composable(
             route = Screen.Home.route
         ) {
-            Home(scrollState = scrollState)
+            Home(navController = navController, scrollState = scrollState)
         }
         composable(
             route = Screen.History.route
@@ -60,6 +61,11 @@ fun HomeScreenNav(navController: NavHostController, scrollState: LazyListState) 
             route = Screen.Cart.route
         ) {
             Cart()
+        }
+        composable(
+            route = Screen.Profile.route
+        ) {
+            Profile(navController = navController)
         }
     }
 }
