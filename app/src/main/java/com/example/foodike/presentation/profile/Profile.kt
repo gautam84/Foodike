@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.foodike.R
+import com.example.foodike.presentation.util.Graph
 
 @Composable
 fun Profile(navController: NavHostController) {
@@ -97,7 +98,7 @@ fun Profile(navController: NavHostController) {
             color = Color.Black
         )
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxWidth()
         ) {
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -133,11 +134,24 @@ fun Profile(navController: NavHostController) {
 
 
         }
+
         Column(
-            modifier = Modifier
-                .padding(32.dp, 0.dp)
+            modifier = Modifier.fillMaxSize().padding(32.dp),
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
+            Button(
+                modifier = Modifier.width(200.dp),
+                onClick = {
+
+                }
+            ) {
+                Text(
+                    text = "Log Out",
+                    fontSize = 16.sp,
+                )
+            }
         }
     }
 }
