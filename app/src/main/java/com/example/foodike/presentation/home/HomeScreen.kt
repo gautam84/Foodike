@@ -39,6 +39,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.foodike.R
 import com.example.foodike.presentation.components.RestaurantCard
+import com.example.foodike.presentation.components.SearchBar
 import com.example.foodike.presentation.home.components.ChipBar
 import com.example.foodike.presentation.home.components.FoodikeBottomNavigation
 import com.example.foodike.presentation.util.HomeScreenNav
@@ -58,6 +59,7 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
     context.window.navigationBarColor = Color.White.toArgb()
 
     val scrollState = rememberLazyListState()
+    //    val state = remember { derivedStateOf { scrollState.firstVisibleItemIndex == 0 }}
 
 
     Scaffold(
@@ -431,36 +433,7 @@ fun AdSection() {
     }
 }
 
-@Composable
-fun SearchBar() {
-    var text by remember { mutableStateOf("") }
 
-    TextField(
-        value = text,
-        onValueChange = { text = it },
-        modifier = Modifier.fillMaxWidth(),
-        placeholder = {
-            Text(
-                text = "Search",
-                modifier = Modifier.alpha(0.5f)
-            )
-        },
-        leadingIcon = { Icon(imageVector = Icons.Outlined.Search, contentDescription = "Search") },
-
-        shape = CircleShape,
-        colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = Color(0xFFE1E1E1),
-            cursorColor = Color.White,
-
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-        ),
-        keyboardOptions = KeyboardOptions.Default.copy(
-            imeAction = ImeAction.Next
-        ),
-        singleLine = true
-    )
-}
 
 @Composable
 fun AdCard(
