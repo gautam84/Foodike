@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SplashViewModel @Inject constructor(
-    private val repository: LoginRepository
+    repository: LoginRepository
 ) : ViewModel() {
 
     private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(true)
@@ -24,18 +24,14 @@ class SplashViewModel @Inject constructor(
     val startDestination: State<String> = _startDestination
 
     init {
-        viewModelScope.launch {
+        if (repository.readLoginState()) {
+            _startDestination.value = Graph.Home.route
 
-            repository.readLoginState().collect { completed ->
-                if (completed) {
-                    _startDestination.value = Graph.Home.route
-                } else {
-                    _startDestination.value = Screen.Onboarding.route
-                }
-            }
+        } else {
+            _startDestination.value = Screen.Onboarding.route
+
         }
         _isLoading.value = false
-
 
 
     }

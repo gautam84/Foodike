@@ -1,21 +1,22 @@
 package com.example.foodike.presentation.home.util
 
-import androidx.compose.runtime.Stable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.graphics.vector.ImageVector
+enum class Filter(val value: String) {
+    FASTDELIVERY("Fast Delivery"),
+    DISCOUNT("50% Discount"),
+    GREATDEALS("Great deals"),
+    NONVEG("Non-Veg")
 
-
-@Stable
-class Filter(
-    val name: String,
-    enabled: Boolean = false,
-    val icon: ImageVector? = null
-) {
-    val enabled = mutableStateOf(enabled)
 }
-val filters = listOf(
-    Filter(name = "Fast Delivery"),
-    Filter(name = "Great deals"),
-    Filter(name = "Non-Veg"),
-    Filter(name = "50% Discount"),
-)
+
+fun getAllCars(): List<Filter> {
+    return listOf(
+        Filter.FASTDELIVERY, Filter.DISCOUNT, Filter.GREATDEALS,
+        Filter.NONVEG
+    )
+}
+
+fun getCar(value: String): Filter? {
+    val map = Filter.values().associateBy(Filter::value)
+    return map[value]
+}
+

@@ -31,10 +31,8 @@ class LoginViewModel @Inject constructor(
         _password.value = password.value.replace(password.value, pass)
     }
 
-    fun saveOnBoardingState(completed: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.saveLoginState(completed = completed)
-        }
+    fun saveOnBoardingState() {
+        repository.toggleLoginState()
     }
 
 

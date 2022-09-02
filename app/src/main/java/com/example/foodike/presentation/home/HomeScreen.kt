@@ -245,7 +245,9 @@ fun Home(navController: NavHostController,scrollState: LazyListState) {
 fun MainSection() {
     Column(modifier = Modifier.padding(8.dp, 0.dp))
     {
+        Spacer(modifier = Modifier.height(8.dp))
         ChipBar()
+        Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = "All around you..",
             fontSize = 20.sp,

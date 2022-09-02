@@ -1,7 +1,6 @@
 package com.example.foodike.presentation.login
 
 import android.app.Activity
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -18,15 +17,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.example.foodike.R
 import com.example.foodike.presentation.util.Graph
@@ -130,9 +126,13 @@ fun LoginScreen(
         Button(
             modifier = Modifier.width(200.dp),
             onClick = {
-                navController.navigate(Graph.Home.route)
-                navController.popBackStack()
-                viewModel.saveOnBoardingState(completed = true)
+                navController.navigate(Graph.Home.route){
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        inclusive = true
+                    }
+                }
+                viewModel.saveOnBoardingState()
+
 
             }
         ) {

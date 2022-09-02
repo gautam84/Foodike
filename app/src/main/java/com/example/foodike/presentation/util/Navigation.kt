@@ -13,6 +13,7 @@ import com.example.foodike.presentation.home.HomeScreen
 import com.example.foodike.presentation.login.LoginScreen
 import com.example.foodike.presentation.onboarding.OnBoarding
 import com.example.foodike.presentation.profile.Profile
+import com.google.accompanist.pager.ExperimentalPagerApi
 
 
 @Composable
@@ -40,6 +41,7 @@ fun SetupNavigation(startDestination: String) {
 
 }
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun HomeScreenNav(navController: NavHostController, scrollState: LazyListState) {
     NavHost(
