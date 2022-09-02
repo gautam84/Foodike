@@ -10,6 +10,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -26,6 +27,8 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.example.foodike.R
 import com.example.foodike.presentation.util.Screen
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
@@ -33,84 +36,198 @@ fun LoginScreen(
     navController: NavHostController,
 
     ) {
+
+    val scaffoldState: ScaffoldState = rememberScaffoldState()
+    val coroutineScope: CoroutineScope = rememberCoroutineScope()
+
     val email by viewModel.email
     val password by viewModel.password
 
 
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        val context = LocalContext.current as Activity
-
-        context.window.statusBarColor = Color.Gray.toArgb()
-        context.window.navigationBarColor = Color.White.toArgb()
-
-
-
-        Text(
-            text = "Welcome back!",
-            fontSize = 24.sp
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
+    Scaffold(scaffoldState = scaffoldState) {
         Column(
-            horizontalAlignment = Alignment.End
-
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            TextField(
-                value = email,
-                onValueChange = { viewModel.changeEmail(it) },
-                modifier = Modifier.width(280.dp),
-                placeholder = {
-                    Text(
-                        text = "Enter email or phone number",
-                        modifier = Modifier.alpha(0.5f)
-                    )
-                },
-                shape = RoundedCornerShape(9.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    cursorColor = Color.White,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                ),
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Next
-                ),
-                singleLine = true
-            )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            val context = LocalContext.current as Activity
 
-            TextField(
-                value = password,
-                onValueChange = { viewModel.changePassword(it) },
-                modifier = Modifier.width(280.dp),
-                placeholder = {
-                    Text(
-                        text = "Password",
-                        Modifier.alpha(0.5f)
-                    )
-                },
-                visualTransformation = PasswordVisualTransformation(),
-                shape = RoundedCornerShape(9.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    cursorColor = Color.White,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                ),
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Next
-                ),
-                singleLine = true
-            )
-            Spacer(modifier = Modifier.height(8.dp))
+            context.window.statusBarColor = Color.Gray.toArgb()
+            context.window.navigationBarColor = Color.White.toArgb()
+
+
 
             Text(
-                text = "forgot password?",
+                text = "Welcome back!",
+                fontSize = 24.sp
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Column(
+                horizontalAlignment = Alignment.End
+
+            ) {
+                TextField(
+                    value = email,
+                    onValueChange = { viewModel.changeEmail(it) },
+                    modifier = Modifier.width(280.dp),
+                    placeholder = {
+                        Text(
+                            text = "Enter email or phone number",
+                            modifier = Modifier.alpha(0.5f)
+                        )
+                    },
+                    shape = RoundedCornerShape(9.dp),
+                    colors = TextFieldDefaults.textFieldColors(
+                        cursorColor = Color.White,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                    ),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Next
+                    ),
+                    singleLine = true
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                TextField(
+                    value = password,
+                    onValueChange = { viewModel.changePassword(it) },
+                    modifier = Modifier.width(280.dp),
+                    placeholder = {
+                        Text(
+                            text = "Password",
+                            Modifier.alpha(0.5f)
+                        )
+                    },
+                    visualTransformation = PasswordVisualTransformation(),
+                    shape = RoundedCornerShape(9.dp),
+                    colors = TextFieldDefaults.textFieldColors(
+                        cursorColor = Color.White,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                    ),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Next
+                    ),
+                    singleLine = true
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = "forgot password?",
+                    modifier = Modifier
+                        .alpha(0.5f)
+                        .clickable {
+                            Toast
+                                .makeText(context, "Coming soon!", Toast.LENGTH_SHORT)
+                                .show()
+                        },
+                    fontSize = 14.sp,
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                modifier = Modifier.width(200.dp),
+                onClick = {
+                    if (email == "abcxyz@gmail.com" && password == "abcdef") {
+                        navController.navigate(Screen.Home.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                inclusive = true
+                            }
+                        }
+                        viewModel.toggleLoginState()
+                    } else {
+
+                        coroutineScope.launch {
+                            scaffoldState.snackbarHostState.showSnackbar(
+                                message = "Please enter correct email and password",
+                                duration = SnackbarDuration.Short
+                            )
+
+                        }
+                    }
+
+
+                }
+            ) {
+                Text(
+                    text = "Login",
+                    fontSize = 16.sp,
+                )
+            }
+
+
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(24.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Divider(
+                    modifier = Modifier
+                        .weight(0.1f)
+                        .width(1.dp)
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+
+                Text(
+                    text = "or sign in with",
+                    modifier = Modifier
+                        .alpha(0.5f),
+                    fontSize = 16.sp,
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+
+
+                Divider(
+                    modifier = Modifier
+                        .weight(0.1f)
+                        .width(1.dp)
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(), horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.goog_icon),
+                    contentDescription = "google login",
+                    modifier = Modifier
+                        .fillMaxSize(0.1f)
+                        .clickable {
+                            Toast
+                                .makeText(context, "Coming soon!", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+
+                Image(
+                    painter = painterResource(id = R.drawable.fb_icon),
+                    contentDescription = "facebook login",
+                    modifier = Modifier
+                        .fillMaxSize(0.1f)
+                        .clickable {
+                            Toast
+                                .makeText(context, "Coming soon!", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                )
+
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+
+
+            Text(
+                text = "New to Foodika? Sign up",
                 modifier = Modifier
                     .alpha(0.5f)
                     .clickable {
@@ -118,106 +235,10 @@ fun LoginScreen(
                             .makeText(context, "Coming soon!", Toast.LENGTH_SHORT)
                             .show()
                     },
-                fontSize = 14.sp,
             )
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            modifier = Modifier.width(200.dp),
-            onClick = {
-                navController.navigate(Screen.Home.route){
-                    popUpTo(navController.graph.findStartDestination().id) {
-                        inclusive = true
-                    }
-                }
-                viewModel.toggleLoginState()
 
-
-            }
-        ) {
-            Text(
-                text = "Login",
-                fontSize = 16.sp,
-            )
-        }
-
-
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(24.dp),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Divider(
-                modifier = Modifier
-                    .weight(0.1f)
-                    .width(1.dp)
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-
-            Text(
-                text = "or sign in with",
-                modifier = Modifier
-                    .alpha(0.5f),
-                fontSize = 16.sp,
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-
-
-            Divider(
-                modifier = Modifier
-                    .weight(0.1f)
-                    .width(1.dp)
-            )
-        }
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(), horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.goog_icon),
-                contentDescription = "google login",
-                modifier = Modifier
-                    .fillMaxSize(0.1f)
-                    .clickable {
-                        Toast
-                            .makeText(context, "Coming soon!", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-
-            Image(
-                painter = painterResource(id = R.drawable.fb_icon),
-                contentDescription = "facebook login",
-                modifier = Modifier
-                    .fillMaxSize(0.1f)
-                    .clickable {
-                        Toast
-                            .makeText(context, "Coming soon!", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-            )
 
         }
-        Spacer(modifier = Modifier.height(16.dp))
-
-
-        Text(
-            text = "New to Foodika? Sign up",
-            modifier = Modifier
-                .alpha(0.5f)
-                .clickable {
-                    Toast
-                        .makeText(context, "Coming soon!", Toast.LENGTH_SHORT)
-                        .show()
-                },
-        )
-
 
     }
 

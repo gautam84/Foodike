@@ -98,7 +98,7 @@ fun SetupNavigation(startDestination: String) {
 
     Scaffold(
         bottomBar = {
-            if (currentRoute == Screen.Home.route || currentRoute == Screen.History.route && scrollState.firstVisibleItemIndex == 0 && currentRoute != Screen.Profile.route) {
+            if ((currentRoute == Screen.Home.route || currentRoute == Screen.History.route) && scrollState.firstVisibleItemIndex == 0) {
 
                 Column(
                     modifier = Modifier.padding(115.dp, 25.dp),
