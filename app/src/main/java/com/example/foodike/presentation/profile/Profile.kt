@@ -18,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.example.foodike.R
 import com.example.foodike.presentation.util.Screen
@@ -150,7 +151,11 @@ fun Profile(
             Button(
                 modifier = Modifier.width(200.dp),
                 onClick = {
-                    navController.navigate(Screen.Onboarding.route)
+                    navController.navigate(Screen.Onboarding.route){
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            inclusive = true
+                        }
+                    }
 
                     viewModel.toggleLoginState()
                 }

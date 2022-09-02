@@ -30,6 +30,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.foodike.R
@@ -69,13 +70,11 @@ fun BottomBar(navController: NavHostController) {
                     // Pop up to the start destination of the graph to
                     // avoid building up a large stack of destinations
                     // on the back stack as users select items
-                    navController.graph.startDestinationRoute?.let { route ->
-                        popUpTo(route) {
-                            saveState = true
-                        }
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
                     }
                     // Avoid multiple copies of the same destination when
-                    // re-selecting the same item
+                    // reselecting the same item
                     launchSingleTop = true
                     // Restore state when reselecting a previously selected item
                     restoreState = true
@@ -106,13 +105,11 @@ fun BottomBar(navController: NavHostController) {
                     // Pop up to the start destination of the graph to
                     // avoid building up a large stack of destinations
                     // on the back stack as users select items
-                    navController.graph.startDestinationRoute?.let { route ->
-                        popUpTo(route) {
-                            saveState = true
-                        }
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
                     }
                     // Avoid multiple copies of the same destination when
-                    // re-selecting the same item
+                    // reselecting the same item
                     launchSingleTop = true
                     // Restore state when reselecting a previously selected item
                     restoreState = true
