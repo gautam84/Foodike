@@ -3,26 +3,23 @@ package com.example.foodike.presentation.home
 import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.outlined.LocationOn
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.ShoppingCart
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
@@ -31,70 +28,18 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.example.foodike.R
 import com.example.foodike.presentation.components.RestaurantCard
 import com.example.foodike.presentation.components.SearchBar
 import com.example.foodike.presentation.home.components.ChipBar
 import com.example.foodike.presentation.home.components.FoodikeBottomNavigation
-import com.example.foodike.presentation.util.HomeScreenNav
 import com.example.foodike.presentation.util.Screen
 import java.util.*
 
-
-@Composable
-fun HomeScreen(navController: NavHostController = rememberNavController()) {
-
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
-
-    val context = LocalContext.current as Activity
-
-    context.window.statusBarColor = Color.Gray.toArgb()
-    context.window.navigationBarColor = Color.White.toArgb()
-
-    val scrollState = rememberLazyListState()
-    //    val state = remember { derivedStateOf { scrollState.firstVisibleItemIndex == 0 }}
-
-
-    Scaffold(
-        bottomBar = {
-            if (currentRoute != Screen.Cart.route && scrollState.firstVisibleItemIndex == 0 && currentRoute != Screen.Profile.route) {
-
-                Column(
-                    modifier = Modifier.padding(115.dp, 25.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-
-                    Box(
-                        contentAlignment = Alignment.Center
-                    ) {
-                        BottomBar(navController = navController)
-                        Column {
-                            FloatingActionButton(
-                                onClick = {
-                                    navController.navigate(Screen.Cart.route)
-
-                                },
-                                backgroundColor = MaterialTheme.colors.primary
-                            ) {
-                                Icon(Icons.Outlined.ShoppingCart, "Cart")
-                            }
-                            Spacer(modifier = Modifier.height(26.dp))
-                        }
-                    }
-                }
-            }
-        }
-    ) {
-        HomeScreenNav(navController = navController, scrollState = scrollState)
-    }
-}
 
 @Composable
 fun BottomBar(navController: NavHostController) {
@@ -180,7 +125,12 @@ fun BottomBar(navController: NavHostController) {
 }
 
 @Composable
-fun Home(navController: NavHostController,scrollState: LazyListState) {
+fun Home(scrollState: LazyListState, navController: NavHostController) {
+
+    val context = LocalContext.current as Activity
+
+    context.window.statusBarColor = Color.Gray.toArgb()
+    context.window.navigationBarColor = Color.White.toArgb()
 
     LazyColumn(
         modifier =
@@ -257,7 +207,6 @@ fun MainSection() {
 
     }
 }
-
 
 
 @Composable
@@ -434,7 +383,6 @@ fun AdSection() {
         }
     }
 }
-
 
 
 @Composable

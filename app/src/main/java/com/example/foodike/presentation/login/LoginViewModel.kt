@@ -31,7 +31,7 @@ class LoginViewModel @Inject constructor(
         _password.value = password.value.replace(password.value, pass)
     }
 
-    fun saveOnBoardingState() {
+    fun toggleLoginState() {
         repository.toggleLoginState()
     }
 

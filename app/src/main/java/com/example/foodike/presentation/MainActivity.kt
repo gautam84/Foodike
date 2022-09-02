@@ -5,24 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navigation
-import com.example.foodike.presentation.cart.Cart
 import com.example.foodike.presentation.common.SplashViewModel
-import com.example.foodike.presentation.history.History
-import com.example.foodike.presentation.home.HomeScreen
-import com.example.foodike.presentation.login.LoginScreen
-import com.example.foodike.presentation.onboarding.OnBoarding
-import com.example.foodike.presentation.util.Graph
-import com.example.foodike.presentation.util.Screen
 import com.example.foodike.presentation.util.SetupNavigation
 import com.example.foodike.ui.theme.FoodikeTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,6 +27,8 @@ class MainActivity : ComponentActivity() {
         installSplashScreen().setKeepOnScreenCondition {
             splashViewModel.isLoading.value
         }
+
+
 
         setContent {
             FoodikeTheme {

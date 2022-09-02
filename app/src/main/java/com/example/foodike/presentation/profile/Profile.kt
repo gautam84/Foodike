@@ -17,12 +17,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.foodike.R
-import com.example.foodike.presentation.util.Graph
+import com.example.foodike.presentation.util.Screen
 
 @Composable
-fun Profile(navController: NavHostController) {
+fun Profile(
+    viewModel: ProfileViewModel = hiltViewModel(),
+    navController: NavHostController,
+) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -136,7 +140,9 @@ fun Profile(navController: NavHostController) {
         }
 
         Column(
-            modifier = Modifier.fillMaxSize().padding(32.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(32.dp),
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -144,7 +150,9 @@ fun Profile(navController: NavHostController) {
             Button(
                 modifier = Modifier.width(200.dp),
                 onClick = {
+                    navController.navigate(Screen.Onboarding.route)
 
+                    viewModel.toggleLoginState()
                 }
             ) {
                 Text(

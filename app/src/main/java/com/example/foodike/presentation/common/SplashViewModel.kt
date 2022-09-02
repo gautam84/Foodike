@@ -4,13 +4,10 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.foodike.domain.repository.LoginRepository
-import com.example.foodike.presentation.util.Graph
 import com.example.foodike.presentation.util.Screen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SplashViewModel @Inject constructor(
@@ -25,7 +22,7 @@ class SplashViewModel @Inject constructor(
 
     init {
         if (repository.readLoginState()) {
-            _startDestination.value = Graph.Home.route
+            _startDestination.value = Screen.Home.route
 
         } else {
             _startDestination.value = Screen.Onboarding.route

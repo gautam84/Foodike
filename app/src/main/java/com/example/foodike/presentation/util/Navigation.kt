@@ -1,27 +1,45 @@
 package com.example.foodike.presentation.util
 
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.foodike.presentation.cart.Cart
 import com.example.foodike.presentation.history.History
+import com.example.foodike.presentation.home.BottomBar
 import com.example.foodike.presentation.home.Home
-import com.example.foodike.presentation.home.HomeScreen
 import com.example.foodike.presentation.login.LoginScreen
 import com.example.foodike.presentation.onboarding.OnBoarding
 import com.example.foodike.presentation.profile.Profile
 import com.google.accompanist.pager.ExperimentalPagerApi
 
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
-fun SetupNavigation(startDestination: String) {
-    val navController = rememberNavController()
+fun NavigationGraph(
+    navController: NavHostController,
+    startDestination: String,
+    scrollState: LazyListState
+) {
 
     NavHost(
-        navController = navController, route = Graph.Root.route, startDestination = startDestination
+        navController = navController,
+        startDestination = startDestination
     ) {
         composable(
             route = Screen.Onboarding.route,
@@ -34,21 +52,6 @@ fun SetupNavigation(startDestination: String) {
             LoginScreen(navController = navController)
         }
 
-        composable(route = Graph.Home.route) {
-            HomeScreen()
-        }
-    }
-
-}
-
-@OptIn(ExperimentalPagerApi::class)
-@Composable
-fun HomeScreenNav(navController: NavHostController, scrollState: LazyListState) {
-    NavHost(
-        navController = navController,
-        route = Graph.Home.route,
-        startDestination = Screen.Home.route
-    ) {
         composable(
             route = Screen.Home.route
         ) {
@@ -69,6 +72,67 @@ fun HomeScreenNav(navController: NavHostController, scrollState: LazyListState) 
         ) {
             Profile(navController = navController)
         }
+
+        composable(
+            route = Screen.Onboarding.route,
+        ) {
+            OnBoarding(navController = navController)
+        }
+    }
+
+}
+
+@Composable
+fun SetupNavigation(startDestination: String) {
+
+    val navController = rememberNavController()
+
+
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
+
+    val scrollState = rememberLazyListState()
+    //    val state = remember { derivedStateOf { scrollState.firstVisibleItemIndex == 0 }}
+
+
+    Scaffold(
+        bottomBar = {
+            if (currentRoute == Screen.Home.route || currentRoute == Screen.History.route && scrollState.firstVisibleItemIndex == 0 && currentRoute != Screen.Profile.route) {
+
+                Column(
+                    modifier = Modifier.padding(115.dp, 25.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+
+                    Box(
+                        contentAlignment = Alignment.Center
+                    ) {
+                        BottomBar(navController = navController)
+                        Column {
+                            FloatingActionButton(
+                                onClick = {
+                                    navController.navigate(Screen.Cart.route)
+
+                                },
+                                backgroundColor = MaterialTheme.colors.primary
+                            ) {
+                                Icon(Icons.Outlined.ShoppingCart, "Cart")
+                            }
+                            Spacer(modifier = Modifier.height(26.dp))
+                        }
+                    }
+                }
+            }
+        }
+    ) {
+        NavigationGraph(
+            navController = navController,
+            scrollState = scrollState,
+            startDestination = startDestination
+        )
     }
 }
+
+
 

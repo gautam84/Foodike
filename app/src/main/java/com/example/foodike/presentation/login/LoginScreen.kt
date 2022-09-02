@@ -25,7 +25,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.example.foodike.R
-import com.example.foodike.presentation.util.Graph
 import com.example.foodike.presentation.util.Screen
 
 @Composable
@@ -126,12 +125,12 @@ fun LoginScreen(
         Button(
             modifier = Modifier.width(200.dp),
             onClick = {
-                navController.navigate(Graph.Home.route){
+                navController.navigate(Screen.Home.route){
                     popUpTo(navController.graph.findStartDestination().id) {
                         inclusive = true
                     }
                 }
-                viewModel.saveOnBoardingState()
+                viewModel.toggleLoginState()
 
 
             }
