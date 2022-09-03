@@ -364,14 +364,16 @@ fun AdSection() {
                 AdCard(
                     titleText = "Offers for you",
                     contentText = "Upto 20% discount for you",
-                    color = Color(0xFFE89191)
+                    color = Color(0xFFE89191),
+                    id = R.drawable.chinese_bowl
 
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 AdCard(
                     titleText = "Free delivery",
                     contentText = "Free delivery for selected restaurants...",
-                    color = Color(0xFFDBE891)
+                    color = Color(0xFFDBE891),
+                    id = R.drawable.rider
 
                 )
             }
@@ -386,7 +388,8 @@ fun AdSection() {
 fun AdCard(
     titleText: String,
     contentText: String,
-    color: Color
+    color: Color,
+    id: Int
 ) {
     Card(
         shape = RoundedCornerShape(24.dp),
@@ -413,7 +416,7 @@ fun AdCard(
                 )
             }
             Image(
-                painter = painterResource(id = R.drawable.chinese_bowl),
+                painter = painterResource(id = id),
                 contentDescription = "Ad",
                 modifier = Modifier
                     .size(150.dp)
