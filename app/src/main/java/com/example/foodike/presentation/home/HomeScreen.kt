@@ -30,10 +30,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.foodike.R
+import com.example.foodike.domain.model.Advertisement
+import com.example.foodike.domain.model.FoodItem
 import com.example.foodike.presentation.components.RestaurantCard
 import com.example.foodike.presentation.components.SearchBar
 import com.example.foodike.presentation.home.components.ChipBar
@@ -41,6 +44,69 @@ import com.example.foodike.presentation.home.components.FoodikeBottomNavigation
 import com.example.foodike.presentation.util.Screen
 import java.util.*
 
+
+@Composable
+fun Home(
+    scrollState: LazyListState,
+    navController: NavHostController,
+    viewModel: HomeViewModel = hiltViewModel()
+) {
+
+    val context = LocalContext.current as Activity
+
+    context.window.statusBarColor = Color.Gray.toArgb()
+    context.window.navigationBarColor = Color.White.toArgb()
+
+    val adsList by viewModel.ads
+    val restaurantList by viewModel.restaurants
+    val foodList by viewModel.food
+
+    LazyColumn(
+        modifier =
+        Modifier.padding(8.dp, 0.dp),
+        state = scrollState,
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.Start
+    ) {
+        item {
+            Spacer(modifier = Modifier.height(8.dp))
+            TopSection(navController = navController)
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+        item {
+            GreetingSection()
+            Spacer(modifier = Modifier.height(24.dp))
+        }
+        item {
+            SearchBar()
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+        item {
+            AdSection(adsList)
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+        item {
+            RecommendedSection(foodList)
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+        item {
+            FavouriteSection()
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+        item {
+            MainSection()
+        }
+        items(restaurantList.size) {
+            RestaurantCard(
+                restaurantList[it]
+            )
+
+
+        }
+
+    }
+
+}
 
 @Composable
 fun BottomBar(navController: NavHostController) {
@@ -121,72 +187,6 @@ fun BottomBar(navController: NavHostController) {
 
 }
 
-@Composable
-fun Home(scrollState: LazyListState, navController: NavHostController) {
-
-    val context = LocalContext.current as Activity
-
-    context.window.statusBarColor = Color.Gray.toArgb()
-    context.window.navigationBarColor = Color.White.toArgb()
-
-    LazyColumn(
-        modifier =
-        Modifier.padding(8.dp, 0.dp),
-        state = scrollState,
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.Start
-    ) {
-        item {
-            Spacer(modifier = Modifier.height(8.dp))
-            TopSection(navController = navController)
-            Spacer(modifier = Modifier.height(8.dp))
-        }
-        item {
-            GreetingSection()
-            Spacer(modifier = Modifier.height(24.dp))
-        }
-        item {
-            SearchBar()
-            Spacer(modifier = Modifier.height(16.dp))
-        }
-        item {
-            AdSection()
-            Spacer(modifier = Modifier.height(16.dp))
-        }
-        item {
-            RecommendedSection()
-            Spacer(modifier = Modifier.height(16.dp))
-        }
-        item {
-            FavouriteSection()
-            Spacer(modifier = Modifier.height(16.dp))
-        }
-        item {
-            MainSection()
-        }
-        item {
-            RestaurantCard(
-                name = "Saffron Express",
-                rating = "4.6",
-                customers = "100+",
-                time = "59 mins",
-                variety = "North Indian, Chinese, Tandoori",
-                place = "Mahabhairab"
-            )
-            RestaurantCard(
-                name = "KF",
-                rating = "4.2",
-                customers = "50+",
-                time = "28 mins",
-                variety = "Biryani, Chinese, Tandoori",
-                place = "Ketekibari"
-            )
-
-        }
-
-    }
-
-}
 
 @Composable
 fun MainSection() {
@@ -248,7 +248,7 @@ fun FavouriteCard() {
 }
 
 @Composable
-fun RecommendedSection() {
+fun RecommendedSection(list: List<FoodItem>) {
     Column(modifier = Modifier.padding(8.dp, 0.dp))
     {
         Text(
@@ -258,30 +258,35 @@ fun RecommendedSection() {
         )
         Spacer(modifier = Modifier.height(8.dp))
 
-        Row {
-            RecommendedCard()
-            Spacer(modifier = Modifier.width(8.dp))
-            RecommendedCard()
-            Spacer(modifier = Modifier.width(8.dp))
-            RecommendedCard()
+        LazyRow(){
+            items(list.size){
+                RecommendedCard(foodItem = list[it])
+                if (it != (list.size - 1)) {
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
+            }
         }
+
+
     }
 }
 
 @Composable
-fun RecommendedCard() {
+fun RecommendedCard(
+    foodItem: FoodItem
+) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(id = R.drawable.burger), contentDescription = "Restaurant",
+            painter = painterResource(id = foodItem.image), contentDescription = "Restaurant",
             modifier = Modifier
                 .size(80.dp)
                 .shadow(elevation = 0.dp, shape = CircleShape, clip = true),
             contentScale = ContentScale.Crop
         )
-        Text(text = "Burger")
+        Text(text = foodItem.name)
     }
 }
 
@@ -352,7 +357,9 @@ fun GreetingSection(
 
 
 @Composable
-fun AdSection() {
+fun AdSection(
+    adsList: List<Advertisement>
+) {
     Column(modifier = Modifier.padding(8.dp, 0.dp))
     {
 
@@ -360,25 +367,15 @@ fun AdSection() {
 
         LazyRow(
         ) {
-            item {
+            items(adsList.size) {
                 AdCard(
-                    titleText = "Offers for you",
-                    contentText = "Upto 20% discount for you",
-                    color = Color(0xFFE89191),
-                    id = R.drawable.chinese_bowl
-
+                    adsList[it]
                 )
-                Spacer(modifier = Modifier.width(8.dp))
-                AdCard(
-                    titleText = "Free delivery",
-                    contentText = "Free delivery for selected restaurants...",
-                    color = Color(0xFFDBE891),
-                    id = R.drawable.groceries
+                if (it != (adsList.size - 1)) {
+                    Spacer(modifier = Modifier.width(16.dp))
+                }
 
-                )
             }
-
-
         }
     }
 }
@@ -386,14 +383,11 @@ fun AdSection() {
 
 @Composable
 fun AdCard(
-    titleText: String,
-    contentText: String,
-    color: Color,
-    id: Int
+    ad: Advertisement
 ) {
     Card(
         shape = RoundedCornerShape(24.dp),
-        backgroundColor = color
+        backgroundColor = ad.color
     ) {
         Row(
             modifier = Modifier
@@ -404,19 +398,19 @@ fun AdCard(
         ) {
             Column(modifier = Modifier.weight(0.5f)) {
                 Text(
-                    text = titleText,
+                    text = ad.title,
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = contentText,
+                    text = ad.subTitle,
                     fontWeight = FontWeight.Light
                 )
             }
             Image(
-                painter = painterResource(id = id),
+                painter = painterResource(id = ad.image),
                 contentDescription = "Ad",
                 modifier = Modifier
                     .size(150.dp)
@@ -425,5 +419,6 @@ fun AdCard(
         }
 
     }
+
 }
 

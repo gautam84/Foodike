@@ -601,13 +601,13 @@ val adList = listOf(
     ),
     Advertisement(
         title = "Order groceries",
-        subTitle = "Order groceries from your local vendors",
+        subTitle = "Order groceries from local vendors",
         color = Color(0xFF91CEE8),
         image = R.drawable.groceries
     ),
     Advertisement(
         title = "Pay with UPI",
-        subTitle = "Get additional 15% discount when paid with UPI",
+        subTitle = "Get extra 15% discount with UPI payment",
         color = Color(0xFFA791E8),
         image = R.drawable.upi
 
