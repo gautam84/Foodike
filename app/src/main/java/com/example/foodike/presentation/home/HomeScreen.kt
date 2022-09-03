@@ -373,7 +373,7 @@ fun AdSection() {
                     titleText = "Free delivery",
                     contentText = "Free delivery for selected restaurants...",
                     color = Color(0xFFDBE891),
-                    id = R.drawable.rider
+                    id = R.drawable.groceries
 
                 )
             }
