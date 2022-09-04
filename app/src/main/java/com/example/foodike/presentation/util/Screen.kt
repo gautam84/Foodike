@@ -7,4 +7,14 @@ sealed class Screen(val route: String) {
     object History : Screen(route = "history")
     object Cart : Screen(route = "cart")
     object Profile : Screen(route = "profile")
+    object RestaurantDetails:Screen(route = "restaurant_details")
+
+    fun withArgs(vararg args: String): String {
+        return buildString {
+            append(route)
+            args.forEach { arg ->
+                append("/$arg")
+            }
+        }
+    }
 }

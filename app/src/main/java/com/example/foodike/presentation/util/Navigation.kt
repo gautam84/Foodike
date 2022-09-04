@@ -10,19 +10,24 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.foodike.presentation.cart.Cart
 import com.example.foodike.presentation.history.History
 import com.example.foodike.presentation.home.BottomBar
 import com.example.foodike.presentation.home.Home
+import com.example.foodike.presentation.home.RestaurantDetail
 import com.example.foodike.presentation.login.LoginScreen
 import com.example.foodike.presentation.onboarding.OnBoarding
 import com.example.foodike.presentation.profile.Profile
@@ -78,6 +83,20 @@ fun NavigationGraph(
         ) {
             OnBoarding(navController = navController)
         }
+        composable(
+            route = Screen.RestaurantDetails.route + "/{name}",
+            arguments = listOf(
+                navArgument("name") {
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = false
+                })
+        ) { entry ->
+            RestaurantDetail(
+                name = entry.arguments?.getString("name")!!,
+                navController = navController
+            )
+        }
     }
 
 }
@@ -93,12 +112,12 @@ fun SetupNavigation(startDestination: String) {
 
 
     val scrollState = rememberLazyListState()
-    //    val state = remember { derivedStateOf { scrollState.firstVisibleItemIndex == 0 }}
+    val state = remember { derivedStateOf { scrollState.firstVisibleItemIndex == 0 } }
 
 
     Scaffold(
         bottomBar = {
-            if ((currentRoute == Screen.Home.route || currentRoute == Screen.History.route) && scrollState.firstVisibleItemIndex == 0) {
+            if ((currentRoute == Screen.Home.route || currentRoute == Screen.History.route) && state.value) {
 
                 Column(
                     modifier = Modifier.padding(115.dp, 25.dp),

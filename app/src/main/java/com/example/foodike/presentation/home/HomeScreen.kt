@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -57,13 +58,15 @@ fun Home(
     context.window.statusBarColor = Color.Gray.toArgb()
     context.window.navigationBarColor = Color.White.toArgb()
 
-    val adsList by viewModel.ads
-    val restaurantList by viewModel.restaurants
-    val foodList by viewModel.food
+    val adsList by remember { viewModel.ads }
+    val restaurantList by remember { viewModel.restaurants }
+    val foodList by remember { viewModel.food }
 
     LazyColumn(
         modifier =
-        Modifier.padding(8.dp, 0.dp),
+        Modifier
+            .fillMaxWidth()
+            .padding(8.dp, 0.dp),
         state = scrollState,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.Start
@@ -98,7 +101,12 @@ fun Home(
         }
         items(restaurantList.size) {
             RestaurantCard(
-                restaurantList[it]
+                restaurant = restaurantList[it],
+                modifier = Modifier
+                    .clip(RoundedCornerShape(8.dp))
+                    .clickable {
+                        navController.navigate(Screen.RestaurantDetails.withArgs(restaurantList[it].name))
+                    }
             )
 
 
@@ -258,8 +266,8 @@ fun RecommendedSection(list: List<FoodItem>) {
         )
         Spacer(modifier = Modifier.height(8.dp))
 
-        LazyRow(){
-            items(list.size){
+        LazyRow() {
+            items(list.size) {
                 RecommendedCard(foodItem = list[it])
                 if (it != (list.size - 1)) {
                     Spacer(modifier = Modifier.width(8.dp))

@@ -1,6 +1,7 @@
 package com.example.foodike.presentation.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -8,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -22,12 +24,20 @@ import java.util.concurrent.TimeUnit
 
 @Composable
 fun RestaurantCard(
-    restaurant: Restaurant
+    restaurant: Restaurant,
+    modifier: Modifier
 ) {
-    Column(modifier = Modifier.padding(8.dp, 0.dp))
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp, 0.dp)
+    )
     {
         Row(
-            horizontalArrangement = Arrangement.Center,
+            modifier = modifier
+                .fillMaxWidth()
+                ,
+            horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
@@ -100,7 +110,8 @@ fun getTimeInMins(timeInMillis: Long): String {
     }
     sb.append(minutes)
     sb.append(" Min ")
-    return sb.toString()}
+    return sb.toString()
+}
 
 fun getCustomerInfo(noOfRatings: Int): String {
     return when {
