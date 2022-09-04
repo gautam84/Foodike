@@ -81,29 +81,29 @@ fun RestaurantDetail(
             )
 
         }
-        RecommendedMenuItemSection()
-        VegMenuItemSection()
-        NonVegMenuItemSection()
+//        RecommendedMenuItemSection()
+//        VegMenuItemSection()
+//        NonVegMenuItemSection()
 
 
 
     }
 }
 
-@Composable
-fun NonVegMenuItemSection() {
-    TODO("Not yet implemented")
-}
-
-@Composable
-fun VegMenuItemSection() {
-    TODO("Not yet implemented")
-}
-
-@Composable
-fun RecommendedMenuItemSection() {
-    TODO("Not yet implemented")
-}
+//@Composable
+//fun NonVegMenuItemSection() {
+//    TODO("Not yet implemented")
+//}
+//
+//@Composable
+//fun VegMenuItemSection() {
+//    TODO("Not yet implemented")
+//}
+//
+//@Composable
+//fun RecommendedMenuItemSection() {
+//    TODO("Not yet implemented")
+//}
 
 @Composable
 fun RestaurantDetailCard(
