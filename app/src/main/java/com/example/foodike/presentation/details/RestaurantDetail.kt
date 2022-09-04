@@ -26,6 +26,8 @@ import com.example.foodike.domain.model.Restaurant
 import com.example.foodike.presentation.components.getCustomerInfo
 import com.example.foodike.presentation.components.getTimeInMins
 import com.example.foodike.presentation.home.HomeViewModel
+import com.example.foodike.presentation.home.RecommendedCard
+import com.example.foodike.presentation.home.RecommendedSection
 
 @Composable
 fun RestaurantDetail(
@@ -73,15 +75,34 @@ fun RestaurantDetail(
 
             }
         }
-        Column(modifier = Modifier.padding(8.dp)) {
+        Column(modifier = Modifier.padding(16.dp)) {
             RestaurantDetailCard(
                 viewModel.getRestaurantFromName(name)!!
             )
 
         }
+        RecommendedMenuItemSection()
+        VegMenuItemSection()
+        NonVegMenuItemSection()
+
 
 
     }
+}
+
+@Composable
+fun NonVegMenuItemSection() {
+    TODO("Not yet implemented")
+}
+
+@Composable
+fun VegMenuItemSection() {
+    TODO("Not yet implemented")
+}
+
+@Composable
+fun RecommendedMenuItemSection() {
+    TODO("Not yet implemented")
 }
 
 @Composable
@@ -96,7 +117,7 @@ fun RestaurantDetailCard(
         backgroundColor = Color(0xFFC6FDB3)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(24.dp),
         ) {
             Text(
                 text = restaurant.name,
@@ -140,17 +161,47 @@ fun RestaurantDetailCard(
                 text = restaurant.place,
                 modifier = Modifier.alpha(0.5f),
             )
-            Row {
+
+            Row(
+                modifier = Modifier.padding(0.dp, 24.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
                 Image(
                     modifier = Modifier.size(50.dp),
                     painter = painterResource(id = R.drawable.outlet_card),
                     contentDescription = "Outlet",
                 )
                 Column(
+                    modifier = Modifier.fillMaxHeight(),
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = restaurant.place)
-                    Text(text = "Your Location")
+                    Row {
+                        Text(
+                            text = "Outlet:",
+                            fontSize = 16.sp
+                        )
+                    }
+                    Row {
+                        Text(text = getTimeInMins(restaurant.timeInMillis))
+                    }
+                }
+                Spacer(modifier = Modifier.width(24.dp))
+                Column(
+                    modifier = Modifier.fillMaxHeight(),
+                    verticalArrangement = Arrangement.SpaceBetween,
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    Row {
+                        Text(
+                            text = restaurant.place, modifier = Modifier.alpha(0.5f),
+                        )
+                    }
+                    Row {
+                        Text(
+                            text = "Your Location", modifier = Modifier.alpha(0.5f),
+                        )
+                    }
                 }
             }
         }
