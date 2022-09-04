@@ -1,4 +1,4 @@
-package com.example.foodike.presentation.home
+package com.example.foodike.presentation.details
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -19,19 +19,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.foodike.R
-import com.example.foodike.data.repository.menu3
 import com.example.foodike.domain.model.Restaurant
 import com.example.foodike.presentation.components.getCustomerInfo
 import com.example.foodike.presentation.components.getTimeInMins
+import com.example.foodike.presentation.home.HomeViewModel
 
 @Composable
 fun RestaurantDetail(
     name: String,
     navController: NavHostController,
+    viewModel: RestaurantDetailViewModel = hiltViewModel()
 ) {
     var isFavorite by remember { mutableStateOf(false) }
+
+
 
     Column(modifier = Modifier.fillMaxSize()) {
         Row(
@@ -71,18 +75,7 @@ fun RestaurantDetail(
         }
         Column(modifier = Modifier.padding(8.dp)) {
             RestaurantDetailCard(
-
-                Restaurant(
-                    name = "Rock n Rolls",
-                    rating = 2.9,
-                    noOfRatings = 237,
-                    timeInMillis = 3480000,
-                    variety = "French, Snacks",
-                    place = "Paasmile",
-                    averagePrice = 4.5,
-                    image = R.drawable.pizza,
-                    menu = menu3
-                )
+                viewModel.getRestaurantFromName(name)!!
             )
 
         }

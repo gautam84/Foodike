@@ -18,4 +18,10 @@ class HomeRepositoryImpl() : HomeRepository {
     override suspend fun getFoodItems(): Results<List<FoodItem>> {
         return Results.Success(recommendedList)
     }
+
+    override fun getRestaurantFromName(name: String): Restaurant? {
+        return restaurantList.find {
+            it.name == name
+        }
+    }
 }

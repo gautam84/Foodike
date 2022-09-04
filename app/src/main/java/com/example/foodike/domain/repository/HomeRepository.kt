@@ -10,5 +10,6 @@ interface HomeRepository {
     suspend fun getRestaurants() : Results<List<Restaurant>>
     suspend fun getAds(): Results<List<Advertisement>>
     suspend fun getFoodItems():Results<List<FoodItem>>
+    fun getRestaurantFromName(name: String): Restaurant?
     
 }

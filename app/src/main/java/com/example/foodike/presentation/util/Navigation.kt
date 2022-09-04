@@ -27,7 +27,7 @@ import com.example.foodike.presentation.cart.Cart
 import com.example.foodike.presentation.history.History
 import com.example.foodike.presentation.home.BottomBar
 import com.example.foodike.presentation.home.Home
-import com.example.foodike.presentation.home.RestaurantDetail
+import com.example.foodike.presentation.details.RestaurantDetail
 import com.example.foodike.presentation.login.LoginScreen
 import com.example.foodike.presentation.onboarding.OnBoarding
 import com.example.foodike.presentation.profile.Profile
