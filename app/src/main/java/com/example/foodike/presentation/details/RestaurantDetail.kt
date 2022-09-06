@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.ContentAlpha.medium
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.ArrowBack
@@ -35,10 +34,6 @@ import com.example.foodike.domain.model.MenuItem
 import com.example.foodike.domain.model.Restaurant
 import com.example.foodike.presentation.components.getCustomerInfo
 import com.example.foodike.presentation.components.getTimeInMins
-import com.example.foodike.presentation.home.HomeViewModel
-import com.example.foodike.presentation.home.RecommendedCard
-import com.example.foodike.presentation.home.RecommendedSection
-import kotlin.random.Random
 
 @Composable
 fun RestaurantDetail(
