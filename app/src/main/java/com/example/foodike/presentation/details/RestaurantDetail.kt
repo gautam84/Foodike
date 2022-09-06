@@ -1,5 +1,9 @@
 package com.example.foodike.presentation.details
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -8,6 +12,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.ContentAlpha.medium
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.ArrowBack
@@ -16,6 +21,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -47,7 +53,7 @@ fun RestaurantDetail(
 
 
 
-    Column(modifier = Modifier.fillMaxSize()) {
+   Column(modifier = Modifier.fillMaxSize()) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
@@ -89,10 +95,19 @@ fun RestaurantDetail(
             )
 
         }
-        RecommendedMenuItemSection(restaurant.menu)
+        RecommendedMenuItemSection(list = restaurant.menu)
+        NonVegMenuItemSection(list = restaurant.menu)
+        VegMenuItemSection(list = restaurant.menu)
 
 
     }
+}
+
+@Composable
+fun RecommendedMenuItemSection(list: List<MenuItem>) {
+    val recommendedList = list.shuffled().dropLast(list.size - 5)
+
+    ExpandableSection(list = recommendedList, title = "Recommended")
 }
 
 @Composable
@@ -223,11 +238,7 @@ fun NonVegMenuItemSection(
     val newList = list.filter {
         !it.isVegetarian
     }
-    LazyColumn {
-        items(newList.size) {
-            MenuItemCard(menuItem = newList[it])
-        }
-    }
+    ExpandableSection(list = newList, title = "Non-Vegetarian")
 }
 
 @Composable
@@ -237,24 +248,80 @@ fun VegMenuItemSection(
     val newList = list.filter {
         it.isVegetarian
     }
-    LazyColumn {
-        items(newList.size) {
-            MenuItemCard(menuItem = newList[it])
-        }
-    }
+    ExpandableSection(list = newList, title = "Vegetarian")
+
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun RecommendedMenuItemSection(
-    list: List<MenuItem>
+fun ExpandableSection(
+    list: List<MenuItem>,
+    title: String
 ) {
-val recommendedList = list.shuffled().dropLast(list.size - 5)
 
-    LazyColumn {
-        items(recommendedList.size) {
-            MenuItemCard(menuItem = recommendedList[it])
+
+    var expandedState by remember { mutableStateOf(true) }
+    val rotationState by animateFloatAsState(
+        targetValue = if (expandedState) 180f else 0f
+    )
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .animateContentSize(
+                animationSpec = tween(
+                    durationMillis = 300,
+                    easing = LinearOutSlowInEasing
+                )
+            ),
+        shape = MaterialTheme.shapes.medium,
+        onClick = {
+            expandedState = !expandedState
+        }
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    modifier = Modifier
+                        .weight(6f),
+                    text = title,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                IconButton(
+                    modifier = Modifier
+                        .weight(1f)
+                        .alpha(ContentAlpha.medium)
+                        .rotate(rotationState),
+                    onClick = {
+                        expandedState = !expandedState
+                    }) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowDropDown,
+                        contentDescription = "Drop-Down Arrow"
+                    )
+                }
+            }
+            if (expandedState) {
+                LazyColumn {
+                    items(list.size) {
+                        MenuItemCard(menuItem = list[it])
+                    }
+                }
+
+            }
         }
     }
+
+
 }
 
 @Composable
