@@ -12,18 +12,23 @@ val menu1 = listOf(
         dish = "Fish and Chips",
         price = 3.95,
         rating = 4.7,
+        noOfRatings = 12,
         isVegetarian = false
     ),
     MenuItem(
         dish = "Guacamole with Chips and Salsa",
         price = 4.50,
         rating = 4.4,
+        noOfRatings = 15,
+
         isVegetarian = true
     ),
     MenuItem(
         dish = "Chicken Biryani",
         price = 2.55,
         rating = 4.9,
+        noOfRatings = 22,
+
         isVegetarian = false
 
     ),
@@ -31,6 +36,8 @@ val menu1 = listOf(
         dish = "Kadai Paneer",
         price = 3.55,
         rating = 3.9,
+        noOfRatings = 52,
+
         isVegetarian = true
 
     ),
@@ -38,6 +45,8 @@ val menu1 = listOf(
         dish = "Veg Pulao",
         price = 5.00,
         rating = 4.2,
+        noOfRatings = 23,
+
         isVegetarian = true
 
     ),
@@ -45,6 +54,8 @@ val menu1 = listOf(
         dish = "Smoked Pork",
         price = 3.75,
         rating = 4.8,
+        noOfRatings = 56,
+
         isVegetarian = false
 
     ),
@@ -52,6 +63,8 @@ val menu1 = listOf(
         dish = "Veg Pakora",
         price = 3.75,
         rating = 2.9,
+        noOfRatings = 43,
+
         isVegetarian = true
 
     ),
@@ -59,6 +72,8 @@ val menu1 = listOf(
         dish = "Cheese Omelette",
         price = 1.15,
         rating = 3.9,
+        noOfRatings = 60,
+
         isVegetarian = false
 
     ),
@@ -66,6 +81,8 @@ val menu1 = listOf(
         dish = "Chicken Tikka Roll",
         price = 7.75,
         rating = 4.9,
+        noOfRatings = 33,
+
         isVegetarian = false
 
     ),
@@ -73,6 +90,8 @@ val menu1 = listOf(
         dish = "Baby Corn",
         price = 2.00,
         rating = 3.9,
+        noOfRatings = 55,
+
         isVegetarian = true
 
     ),
@@ -80,6 +99,8 @@ val menu1 = listOf(
         dish = "Veg Momo",
         price = 2.00,
         rating = 4.6,
+        noOfRatings = 63,
+
         isVegetarian = true
 
     ),
@@ -88,6 +109,8 @@ val menu1 = listOf(
         dish = "Chicken Momo",
         price = 3.50,
         rating = 4.9,
+        noOfRatings = 80,
+
         isVegetarian = false
 
     ),
@@ -96,13 +119,17 @@ val menu1 = listOf(
         dish = "Aloo Paratha",
         price = 1.00,
         rating = 2.9,
+        noOfRatings = 17,
+
         isVegetarian = true
 
     ),
     MenuItem(
-        dish = "Mutton Pula0",
+        dish = "Mutton Pulao",
         price = 7.75,
         rating = 2.9,
+        noOfRatings = 15,
+
         isVegetarian = false
 
     ),
@@ -110,6 +137,8 @@ val menu1 = listOf(
         dish = "Prawns Chilli",
         price = 5.75,
         rating = 3.5,
+        noOfRatings = 17,
+
         isVegetarian = false
 
     ),
@@ -117,6 +146,8 @@ val menu1 = listOf(
         dish = "Veg Fried Rice",
         price = 3.75,
         rating = 4.1,
+        noOfRatings = 42,
+
         isVegetarian = true
 
     ),
@@ -124,6 +155,8 @@ val menu1 = listOf(
         dish = "Prawn Fried Rice",
         price = 6.75,
         rating = 4.9,
+        noOfRatings = 52,
+
         isVegetarian = false
 
     ),
@@ -134,12 +167,16 @@ val menu2 = listOf(
         dish = "Masala Dosa",
         price = 4.50,
         rating = 4.4,
+        noOfRatings = 73,
+
         isVegetarian = true
     ),
     MenuItem(
         dish = "Papdi Chaat",
         price = 2.55,
         rating = 4.9,
+        noOfRatings = 33,
+
         isVegetarian = true
 
     ),
@@ -148,6 +185,8 @@ val menu2 = listOf(
         dish = "Chole Bhature",
         price = 3.75,
         rating = 4.8,
+        noOfRatings = 53,
+
         isVegetarian = true
 
     ),
@@ -156,6 +195,8 @@ val menu2 = listOf(
         dish = "Paw Bhaaji",
         price = 2.00,
         rating = 3.9,
+        noOfRatings = 67,
+
         isVegetarian = true
 
     ),
@@ -163,6 +204,8 @@ val menu2 = listOf(
         dish = "Amrit Peda",
         price = 2.00,
         rating = 4.6,
+        noOfRatings = 9,
+
         isVegetarian = true
 
     ),
@@ -171,6 +214,7 @@ val menu2 = listOf(
         dish = "Pani Puchka",
         price = 3.50,
         rating = 4.9,
+        noOfRatings = 93,
         isVegetarian = true
 
     ),
@@ -178,6 +222,7 @@ val menu2 = listOf(
         dish = "Raj Kachoori",
         price = 3.55,
         rating = 3.9,
+        noOfRatings = 83,
         isVegetarian = true
 
     ),
@@ -185,6 +230,7 @@ val menu2 = listOf(
         dish = "Plain Dosa",
         price = 3.95,
         rating = 4.7,
+        noOfRatings = 13,
         isVegetarian = true
     ),
 
@@ -192,6 +238,8 @@ val menu2 = listOf(
         dish = "Vada Pav",
         price = 5.00,
         rating = 4.2,
+        noOfRatings = 43,
+
         isVegetarian = true
 
     ),
@@ -201,6 +249,8 @@ val menu2 = listOf(
         dish = "Kachori",
         price = 3.75,
         rating = 2.9,
+        noOfRatings = 43,
+
         isVegetarian = true
 
     ),
@@ -208,6 +258,8 @@ val menu2 = listOf(
         dish = "Gond Ladoo",
         price = 1.15,
         rating = 3.9,
+        noOfRatings = 66,
+
         isVegetarian = true
 
     ),
@@ -215,6 +267,8 @@ val menu2 = listOf(
         dish = "Raskadam",
         price = 7.75,
         rating = 4.9,
+        noOfRatings = 13,
+
         isVegetarian = true
 
     ),
@@ -223,6 +277,7 @@ val menu2 = listOf(
         dish = "Aloo Paratha",
         price = 1.00,
         rating = 2.9,
+        noOfRatings = 23,
         isVegetarian = true
 
     ),
@@ -230,6 +285,7 @@ val menu2 = listOf(
         dish = "Samosa Chat",
         price = 7.75,
         rating = 2.9,
+        noOfRatings = 21,
         isVegetarian = true
 
     ),
@@ -237,6 +293,7 @@ val menu2 = listOf(
         dish = "Aloo Tikki",
         price = 5.75,
         rating = 3.5,
+        noOfRatings = 88,
         isVegetarian = true
 
     ),
@@ -244,6 +301,7 @@ val menu2 = listOf(
         dish = "Veg Fried Rice",
         price = 3.75,
         rating = 4.1,
+        noOfRatings = 78,
         isVegetarian = true
 
     ),
@@ -251,6 +309,7 @@ val menu2 = listOf(
         dish = "Butter Masala Dosa",
         price = 6.75,
         rating = 4.9,
+        noOfRatings = 31,
         isVegetarian = true
 
     ),
@@ -261,12 +320,14 @@ val menu3 = listOf(
         dish = "Szechwan Chilli Chicken",
         price = 6.75,
         rating = 4.9,
+        noOfRatings = 31,
         isVegetarian = false
     ),
     MenuItem(
         dish = "Veg Momo",
         price = 2.00,
         rating = 4.6,
+        noOfRatings = 13,
         isVegetarian = true
 
     ),
@@ -275,6 +336,7 @@ val menu3 = listOf(
         dish = "Chicken Momo",
         price = 3.50,
         rating = 4.9,
+        noOfRatings = 71,
         isVegetarian = false
 
     ),
@@ -283,6 +345,7 @@ val menu3 = listOf(
         dish = "Aloo Paratha",
         price = 1.00,
         rating = 2.9,
+        noOfRatings = 23,
         isVegetarian = true
 
     ),
@@ -290,6 +353,7 @@ val menu3 = listOf(
         dish = "Mutton Pula0",
         price = 7.75,
         rating = 2.9,
+        noOfRatings = 13,
         isVegetarian = false
 
     ),
@@ -297,6 +361,7 @@ val menu3 = listOf(
         dish = "Prawns Chilli",
         price = 5.75,
         rating = 3.5,
+        noOfRatings = 75,
         isVegetarian = false
 
     ),
@@ -304,6 +369,7 @@ val menu3 = listOf(
         dish = "Veg Fried Rice",
         price = 3.75,
         rating = 4.1,
+        noOfRatings = 73,
         isVegetarian = true
 
     ),
@@ -311,6 +377,7 @@ val menu3 = listOf(
         dish = "Veg Momo",
         price = 2.00,
         rating = 4.6,
+        noOfRatings = 23,
         isVegetarian = true
 
     ),
@@ -319,6 +386,7 @@ val menu3 = listOf(
         dish = "Chicken Momo",
         price = 3.50,
         rating = 4.9,
+        noOfRatings = 13,
         isVegetarian = false
 
     ),
@@ -327,6 +395,7 @@ val menu3 = listOf(
         dish = "Aloo Paratha",
         price = 1.00,
         rating = 2.9,
+        noOfRatings = 23,
         isVegetarian = true
 
     ),
@@ -334,6 +403,7 @@ val menu3 = listOf(
         dish = "Mutton Pula0",
         price = 7.75,
         rating = 2.9,
+        noOfRatings = 57,
         isVegetarian = false
 
     ),
@@ -341,6 +411,7 @@ val menu3 = listOf(
         dish = "Prawns Chilli",
         price = 5.75,
         rating = 3.5,
+        noOfRatings = 23,
         isVegetarian = false
 
     ),
@@ -348,6 +419,7 @@ val menu3 = listOf(
         dish = "Veg Fried Rice",
         price = 3.75,
         rating = 4.1,
+        noOfRatings = 13,
         isVegetarian = true
 
     ),
@@ -355,12 +427,15 @@ val menu3 = listOf(
         dish = "Masala Dosa",
         price = 4.50,
         rating = 4.4,
+        noOfRatings = 77,
+
         isVegetarian = true
     ),
     MenuItem(
         dish = "Papdi Chaat",
         price = 2.55,
         rating = 4.9,
+        noOfRatings = 79,
         isVegetarian = true
 
     ),
@@ -369,6 +444,7 @@ val menu3 = listOf(
         dish = "Chole Bhature",
         price = 3.75,
         rating = 4.8,
+        noOfRatings = 45,
         isVegetarian = true
 
     ),
@@ -377,13 +453,14 @@ val menu3 = listOf(
         dish = "Paw Bhaaji",
         price = 2.00,
         rating = 3.9,
+        noOfRatings = 23,
         isVegetarian = true
-
     ),
     MenuItem(
         dish = "Amrit Peda",
         price = 2.00,
         rating = 4.6,
+        noOfRatings = 81,
         isVegetarian = true
 
     ),
@@ -392,6 +469,7 @@ val menu3 = listOf(
         dish = "Pani Puchka",
         price = 3.50,
         rating = 4.9,
+        noOfRatings = 32,
         isVegetarian = true
 
     ),

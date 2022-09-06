@@ -1,12 +1,15 @@
 package com.example.foodike.presentation.details
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.runtime.*
@@ -22,12 +25,14 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.foodike.R
+import com.example.foodike.domain.model.MenuItem
 import com.example.foodike.domain.model.Restaurant
 import com.example.foodike.presentation.components.getCustomerInfo
 import com.example.foodike.presentation.components.getTimeInMins
 import com.example.foodike.presentation.home.HomeViewModel
 import com.example.foodike.presentation.home.RecommendedCard
 import com.example.foodike.presentation.home.RecommendedSection
+import kotlin.random.Random
 
 @Composable
 fun RestaurantDetail(
@@ -36,6 +41,9 @@ fun RestaurantDetail(
     viewModel: RestaurantDetailViewModel = hiltViewModel()
 ) {
     var isFavorite by remember { mutableStateOf(false) }
+
+    val restaurant = viewModel.getRestaurantFromName(name)!!
+
 
 
 
@@ -77,33 +85,177 @@ fun RestaurantDetail(
         }
         Column(modifier = Modifier.padding(16.dp)) {
             RestaurantDetailCard(
-                viewModel.getRestaurantFromName(name)!!
+                restaurant
             )
 
         }
-//        RecommendedMenuItemSection()
-//        VegMenuItemSection()
-//        NonVegMenuItemSection()
-
+        RecommendedMenuItemSection(restaurant.menu)
 
 
     }
 }
 
-//@Composable
-//fun NonVegMenuItemSection() {
-//    TODO("Not yet implemented")
-//}
-//
-//@Composable
-//fun VegMenuItemSection() {
-//    TODO("Not yet implemented")
-//}
-//
-//@Composable
-//fun RecommendedMenuItemSection() {
-//    TODO("Not yet implemented")
-//}
+@Composable
+fun MenuItemCard(
+    menuItem: MenuItem
+) {
+    Row(
+        modifier = Modifier
+            .height(120.dp)
+            .fillMaxWidth()
+            .padding(24.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        val state = remember { mutableStateOf(0) }
+
+        Column(
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (menuItem.isVegetarian) {
+                    Image(
+                        modifier = Modifier.size(18.dp),
+                        painter = painterResource(id = R.drawable.ic_veg),
+                        contentDescription = "Vegetarian"
+                    )
+                } else {
+                    Image(
+                        modifier = Modifier.size(16.dp),
+                        painter = painterResource(id = R.drawable.ic_non_veg),
+                        contentDescription = "Non-Vegetarian"
+                    )
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = menuItem.dish)
+            }
+
+            Text(text = "  $  ${menuItem.price}")
+            Row {
+                Icon(
+                    imageVector = Icons.Filled.Star,
+                    contentDescription = "Rating",
+                    tint = Color(0xFFFF7A00)
+                )
+                Text(text = menuItem.rating.toString())
+                Text(
+                    text = " · ",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+                Text(
+                    text = menuItem.noOfRatings.toString() + " ratings",
+                )
+            }
+        }
+
+        if (
+            state.value == 0
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            )
+            {
+                Row {
+                    Text(
+                        text = "Add",
+                        modifier = Modifier.clickable { state.value++ },
+                        color = MaterialTheme.colors.primary,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.width(24.dp))
+                }
+            }
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Surface(
+                    modifier = Modifier
+                        .border(
+                            BorderStroke(1.dp, Color.Black.copy(0.5f)),
+                            MaterialTheme.shapes.medium
+                        ),
+                    shape = MaterialTheme.shapes.medium,
+                    color = Color.White,
+                    contentColor = MaterialTheme.colors.primary
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        IconButton(onClick = { state.value-- }) {
+                            Icon(
+                                imageVector = Icons.Default.Remove,
+                                contentDescription = "Subtract",
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
+                        Text(text = state.value.toString())
+                        IconButton(onClick = { state.value++ }) {
+                            Icon(
+                                imageVector = Icons.Filled.Add,
+                                contentDescription = "Add",
+                                modifier = Modifier.size(16.dp)
+
+                            )
+                        }
+
+                    }
+
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun NonVegMenuItemSection(
+    list: List<MenuItem>
+) {
+    val newList = list.filter {
+        !it.isVegetarian
+    }
+    LazyColumn {
+        items(newList.size) {
+            MenuItemCard(menuItem = newList[it])
+        }
+    }
+}
+
+@Composable
+fun VegMenuItemSection(
+    list: List<MenuItem>
+) {
+    val newList = list.filter {
+        it.isVegetarian
+    }
+    LazyColumn {
+        items(newList.size) {
+            MenuItemCard(menuItem = newList[it])
+        }
+    }
+}
+
+@Composable
+fun RecommendedMenuItemSection(
+    list: List<MenuItem>
+) {
+val recommendedList = list.shuffled().dropLast(list.size - 5)
+
+    LazyColumn {
+        items(recommendedList.size) {
+            MenuItemCard(menuItem = recommendedList[it])
+        }
+    }
+}
 
 @Composable
 fun RestaurantDetailCard(
