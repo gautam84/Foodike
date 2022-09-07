@@ -16,7 +16,7 @@ val menu1 = listOf(
         isVegetarian = false
     ),
     MenuItem(
-        dish = "Guacamole with Chips and Salsa",
+        dish = "Guacamole with Chips",
         price = 4.50,
         rating = 4.4,
         noOfRatings = 15,
