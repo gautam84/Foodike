@@ -3,7 +3,9 @@ package com.example.foodike.presentation.history
 import android.app.Activity
 import android.graphics.Paint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Tab
@@ -24,14 +26,22 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.foodike.R
+import com.example.foodike.data.data_source.menu2
+import com.example.foodike.data.data_source.restaurantList
+import com.example.foodike.domain.model.Restaurant
+import com.example.foodike.presentation.components.RestaurantCard
 import com.example.foodike.presentation.components.SearchBar
 import com.example.foodike.presentation.home.FavouriteSection
+import com.example.foodike.presentation.util.Screen
 import com.google.accompanist.pager.*
 import kotlinx.coroutines.launch
 
 @ExperimentalPagerApi
 @Composable
-fun History() {
+fun History(
+
+) {
 
 
     val context = LocalContext.current as Activity
@@ -54,7 +64,7 @@ fun History() {
 
             Tabs(pagerState = pagerState)
         }
-        TabsContent(pagerState = pagerState)
+        TabsContent(pagerState = pagerState, restaurantList)
 
     }
 }
@@ -68,7 +78,7 @@ fun Tabs(pagerState: PagerState) {
 
     TabRow(
         selectedTabIndex = pagerState.currentPage,
-        modifier = Modifier.padding(0.dp,0.dp,75.dp,0.dp),
+        modifier = Modifier.padding(0.dp, 0.dp, 75.dp, 0.dp),
         backgroundColor = Color.White,
         contentColor = Color.White,
         indicator = { tabPositions ->
@@ -107,24 +117,42 @@ fun Tabs(pagerState: PagerState) {
 
 @ExperimentalPagerApi
 @Composable
-fun TabsContent(pagerState: PagerState) {
+fun TabsContent(pagerState: PagerState, list: List<Restaurant>) {
 
     HorizontalPager(count = 2, state = pagerState) { page ->
         when (page) {
             0 -> HistorySection()
-            1 -> FavouritesSection()
+            1 -> FavouritesSection(list = list)
         }
     }
 
 }
 
 @Composable
-fun FavouritesSection() {
+fun FavouritesSection(
+    list: List<Restaurant>,
+
+) {
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp)
 
     ) {
-        Text(text = "FAVORITEEE")
+        LazyColumn {
+
+            items(list.size) {
+                RestaurantCard(
+                    restaurant = list[it],
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(8.dp))
+                        .clickable {
+//                            navController.navigate(Screen.RestaurantDetails.withArgs(list[it].name))
+                        }
+                )
+            }
+
+        }
     }
 }
 

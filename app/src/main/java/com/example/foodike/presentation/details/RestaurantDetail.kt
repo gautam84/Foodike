@@ -38,9 +38,14 @@ fun RestaurantDetail(
     navController: NavHostController,
     viewModel: RestaurantDetailViewModel = hiltViewModel()
 ) {
-    var isFavorite by remember { mutableStateOf(false) }
 
     val restaurant = viewModel.getRestaurantFromName(name)!!
+
+    viewModel.setLikeStatus(restaurant)
+
+
+    val isFavorite by viewModel.likedRestaurants
+//    val isFavorite = true
 
 
     var expandedState by remember { mutableStateOf(true) }
@@ -62,6 +67,8 @@ fun RestaurantDetail(
 
 
 
+
+
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         item {
             Row(
@@ -75,7 +82,15 @@ fun RestaurantDetail(
                     IconToggleButton(
                         checked = isFavorite,
                         onCheckedChange = {
-                            isFavorite = !isFavorite
+                            if (isFavorite) {
+                                viewModel.removeRestaurant(restaurant)
+                                viewModel.setLikeStatus(restaurant)
+
+                            } else {
+                                viewModel.addRestaurant(restaurant)
+                                viewModel.setLikeStatus(restaurant)
+                            }
+
                         },
                     ) {
                         if (isFavorite) {
@@ -154,9 +169,11 @@ fun RestaurantDetail(
             items(recommendedList.size) {
                 MenuItemCard(menuItem = recommendedList[it])
                 if (it != (recommendedList.size - 1)) {
-                    Divider(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(24.dp, 0.dp))
+                    Divider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(24.dp, 0.dp)
+                    )
                 }
             }
 
@@ -207,9 +224,11 @@ fun RestaurantDetail(
             items(nonVegList.size) {
                 MenuItemCard(menuItem = nonVegList[it])
                 if (it != (nonVegList.size - 1)) {
-                    Divider(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(24.dp, 0.dp))
+                    Divider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(24.dp, 0.dp)
+                    )
                 }
             }
         }
@@ -258,9 +277,11 @@ fun RestaurantDetail(
             items(vegList.size) {
                 MenuItemCard(menuItem = vegList[it])
                 if (it != (vegList.size - 1)) {
-                    Divider(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(24.dp, 0.dp))
+                    Divider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(24.dp, 0.dp)
+                    )
                 }
             }
 

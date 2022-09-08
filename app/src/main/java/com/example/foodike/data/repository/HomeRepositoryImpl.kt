@@ -1,5 +1,8 @@
 package com.example.foodike.data.repository
 
+import com.example.foodike.data.data_source.adList
+import com.example.foodike.data.data_source.recommendedList
+import com.example.foodike.data.data_source.restaurantList
 import com.example.foodike.domain.model.Advertisement
 import com.example.foodike.domain.model.FoodItem
 import com.example.foodike.domain.model.Restaurant

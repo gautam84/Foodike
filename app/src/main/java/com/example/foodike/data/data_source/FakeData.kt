@@ -1,4 +1,4 @@
-package com.example.foodike.data.repository
+package com.example.foodike.data.data_source
 
 import androidx.compose.ui.graphics.Color
 import com.example.foodike.R

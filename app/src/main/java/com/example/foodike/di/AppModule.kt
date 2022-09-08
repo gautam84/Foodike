@@ -3,8 +3,10 @@ package com.example.foodike.di
 import android.content.Context
 import com.example.foodike.data.repository.HomeRepositoryImpl
 import com.example.foodike.data.repository.LoginRepositoryImpl
+import com.example.foodike.data.repository.UserDataRepositoryImpl
 import com.example.foodike.domain.repository.HomeRepository
 import com.example.foodike.domain.repository.LoginRepository
+import com.example.foodike.domain.repository.UserDataRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,7 +27,13 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesHomeRepository() : HomeRepository = HomeRepositoryImpl()
+    fun providesHomeRepository(): HomeRepository = HomeRepositoryImpl()
+
+    @Provides
+    @Singleton
+    fun providesUserDataRepository(
+        @ApplicationContext context: Context
+    ): UserDataRepository = UserDataRepositoryImpl(context = context)
 
 
 }
