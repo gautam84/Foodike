@@ -11,6 +11,7 @@ import com.example.foodike.domain.model.Advertisement
 import com.example.foodike.domain.model.FoodItem
 import com.example.foodike.domain.model.Restaurant
 import com.example.foodike.domain.repository.HomeRepository
+import com.example.foodike.domain.repository.UserDataRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.util.*
@@ -18,7 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: HomeRepository
+    private val repository: HomeRepository,
+    private val userDataRepository: UserDataRepository
 ) : ViewModel() {
 
     private val _ads = mutableStateOf(listOf<Advertisement>())
@@ -30,10 +32,23 @@ class HomeViewModel @Inject constructor(
     private val _food = mutableStateOf(listOf<FoodItem>())
     val food: State<List<FoodItem>> = _food
 
+
+    private val _likedRestaurants = mutableStateOf(mutableListOf<Restaurant>())
+    val likedRestaurants: State<List<Restaurant>> = _likedRestaurants
+
     init {
         loadAds()
         loadRestaurants()
         loadFoodItems()
+
+        viewModelScope.launch {
+            userDataRepository.getLikedRestaurants().collect {
+                it.forEach { name ->
+                    _likedRestaurants.value.add(repository.getRestaurantFromName(name)!!)
+                }
+            }
+
+        }
     }
 
     private fun loadFoodItems() {

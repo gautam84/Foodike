@@ -41,6 +41,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.foodike.R
 import com.example.foodike.domain.model.Advertisement
 import com.example.foodike.domain.model.FoodItem
+import com.example.foodike.domain.model.Restaurant
 import com.example.foodike.presentation.components.RestaurantCard
 import com.example.foodike.presentation.components.SearchBar
 import com.example.foodike.presentation.home.components.ChipBar
@@ -64,6 +65,8 @@ fun Home(
     val adsList by remember { viewModel.ads }
     val restaurantList by remember { viewModel.restaurants }
     val foodList by remember { viewModel.food }
+
+    val likedList by viewModel.likedRestaurants
 
     LazyColumn(
         modifier =
@@ -95,9 +98,11 @@ fun Home(
             RecommendedSection(foodList)
             Spacer(modifier = Modifier.height(16.dp))
         }
-        item {
-            FavouriteSection()
-            Spacer(modifier = Modifier.height(16.dp))
+        if (likedList.isNotEmpty()) {
+            item {
+                FavouriteSection(likedList, navController)
+                Spacer(modifier = Modifier.height(16.dp))
+            }
         }
         item {
             MainSection()
@@ -124,7 +129,13 @@ fun Home(
 
 @Composable
 fun ThankYouSection() {
-    Row(modifier = Modifier.fillMaxWidth().padding(24.dp), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(24.dp),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Text(
             text = "With ",
             modifier = Modifier.alpha(0.5f),
@@ -244,7 +255,10 @@ fun MainSection() {
 
 
 @Composable
-fun FavouriteSection() {
+fun FavouriteSection(
+    list: List<Restaurant>,
+    navController: NavHostController
+) {
     Column(modifier = Modifier.padding(8.dp, 0.dp))
     {
         Text(
@@ -254,12 +268,16 @@ fun FavouriteSection() {
         )
         Spacer(modifier = Modifier.height(8.dp))
 
-        Row {
-            FavouriteCard()
-            Spacer(modifier = Modifier.width(12.dp))
-            FavouriteCard()
-            Spacer(modifier = Modifier.width(12.dp))
-            FavouriteCard()
+        LazyRow {
+            items(list.size) {
+                FavouriteCard(restaurant = list[it], modifier = Modifier.clickable {
+                    navController.navigate(Screen.RestaurantDetails.withArgs(list[it].name))
+
+
+                })
+                if (it != (list.size - 1)) {
+                    Spacer(modifier = Modifier.width(12.dp))
+                }            }
 
 
         }
@@ -267,19 +285,23 @@ fun FavouriteSection() {
 }
 
 @Composable
-fun FavouriteCard() {
+fun FavouriteCard(
+    restaurant: Restaurant,
+    modifier: Modifier
+) {
     Column(
+        modifier = modifier,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(id = R.drawable.chinese), contentDescription = "Restaurant",
+            painter = painterResource(id = restaurant.image), contentDescription = "Restaurant",
             modifier = Modifier
                 .size(100.dp, 130.dp)
                 .shadow(elevation = 0.dp, shape = RoundedCornerShape(8.dp), clip = true),
             contentScale = ContentScale.Crop
         )
-        Text(text = "Burger")
+        Text(text = restaurant.name)
 
     }
 }

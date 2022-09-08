@@ -65,7 +65,7 @@ fun NavigationGraph(
         composable(
             route = Screen.History.route
         ) {
-            History()
+            History(navHostController = navController)
         }
         composable(
             route = Screen.Cart.route

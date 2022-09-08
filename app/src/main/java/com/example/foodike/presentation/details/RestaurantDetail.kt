@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Share
+import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +32,7 @@ import com.example.foodike.domain.model.MenuItem
 import com.example.foodike.domain.model.Restaurant
 import com.example.foodike.presentation.components.getCustomerInfo
 import com.example.foodike.presentation.components.getTimeInMins
+import com.example.foodike.presentation.util.Screen
 
 @Composable
 fun RestaurantDetail(
@@ -64,231 +66,240 @@ fun RestaurantDetail(
     )
 
 
+  Box(contentAlignment = Alignment.BottomEnd)  {
+        LazyColumn(modifier = Modifier.fillMaxSize()) {
+            item {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    IconButton(onClick = { navController.navigateUp() }) {
+                        Icon(imageVector = Icons.Outlined.ArrowBack, contentDescription = "Back")
+                    }
+                    Row {
+                        IconToggleButton(
+                            checked = isFavorite,
+                            onCheckedChange = {
+                                if (isFavorite) {
+                                    viewModel.removeRestaurant(restaurant)
+                                    viewModel.setLikeStatus(restaurant)
 
+                                } else {
+                                    viewModel.addRestaurant(restaurant)
+                                    viewModel.setLikeStatus(restaurant)
+                                }
 
-
-
-
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
-        item {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                IconButton(onClick = { navController.navigateUp() }) {
-                    Icon(imageVector = Icons.Outlined.ArrowBack, contentDescription = "Back")
-                }
-                Row {
-                    IconToggleButton(
-                        checked = isFavorite,
-                        onCheckedChange = {
+                            },
+                        ) {
                             if (isFavorite) {
-                                viewModel.removeRestaurant(restaurant)
-                                viewModel.setLikeStatus(restaurant)
-
+                                Icon(
+                                    imageVector = Icons.Filled.Favorite,
+                                    contentDescription = "Favourite",
+                                    tint = Color.Red
+                                )
                             } else {
-                                viewModel.addRestaurant(restaurant)
-                                viewModel.setLikeStatus(restaurant)
+                                Icon(
+                                    imageVector = Icons.Default.FavoriteBorder,
+                                    contentDescription = "Favourite"
+                                )
                             }
 
-                        },
-                    ) {
-                        if (isFavorite) {
-                            Icon(
-                                imageVector = Icons.Filled.Favorite,
-                                contentDescription = "Favourite",
-                                tint = Color.Red
-                            )
-                        } else {
-                            Icon(
-                                imageVector = Icons.Default.FavoriteBorder,
-                                contentDescription = "Favourite"
-                            )
+                        }
+                        IconButton(onClick = {
+
+                        }) {
+                            Icon(imageVector = Icons.Outlined.Share, contentDescription = "Share")
                         }
 
                     }
-                    IconButton(onClick = {
+                }
+            }
+            item {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    RestaurantDetailCard(
+                        restaurant
+                    )
 
-                    }) {
-                        Icon(imageVector = Icons.Outlined.Share, contentDescription = "Share")
+                }
+            }
+            val recommendedList = restaurant.menu.shuffled().dropLast(restaurant.menu.size - 5)
+
+
+
+
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(24.dp, 0.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .weight(6f),
+                        text = "Recommended",
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    IconButton(
+                        modifier = Modifier
+                            .weight(1f)
+                            .alpha(ContentAlpha.medium)
+                            .rotate(rotationState),
+                        onClick = {
+                            expandedState = !expandedState
+                        }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowDropDown,
+                            contentDescription = "Drop-Down Arrow"
+                        )
                     }
 
                 }
-            }
-        }
-        item {
-            Column(modifier = Modifier.padding(16.dp)) {
-                RestaurantDetailCard(
-                    restaurant
-                )
 
             }
-        }
-        val recommendedList = restaurant.menu.shuffled().dropLast(restaurant.menu.size - 5)
+            if (expandedState) {
 
-
-
-
-        item {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(24.dp, 0.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-
-            ) {
-                Text(
-                    modifier = Modifier
-                        .weight(6f),
-                    text = "Recommended",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                IconButton(
-                    modifier = Modifier
-                        .weight(1f)
-                        .alpha(ContentAlpha.medium)
-                        .rotate(rotationState),
-                    onClick = {
-                        expandedState = !expandedState
-                    }) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowDropDown,
-                        contentDescription = "Drop-Down Arrow"
-                    )
+                items(recommendedList.size) {
+                    MenuItemCard(menuItem = recommendedList[it])
+                    if (it != (recommendedList.size - 1)) {
+                        Divider(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(24.dp, 0.dp)
+                        )
+                    }
                 }
 
+
             }
 
-        }
-        if (expandedState) {
+            val nonVegList = restaurant.menu.filter {
+                !it.isVegetarian
+            }
 
-            items(recommendedList.size) {
-                MenuItemCard(menuItem = recommendedList[it])
-                if (it != (recommendedList.size - 1)) {
-                    Divider(
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(24.dp, 0.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+
+                ) {
+                    Text(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(24.dp, 0.dp)
+                            .weight(6f),
+                        text = "Non-Vegetarian",
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
-                }
-            }
-
-
-        }
-
-        val nonVegList = restaurant.menu.filter {
-            !it.isVegetarian
-        }
-
-        item {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(24.dp, 0.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-
-            ) {
-                Text(
-                    modifier = Modifier
-                        .weight(6f),
-                    text = "Non-Vegetarian",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                IconButton(
-                    modifier = Modifier
-                        .weight(1f)
-                        .alpha(ContentAlpha.medium)
-                        .rotate(rotationStateNonVeg),
-                    onClick = {
-                        expandedStateNonVeg = !expandedStateNonVeg
-                    }) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowDropDown,
-                        contentDescription = "Drop-Down Arrow"
-                    )
-                }
-
-            }
-
-        }
-        if (expandedStateNonVeg) {
-
-            items(nonVegList.size) {
-                MenuItemCard(menuItem = nonVegList[it])
-                if (it != (nonVegList.size - 1)) {
-                    Divider(
+                    IconButton(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(24.dp, 0.dp)
-                    )
-                }
-            }
-        }
+                            .weight(1f)
+                            .alpha(ContentAlpha.medium)
+                            .rotate(rotationStateNonVeg),
+                        onClick = {
+                            expandedStateNonVeg = !expandedStateNonVeg
+                        }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowDropDown,
+                            contentDescription = "Drop-Down Arrow"
+                        )
+                    }
 
-        val vegList = restaurant.menu.filter {
-            it.isVegetarian
-        }
-
-        item {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(24.dp, 0.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-
-            ) {
-                Text(
-                    modifier = Modifier
-                        .weight(6f),
-                    text = "Vegetarian",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                IconButton(
-                    modifier = Modifier
-                        .weight(1f)
-                        .alpha(ContentAlpha.medium)
-                        .rotate(rotationStateVeg),
-                    onClick = {
-                        expandedStateVeg = !expandedStateVeg
-                    }) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowDropDown,
-                        contentDescription = "Drop-Down Arrow"
-                    )
                 }
 
             }
+            if (expandedStateNonVeg) {
 
-        }
-        if (expandedStateVeg) {
+                items(nonVegList.size) {
+                    MenuItemCard(menuItem = nonVegList[it])
+                    if (it != (nonVegList.size - 1)) {
+                        Divider(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(24.dp, 0.dp)
+                        )
+                    }
+                }
+            }
 
-            items(vegList.size) {
-                MenuItemCard(menuItem = vegList[it])
-                if (it != (vegList.size - 1)) {
-                    Divider(
+            val vegList = restaurant.menu.filter {
+                it.isVegetarian
+            }
+
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(24.dp, 0.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+
+                ) {
+                    Text(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(24.dp, 0.dp)
+                            .weight(6f),
+                        text = "Vegetarian",
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
+                    IconButton(
+                        modifier = Modifier
+                            .weight(1f)
+                            .alpha(ContentAlpha.medium)
+                            .rotate(rotationStateVeg),
+                        onClick = {
+                            expandedStateVeg = !expandedStateVeg
+                        }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowDropDown,
+                            contentDescription = "Drop-Down Arrow"
+                        )
+                    }
+
                 }
+
+            }
+            if (expandedStateVeg) {
+
+                items(vegList.size) {
+                    MenuItemCard(menuItem = vegList[it])
+                    if (it != (vegList.size - 1)) {
+                        Divider(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(24.dp, 0.dp)
+                        )
+                    }
+                }
+
+
             }
 
 
         }
 
+      Column(modifier=Modifier.padding(16.dp))  {
+            FloatingActionButton(
+                onClick = {
+                    navController.navigate(Screen.Cart.route)
 
+                },
+                backgroundColor = MaterialTheme.colors.primary
+            ) {
+                Icon(Icons.Outlined.ShoppingCart, "Cart")
+            }
+        }
     }
 }
 

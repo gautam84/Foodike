@@ -15,6 +15,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -28,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.example.foodike.R
 import com.example.foodike.data.data_source.menu2
 import com.example.foodike.data.data_source.restaurantList
@@ -42,7 +44,8 @@ import kotlinx.coroutines.launch
 @ExperimentalPagerApi
 @Composable
 fun History(
-    viewModel: HistoryViewModel = hiltViewModel()
+    viewModel: HistoryViewModel = hiltViewModel(),
+    navHostController: NavHostController
 ) {
 
     val list by viewModel.likedRestaurants
@@ -68,7 +71,8 @@ fun History(
 
             Tabs(pagerState = pagerState)
         }
-        TabsContent(pagerState = pagerState, list)
+        TabsContent(pagerState = pagerState, list,
+        navHostController = navHostController)
 
     }
 }
@@ -121,12 +125,12 @@ fun Tabs(pagerState: PagerState) {
 
 @ExperimentalPagerApi
 @Composable
-fun TabsContent(pagerState: PagerState, list: List<Restaurant>) {
+fun TabsContent(pagerState: PagerState, list: List<Restaurant>, navHostController: NavHostController) {
 
     HorizontalPager(count = 2, state = pagerState) { page ->
         when (page) {
             0 -> HistorySection()
-            1 -> FavouritesSection(list = list)
+            1 -> FavouritesSection(list = list, navHostController)
         }
     }
 
@@ -135,6 +139,7 @@ fun TabsContent(pagerState: PagerState, list: List<Restaurant>) {
 @Composable
 fun FavouritesSection(
     list: List<Restaurant>,
+    navHostController: NavHostController
 
     ) {
     Column(
@@ -143,19 +148,31 @@ fun FavouritesSection(
             .padding(8.dp)
 
     ) {
-        LazyColumn {
+        if (list.isNotEmpty()) {
+            LazyColumn {
 
-            items(list.size) {
-                RestaurantCard(
-                    restaurant = list[it],
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(8.dp))
-                        .clickable {
-//                            navController.navigate(Screen.RestaurantDetails.withArgs(list[it].name))
-                        }
-                )
+                items(list.size) {
+                    RestaurantCard(
+                        restaurant = list[it],
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(8.dp))
+                            .clickable {
+                                navHostController.navigate(Screen.RestaurantDetails.withArgs(list[it].name))
+                            }
+                    )
+                }
+
             }
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
 
+            ) {
+                Text(text = "Empty")
+            }
         }
     }
 }
