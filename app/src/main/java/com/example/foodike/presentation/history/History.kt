@@ -13,6 +13,7 @@ import androidx.compose.material.TabRow
 import androidx.compose.material.TabRowDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,6 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.foodike.R
 import com.example.foodike.data.data_source.menu2
 import com.example.foodike.data.data_source.restaurantList
@@ -40,8 +42,10 @@ import kotlinx.coroutines.launch
 @ExperimentalPagerApi
 @Composable
 fun History(
-
+    viewModel: HistoryViewModel = hiltViewModel()
 ) {
+
+    val list by viewModel.likedRestaurants
 
 
     val context = LocalContext.current as Activity
@@ -64,7 +68,7 @@ fun History(
 
             Tabs(pagerState = pagerState)
         }
-        TabsContent(pagerState = pagerState, restaurantList)
+        TabsContent(pagerState = pagerState, list)
 
     }
 }
@@ -132,7 +136,7 @@ fun TabsContent(pagerState: PagerState, list: List<Restaurant>) {
 fun FavouritesSection(
     list: List<Restaurant>,
 
-) {
+    ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
