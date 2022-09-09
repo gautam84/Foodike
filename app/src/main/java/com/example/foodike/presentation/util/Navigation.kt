@@ -70,7 +70,7 @@ fun NavigationGraph(
         composable(
             route = Screen.Cart.route
         ) {
-            Cart()
+            Cart(navController = navController)
         }
         composable(
             route = Screen.Profile.route

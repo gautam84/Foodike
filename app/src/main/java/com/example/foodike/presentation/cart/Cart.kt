@@ -1,15 +1,49 @@
 package com.example.foodike.presentation.cart
 
 import android.app.Activity
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.Remove
+import androidx.compose.material.icons.outlined.Search
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import com.example.foodike.R
+import com.example.foodike.data.data_source.menu2
+import com.example.foodike.domain.model.MenuItem
+import com.example.foodike.domain.model.Restaurant
+import com.example.foodike.presentation.components.getTimeInMins
+import kotlin.math.round
+import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 
 @Composable
-fun Cart(){
+fun Cart(
+    navController: NavHostController
+) {
 
 
     val context = LocalContext.current as Activity
@@ -17,7 +51,385 @@ fun Cart(){
     context.window.statusBarColor = Color.Gray.toArgb()
     context.window.navigationBarColor = Color.White.toArgb()
 
-    Column {
-        Text(text = "cart")
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color(0xFFE8E7E7)),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            IconButton(onClick = { navController.navigateUp() }) {
+                Icon(imageVector = Icons.Outlined.Close, contentDescription = "Back")
+            }
+        }
+
+        ItemSection()
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        CouponBar()
+        DeliverySection(
+            Restaurant(
+                name = "Relish",
+                rating = 3.9,
+                noOfRatings = 258,
+                timeInMillis = 1800000,
+                variety = "American, French",
+                place = "Misamari",
+                averagePrice = 1.0,
+                image = R.drawable.pizza,
+                menu = menu2
+            )
+        )
+        BillSection(
+            itemTotal = 6.09
+        )
+
+
+    }
+}
+
+fun Double.round(decimals: Int): Double {
+    var multiplier = 1.0
+    repeat(decimals) { multiplier *= 10 }
+    return round(this * multiplier) / multiplier
+}
+
+@Composable
+fun BillSection(
+    itemTotal: Double
+) {
+
+    Column(modifier = Modifier.padding(16.dp)) {
+
+
+        Card(
+            shape = RoundedCornerShape(24.dp),
+            elevation = 16.dp
+
+        ) {
+            Column(modifier = Modifier.padding(24.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = "Bill  Details", fontWeight = FontWeight.Bold)
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Column {
+                        Text(text = "Item total:")
+                        Text(text = "Taxes and charges:")
+                        Text(text = "Total:")
+                    }
+                    Column {
+                        Text(text = "$$itemTotal")
+                        Text(text = "$${((0.18) * itemTotal).round(2)}")
+                        Text(text = "$${(itemTotal + ((0.18) * itemTotal).round(2)).round(2)}")
+
+                    }
+
+
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Button(onClick = { /*TODO*/ }) {
+                        Text(text = "Proceed to Pay")
+                    }
+
+                }
+
+            }
+        }
+    }
+}
+
+@Composable
+fun DeliverySection(
+    restaurant: Restaurant
+) {
+    Column(modifier = Modifier.padding(16.dp)) {
+
+
+        Card(
+            shape = RoundedCornerShape(24.dp),
+            elevation = 16.dp
+
+        ) {
+            Column(modifier = Modifier.padding(24.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = "Deliver to:", fontWeight = FontWeight.Bold)
+                    IconButton(onClick = { }) {
+                        Icon(imageVector = Icons.Outlined.Edit, contentDescription = "Back")
+                    }
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Column {
+                        Text(text = "Location:")
+                        Text(text = "Estimated time:")
+                    }
+                    Column {
+                        Text(text = "Guwahati")
+                        Text(text = getTimeInMins(restaurant.timeInMillis))
+                    }
+
+
+                }
+
+            }
+        }
+    }
+}
+
+@Composable
+fun ItemSection(
+
+) {
+    Column(modifier = Modifier.padding(16.dp)) {
+
+
+        Card(
+            shape = RoundedCornerShape(24.dp),
+            elevation = 16.dp
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                CartItem(
+                    MenuItem(
+                        dish = "Pani Puchka",
+                        price = 3.50,
+                        rating = 4.9,
+                        noOfRatings = 32,
+                        isVegetarian = true
+
+                    )
+                )
+
+                CartItem(
+                    MenuItem(
+                        dish = "Pani Puchka",
+                        price = 3.50,
+                        rating = 4.9,
+                        noOfRatings = 32,
+                        isVegetarian = true
+
+                    )
+                )
+                CartItem(
+                    MenuItem(
+                        dish = "Pani Puchka",
+                        price = 3.50,
+                        rating = 4.9,
+                        noOfRatings = 32,
+                        isVegetarian = true
+
+                    )
+                )
+                CartItem(
+                    MenuItem(
+                        dish = "Pani Puchka",
+                        price = 3.50,
+                        rating = 4.9,
+                        noOfRatings = 32,
+                        isVegetarian = true
+
+                    )
+                )
+                Divider(modifier = Modifier.fillMaxWidth())
+
+                val inputValue = remember { mutableStateOf("") }
+                val hintState = remember {
+                    mutableStateOf(true)
+                }
+
+                Box {
+                    BasicTextField(
+                        value = inputValue.value,
+                        onValueChange = { inputValue.value = it },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(24.dp)
+                            .onFocusChanged {
+                                hintState.value = !it.isFocused
+
+                            }
+                    )
+
+                    if (hintState.value) {
+                        Text(text = "Write instruction for restaurant...", color = Color.DarkGray)
+                    }
+                }
+            }
+
+        }
+    }
+}
+
+@Composable
+fun CartItem(
+    menuItem: MenuItem
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        val state = remember { mutableStateOf(0) }
+
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (menuItem.isVegetarian) {
+                Image(
+                    modifier = Modifier.size(18.dp),
+                    painter = painterResource(id = R.drawable.ic_veg),
+                    contentDescription = "Vegetarian"
+                )
+            } else {
+                Image(
+                    modifier = Modifier.size(16.dp),
+                    painter = painterResource(id = R.drawable.ic_non_veg),
+                    contentDescription = "Non-Vegetarian"
+                )
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = menuItem.dish)
+        }
+
+        if (
+            state.value == 0
+        ) {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            )
+            {
+                Row {
+                    Text(
+                        text = "Add",
+                        modifier = Modifier.clickable { state.value++ },
+                        color = MaterialTheme.colors.primary,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.width(24.dp))
+                }
+            }
+        } else {
+            Column(
+
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Surface(
+                    modifier = Modifier
+                        .border(
+                            BorderStroke(1.dp, Color.Black.copy(0.5f)),
+                            MaterialTheme.shapes.medium
+                        ),
+                    shape = MaterialTheme.shapes.medium,
+                    color = Color.White,
+                    contentColor = MaterialTheme.colors.primary
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        IconButton(onClick = { state.value-- }) {
+                            Icon(
+                                imageVector = Icons.Default.Remove,
+                                contentDescription = "Subtract",
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
+                        Text(text = state.value.toString())
+                        IconButton(onClick = { state.value++ }) {
+                            Icon(
+                                imageVector = Icons.Filled.Add,
+                                contentDescription = "Add",
+                                modifier = Modifier.size(16.dp)
+
+                            )
+                        }
+
+                    }
+
+                }
+            }
+        }
+
+        Text(text = "  $  ${menuItem.price}", overflow = TextOverflow.Ellipsis)
+
+
+    }
+}
+
+@Composable
+fun CouponBar() {
+    var text by remember { mutableStateOf("") }
+
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+    ) {
+        Box(
+            contentAlignment = Alignment.CenterEnd,
+
+            ) {
+            TextField(
+                value = text,
+                onValueChange = { text = it },
+                placeholder = {
+                    Text(
+                        text = "Add a coupon code...",
+                        modifier = Modifier.alpha(0.5f)
+                    )
+                },
+
+
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .shadow(elevation = 16.dp, shape = CircleShape),
+
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.White,
+                    cursorColor = Color.White,
+
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                ),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Next
+                ),
+                singleLine = true
+            )
+            Row {
+                Text(
+                    text = "APPLY",
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.clickable { },
+                    color = MaterialTheme.colors.primary
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+            }
+        }
     }
 }
