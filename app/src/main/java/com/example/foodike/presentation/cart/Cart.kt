@@ -252,7 +252,7 @@ fun ItemSection(
                 )
                 Divider(modifier = Modifier.fillMaxWidth())
 
-                val inputValue = remember { mutableStateOf("") }
+                val inputValue = remember { mutableStateOf(TextFieldValue()) }
                 val hintState = remember {
                     mutableStateOf(true)
                 }
