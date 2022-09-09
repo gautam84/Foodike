@@ -3,6 +3,7 @@ package com.example.foodike.presentation.cart
 import android.app.Activity
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -13,8 +14,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.Remove
-import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,26 +26,25 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.foodike.R
 import com.example.foodike.data.data_source.menu2
+import com.example.foodike.domain.model.CartItem
 import com.example.foodike.domain.model.MenuItem
 import com.example.foodike.domain.model.Restaurant
 import com.example.foodike.presentation.common.RestaurantDetailViewModel
 import com.example.foodike.presentation.components.getTimeInMins
 import kotlin.math.round
-import kotlin.math.roundToInt
-import kotlin.math.roundToLong
 
 @Composable
 fun Cart(
     navController: NavHostController,
     viewModel: RestaurantDetailViewModel = hiltViewModel()
 ) {
+    val cartItems by viewModel.cartState
 
 
     val context = LocalContext.current as Activity
@@ -68,7 +66,9 @@ fun Cart(
             }
         }
 
-        ItemSection()
+        ItemSection(
+            cartItems.list
+        )
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -206,7 +206,7 @@ fun DeliverySection(
 
 @Composable
 fun ItemSection(
-
+    list: List<CartItem>
 ) {
     Column(modifier = Modifier.padding(16.dp)) {
 
@@ -215,99 +215,69 @@ fun ItemSection(
             shape = RoundedCornerShape(24.dp),
             elevation = 16.dp
         ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                CartItem(
-                    MenuItem(
-                        dish = "Pani Puchka",
-                        price = 3.50,
-                        rating = 4.9,
-                        noOfRatings = 32,
-                        isVegetarian = true
+            LazyColumn(modifier = Modifier.padding(16.dp)) {
 
+
+                items(list.size) {
+                    CartItemCard(
+                        list[it]
                     )
-                )
-
-                CartItem(
-                    MenuItem(
-                        dish = "Pani Puchka",
-                        price = 3.50,
-                        rating = 4.9,
-                        noOfRatings = 32,
-                        isVegetarian = true
-
-                    )
-                )
-                CartItem(
-                    MenuItem(
-                        dish = "Pani Puchka",
-                        price = 3.50,
-                        rating = 4.9,
-                        noOfRatings = 32,
-                        isVegetarian = true
-
-                    )
-                )
-                CartItem(
-                    MenuItem(
-                        dish = "Pani Puchka",
-                        price = 3.50,
-                        rating = 4.9,
-                        noOfRatings = 32,
-                        isVegetarian = true
-
-                    )
-                )
-                Divider(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(0.dp, 8.dp))
-
-                val inputValue = remember { mutableStateOf("") }
-                val hintState = remember {
-                    mutableStateOf(true)
                 }
 
-                Box {
-                    BasicTextField(
-                        value = inputValue.value,
-                        onValueChange = { inputValue.value = it },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(24.dp)
-                            .onFocusChanged {
-                               if(inputValue.value=="") {
-                                    hintState.value = !it.isFocused
-                                }
+            }
+            Divider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(0.dp, 8.dp)
+            )
+
+            val inputValue = remember { mutableStateOf("") }
+            val hintState = remember {
+                mutableStateOf(true)
+            }
+
+            Box {
+                BasicTextField(
+                    value = inputValue.value,
+                    onValueChange = { inputValue.value = it },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(24.dp)
+                        .onFocusChanged {
+                            if (inputValue.value == "") {
+                                hintState.value = !it.isFocused
                             }
-                    )
-
-                    if (hintState.value) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = "Write instruction for restaurant...",
-                                modifier = Modifier.alpha(0.5f),
-                            )
-                            Icon(
-                                imageVector = Icons.Outlined.Edit,
-                                contentDescription = "Back",
-                                modifier = Modifier.alpha(0.5f),
-                            )
-
                         }
+                )
+
+                if (hintState.value) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Write instruction for restaurant...",
+                            modifier = Modifier.alpha(0.5f),
+                        )
+                        Icon(
+                            imageVector = Icons.Outlined.Edit,
+                            contentDescription = "Back",
+                            modifier = Modifier.alpha(0.5f),
+                        )
+
                     }
                 }
             }
-
         }
+
     }
 }
 
+
 @Composable
-fun CartItem(
-    menuItem: MenuItem
+fun CartItemCard(
+    cartItem: CartItem
 ) {
     Row(
         modifier = Modifier
@@ -323,7 +293,7 @@ fun CartItem(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (menuItem.isVegetarian) {
+            if (cartItem.menuItem.isVegetarian) {
                 Image(
                     modifier = Modifier.size(18.dp),
                     painter = painterResource(id = R.drawable.ic_veg),
@@ -337,7 +307,7 @@ fun CartItem(
                 )
             }
             Spacer(modifier = Modifier.width(8.dp))
-            Text(text = menuItem.dish)
+            Text(text = cartItem.menuItem.dish)
         }
 
         if (
@@ -401,7 +371,7 @@ fun CartItem(
             }
         }
 
-        Text(text = "  $  ${menuItem.price}", overflow = TextOverflow.Ellipsis)
+        Text(text = "  $  ${cartItem.menuItem.price}", overflow = TextOverflow.Ellipsis)
 
 
     }

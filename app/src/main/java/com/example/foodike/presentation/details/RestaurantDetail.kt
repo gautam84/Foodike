@@ -1,5 +1,6 @@
 package com.example.foodike.presentation.details
 
+import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -48,7 +49,6 @@ fun RestaurantDetail(
 
 
     val isFavorite by viewModel.likedRestaurants
-//    val isFavorite = true
 
 
     var expandedState by remember { mutableStateOf(true) }
@@ -67,7 +67,7 @@ fun RestaurantDetail(
     )
 
 
-  Box(contentAlignment = Alignment.BottomEnd)  {
+    Box(contentAlignment = Alignment.BottomEnd) {
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             item {
                 Row(
@@ -166,7 +166,13 @@ fun RestaurantDetail(
             if (expandedState) {
 
                 items(recommendedList.size) {
-                    MenuItemCard(menuItem = recommendedList[it])
+                    MenuItemCard(
+                        menuItem = recommendedList[it],
+                        onClick = { menuItem, noOfItems ->
+                            viewModel.addToCart(restaurant, menuItem, noOfItems)
+
+                        }
+                    )
                     if (it != (recommendedList.size - 1)) {
                         Divider(
                             modifier = Modifier
@@ -221,7 +227,10 @@ fun RestaurantDetail(
             if (expandedStateNonVeg) {
 
                 items(nonVegList.size) {
-                    MenuItemCard(menuItem = nonVegList[it])
+                    MenuItemCard(menuItem = nonVegList[it], onClick = { menuItem, noOfItems ->
+                        viewModel.addToCart(restaurant, menuItem, noOfItems)
+
+                    })
                     if (it != (nonVegList.size - 1)) {
                         Divider(
                             modifier = Modifier
@@ -274,7 +283,10 @@ fun RestaurantDetail(
             if (expandedStateVeg) {
 
                 items(vegList.size) {
-                    MenuItemCard(menuItem = vegList[it])
+                    MenuItemCard(menuItem = vegList[it], onClick = { menuItem, noOfItems ->
+                        viewModel.addToCart(restaurant, menuItem, noOfItems)
+
+                    })
                     if (it != (vegList.size - 1)) {
                         Divider(
                             modifier = Modifier
@@ -290,7 +302,7 @@ fun RestaurantDetail(
 
         }
 
-      Column(modifier=Modifier.padding(16.dp))  {
+        Column(modifier = Modifier.padding(16.dp)) {
             FloatingActionButton(
                 onClick = {
                     navController.navigate(Screen.Cart.route)
@@ -307,8 +319,10 @@ fun RestaurantDetail(
 
 @Composable
 fun MenuItemCard(
-    menuItem: MenuItem
-) {
+    menuItem: MenuItem,
+    onClick: (MenuItem, Int) -> Unit,
+
+    ) {
     Row(
         modifier = Modifier
             .height(120.dp)
@@ -373,7 +387,13 @@ fun MenuItemCard(
                 Row {
                     Text(
                         text = "Add",
-                        modifier = Modifier.clickable { state.value++ },
+                        modifier = Modifier.clickable {
+                            state.value++
+                            onClick(
+                                menuItem,
+                                state.value
+                            )
+                        },
                         color = MaterialTheme.colors.primary,
                         fontWeight = FontWeight.Bold
                     )
@@ -401,7 +421,13 @@ fun MenuItemCard(
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        IconButton(onClick = { state.value-- }) {
+                        IconButton(onClick = {
+                            state.value--
+                            onClick(
+                                menuItem,
+                                state.value
+                            )
+                        }) {
                             Icon(
                                 imageVector = Icons.Default.Remove,
                                 contentDescription = "Subtract",
@@ -409,7 +435,13 @@ fun MenuItemCard(
                             )
                         }
                         Text(text = state.value.toString())
-                        IconButton(onClick = { state.value++ }) {
+                        IconButton(onClick = {
+                            state.value++
+                            onClick(
+                                menuItem,
+                                state.value
+                            )
+                        }) {
                             Icon(
                                 imageVector = Icons.Filled.Add,
                                 contentDescription = "Add",
@@ -424,6 +456,10 @@ fun MenuItemCard(
             }
         }
     }
+}
+
+fun vbv() {
+    TODO("Not yet implemented")
 }
 
 
