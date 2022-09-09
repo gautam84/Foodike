@@ -30,11 +30,13 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.foodike.R
 import com.example.foodike.data.data_source.menu2
 import com.example.foodike.domain.model.MenuItem
 import com.example.foodike.domain.model.Restaurant
+import com.example.foodike.presentation.common.RestaurantDetailViewModel
 import com.example.foodike.presentation.components.getTimeInMins
 import kotlin.math.round
 import kotlin.math.roundToInt
@@ -42,7 +44,8 @@ import kotlin.math.roundToLong
 
 @Composable
 fun Cart(
-    navController: NavHostController
+    navController: NavHostController,
+    viewModel: RestaurantDetailViewModel = hiltViewModel()
 ) {
 
 
@@ -173,7 +176,11 @@ fun DeliverySection(
                 ) {
                     Text(text = "Deliver to:", fontWeight = FontWeight.Bold)
                     IconButton(onClick = { }) {
-                        Icon(imageVector = Icons.Outlined.Edit, contentDescription = "Back")
+                        Icon(
+                            imageVector = Icons.Outlined.Edit,
+                            contentDescription = "Back",
+                            modifier = Modifier.alpha(0.5f),
+                        )
                     }
                 }
                 Row(
@@ -250,9 +257,11 @@ fun ItemSection(
 
                     )
                 )
-                Divider(modifier = Modifier.fillMaxWidth())
+                Divider(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(0.dp, 8.dp))
 
-                val inputValue = remember { mutableStateOf(TextFieldValue()) }
+                val inputValue = remember { mutableStateOf("") }
                 val hintState = remember {
                     mutableStateOf(true)
                 }
@@ -265,13 +274,29 @@ fun ItemSection(
                             .fillMaxWidth()
                             .height(24.dp)
                             .onFocusChanged {
-                                hintState.value = !it.isFocused
-
+                               if(inputValue.value=="") {
+                                    hintState.value = !it.isFocused
+                                }
                             }
                     )
 
                     if (hintState.value) {
-                        Text(text = "Write instruction for restaurant...", color = Color.DarkGray)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "Write instruction for restaurant...",
+                                modifier = Modifier.alpha(0.5f),
+                            )
+                            Icon(
+                                imageVector = Icons.Outlined.Edit,
+                                contentDescription = "Back",
+                                modifier = Modifier.alpha(0.5f),
+                            )
+
+                        }
                     }
                 }
             }

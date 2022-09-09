@@ -30,6 +30,7 @@ import androidx.navigation.NavHostController
 import com.example.foodike.R
 import com.example.foodike.domain.model.MenuItem
 import com.example.foodike.domain.model.Restaurant
+import com.example.foodike.presentation.common.RestaurantDetailViewModel
 import com.example.foodike.presentation.components.getCustomerInfo
 import com.example.foodike.presentation.components.getTimeInMins
 import com.example.foodike.presentation.util.Screen

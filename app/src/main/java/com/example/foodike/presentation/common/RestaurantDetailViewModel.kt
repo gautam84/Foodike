@@ -1,17 +1,13 @@
-package com.example.foodike.presentation.details
+package com.example.foodike.presentation.common
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.foodike.domain.model.Advertisement
 import com.example.foodike.domain.model.Restaurant
 import com.example.foodike.domain.repository.HomeRepository
 import com.example.foodike.domain.repository.UserDataRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,6 +16,11 @@ class RestaurantDetailViewModel @Inject constructor(
     private val repository: HomeRepository,
     private val userDataRepository: UserDataRepository
 ) : ViewModel() {
+
+
+
+
+
 
     fun getRestaurantFromName(name: String): Restaurant? {
         return repository.getRestaurantFromName(name)
