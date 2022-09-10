@@ -1,1 +1,1 @@
-![GitHub Cards Preview](https:/https://github.com/gautam84/blob/master/Foodike/art/FoodikeIntrouctionMockUp.jpg?raw=true)
+![GitHub Cards Preview](https:/https://github.com/gautam84/Foodike/blob/master/art/FoodikeIntrouctionMockUp.jpg?raw=true)
