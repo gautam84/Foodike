@@ -206,7 +206,7 @@ fun DeliverySection(
 
 @Composable
 fun ItemSection(
-    list: List<CartItem>
+    list: List<MenuItem>
 ) {
     Column(modifier = Modifier.padding(16.dp)) {
 
@@ -220,7 +220,8 @@ fun ItemSection(
 
                 items(list.size) {
                     CartItemCard(
-                        list[it]
+                        list[it],
+                        0
                     )
                 }
 
@@ -277,7 +278,8 @@ fun ItemSection(
 
 @Composable
 fun CartItemCard(
-    cartItem: CartItem
+    menuItem: MenuItem,
+    quantity:Int
 ) {
     Row(
         modifier = Modifier
@@ -287,13 +289,12 @@ fun CartItemCard(
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-        val state = remember { mutableStateOf(0) }
 
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (cartItem.menuItem.isVegetarian) {
+            if (menuItem.isVegetarian) {
                 Image(
                     modifier = Modifier.size(18.dp),
                     painter = painterResource(id = R.drawable.ic_veg),
@@ -307,11 +308,11 @@ fun CartItemCard(
                 )
             }
             Spacer(modifier = Modifier.width(8.dp))
-            Text(text = cartItem.menuItem.dish)
+            Text(text = menuItem.dish)
         }
 
         if (
-            state.value == 0
+            quantity == 0
         ) {
             Column(
                 verticalArrangement = Arrangement.Center,
@@ -321,7 +322,7 @@ fun CartItemCard(
                 Row {
                     Text(
                         text = "Add",
-                        modifier = Modifier.clickable { state.value++ },
+                        modifier = Modifier.clickable {  },
                         color = MaterialTheme.colors.primary,
                         fontWeight = FontWeight.Bold
                     )
@@ -348,15 +349,15 @@ fun CartItemCard(
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        IconButton(onClick = { state.value-- }) {
+                        IconButton(onClick = {  }) {
                             Icon(
                                 imageVector = Icons.Default.Remove,
                                 contentDescription = "Subtract",
                                 modifier = Modifier.size(16.dp)
                             )
                         }
-                        Text(text = state.value.toString())
-                        IconButton(onClick = { state.value++ }) {
+                        Text(text = quantity.toString())
+                        IconButton(onClick = {  }) {
                             Icon(
                                 imageVector = Icons.Filled.Add,
                                 contentDescription = "Add",
@@ -371,7 +372,7 @@ fun CartItemCard(
             }
         }
 
-        Text(text = "  $  ${cartItem.menuItem.price}", overflow = TextOverflow.Ellipsis)
+        Text(text = "  $  ${menuItem.price}", overflow = TextOverflow.Ellipsis)
 
 
     }

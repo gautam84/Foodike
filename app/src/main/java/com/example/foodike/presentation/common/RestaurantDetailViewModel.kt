@@ -1,13 +1,10 @@
 package com.example.foodike.presentation.common
 
-import android.util.Log
-import android.widget.RemoteViews
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.foodike.domain.model.CartItem
-import com.example.foodike.domain.model.MenuItem
 import com.example.foodike.domain.model.Restaurant
 import com.example.foodike.domain.repository.HomeRepository
 import com.example.foodike.domain.repository.UserDataRepository
@@ -27,29 +24,10 @@ class RestaurantDetailViewModel @Inject constructor(
 
     val cartState: State<CartState> = _cartState
 
-    val map = mutableMapOf<CartItem,Int>()
 
-    private val cartList = mutableListOf<CartItem>()
+    fun getRestaurantFromName(name: String): Restaurant? {
 
-    fun getRestaurantFromNameAndLoadMenu(name: String): Restaurant? {
-        val restaurant = repository.getRestaurantFromName(name)
-
-        restaurant?.menu?.forEach {
-            cartList.add(CartItem(it, 0))
-        }
-
-
-
-
-        _cartState.value = cartState.value.copy(
-            restaurant = restaurant,
-            list = cartList
-        )
-
-
-
-
-        return restaurant
+        return repository.getRestaurantFromName(name)
     }
 
     val list = mutableListOf<Restaurant>()
@@ -113,18 +91,8 @@ class RestaurantDetailViewModel @Inject constructor(
 
     }
 
-    fun increase(cartItem: CartItem) {
-        cartList.map {
-            if(it == cartItem){
-                it.noOfItems++
-            }
-        }
-    }
 
-    fun decrease(cartItem: CartItem) {
-        TODO("Not yet implemented")
 
-    }
 
 
 }
