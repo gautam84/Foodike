@@ -43,12 +43,14 @@ fun RestaurantDetail(
     viewModel: RestaurantDetailViewModel = hiltViewModel()
 ) {
 
-    val restaurant = viewModel.getRestaurantFromName(name)!!
+    val restaurant = viewModel.getRestaurantFromNameAndLoadMenu(name)!!
 
     viewModel.setLikeStatus(restaurant)
 
 
     val isFavorite by viewModel.likedRestaurants
+
+    val cartState by viewModel.cartState
 
 
     var expandedState by remember { mutableStateOf(true) }
@@ -123,7 +125,7 @@ fun RestaurantDetail(
 
                 }
             }
-            val recommendedList = restaurant.menu.shuffled().dropLast(restaurant.menu.size - 5)
+            val recommendedList = cartState.list.shuffled().dropLast(restaurant.menu.size - 5)
 
 
 
@@ -167,9 +169,13 @@ fun RestaurantDetail(
 
                 items(recommendedList.size) {
                     MenuItemCard(
-                        menuItem = recommendedList[it],
-                        onClick = { menuItem, noOfItems ->
-                            viewModel.addToCart(restaurant, menuItem, noOfItems)
+                        menuItem = recommendedList[it].menuItem,
+                        noOfItems = recommendedList[it].noOfItems,
+                        onIncreaseClick = {
+                            viewModel.increase(recommendedList[it])
+                        },
+                        onDecreaseClick = {
+                            viewModel.decrease(recommendedList[it])
 
                         }
                     )
@@ -185,8 +191,8 @@ fun RestaurantDetail(
 
             }
 
-            val nonVegList = restaurant.menu.filter {
-                !it.isVegetarian
+            val nonVegList = cartState.list.filter {
+                !it.menuItem.isVegetarian
             }
 
             item {
@@ -227,10 +233,16 @@ fun RestaurantDetail(
             if (expandedStateNonVeg) {
 
                 items(nonVegList.size) {
-                    MenuItemCard(menuItem = nonVegList[it], onClick = { menuItem, noOfItems ->
-                        viewModel.addToCart(restaurant, menuItem, noOfItems)
+                    MenuItemCard(
+                        menuItem = nonVegList[it].menuItem,
+                        noOfItems = nonVegList[it].noOfItems,
+                        onIncreaseClick = {
+                            viewModel.increase(recommendedList[it])
+                        },
+                        onDecreaseClick = {
+                            viewModel.decrease(recommendedList[it])
 
-                    })
+                        })
                     if (it != (nonVegList.size - 1)) {
                         Divider(
                             modifier = Modifier
@@ -241,8 +253,8 @@ fun RestaurantDetail(
                 }
             }
 
-            val vegList = restaurant.menu.filter {
-                it.isVegetarian
+            val vegList = cartState.list.filter {
+                it.menuItem.isVegetarian
             }
 
             item {
@@ -283,10 +295,16 @@ fun RestaurantDetail(
             if (expandedStateVeg) {
 
                 items(vegList.size) {
-                    MenuItemCard(menuItem = vegList[it], onClick = { menuItem, noOfItems ->
-                        viewModel.addToCart(restaurant, menuItem, noOfItems)
+                    MenuItemCard(
+                        menuItem = vegList[it].menuItem,
+                        noOfItems = vegList[it].noOfItems,
+                        onIncreaseClick = {
+                            viewModel.increase(recommendedList[it])
+                        },
+                        onDecreaseClick = {
+                            viewModel.decrease(recommendedList[it])
 
-                    })
+                        })
                     if (it != (vegList.size - 1)) {
                         Divider(
                             modifier = Modifier
@@ -320,7 +338,10 @@ fun RestaurantDetail(
 @Composable
 fun MenuItemCard(
     menuItem: MenuItem,
-    onClick: (MenuItem, Int) -> Unit,
+    noOfItems: Int,
+    onIncreaseClick: () -> Unit,
+    onDecreaseClick: () -> Unit,
+
 
     ) {
     Row(
@@ -330,7 +351,6 @@ fun MenuItemCard(
             .padding(24.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        val state = remember { mutableStateOf(0) }
 
         Column(
         ) {
@@ -375,7 +395,7 @@ fun MenuItemCard(
         }
 
         if (
-            state.value == 0
+            noOfItems == 0
         ) {
             Column(
                 modifier = Modifier
@@ -388,11 +408,7 @@ fun MenuItemCard(
                     Text(
                         text = "Add",
                         modifier = Modifier.clickable {
-                            state.value++
-                            onClick(
-                                menuItem,
-                                state.value
-                            )
+                            onIncreaseClick()
                         },
                         color = MaterialTheme.colors.primary,
                         fontWeight = FontWeight.Bold
@@ -422,11 +438,8 @@ fun MenuItemCard(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         IconButton(onClick = {
-                            state.value--
-                            onClick(
-                                menuItem,
-                                state.value
-                            )
+                            onIncreaseClick()
+
                         }) {
                             Icon(
                                 imageVector = Icons.Default.Remove,
@@ -434,13 +447,9 @@ fun MenuItemCard(
                                 modifier = Modifier.size(16.dp)
                             )
                         }
-                        Text(text = state.value.toString())
+                        Text(text = noOfItems.toString())
                         IconButton(onClick = {
-                            state.value++
-                            onClick(
-                                menuItem,
-                                state.value
-                            )
+                            onDecreaseClick()
                         }) {
                             Icon(
                                 imageVector = Icons.Filled.Add,
@@ -456,10 +465,6 @@ fun MenuItemCard(
             }
         }
     }
-}
-
-fun vbv() {
-    TODO("Not yet implemented")
 }
 
 

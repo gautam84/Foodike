@@ -1,5 +1,6 @@
 package com.example.foodike.presentation.common
 
+import android.util.Log
 import android.widget.RemoteViews
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -20,29 +21,35 @@ class RestaurantDetailViewModel @Inject constructor(
     private val userDataRepository: UserDataRepository
 ) : ViewModel() {
 
-    private val cartItems = mutableSetOf<CartItem>()
-
     private val _cartState = mutableStateOf(
         CartState()
     )
 
     val cartState: State<CartState> = _cartState
 
+    val map = mutableMapOf<CartItem,Int>()
 
-    fun addToCart(
-        restaurant: Restaurant,
-        menuItem: MenuItem,
-        noOfItems: Int
-    ) {
-        cartItems.add(CartItem(menuItem, noOfItems))
+    private val cartList = mutableListOf<CartItem>()
 
-        _cartState.value = cartState.value.copy(restaurant = restaurant, list = cartItems.toList())
+    fun getRestaurantFromNameAndLoadMenu(name: String): Restaurant? {
+        val restaurant = repository.getRestaurantFromName(name)
 
-    }
+        restaurant?.menu?.forEach {
+            cartList.add(CartItem(it, 0))
+        }
 
 
-    fun getRestaurantFromName(name: String): Restaurant? {
-        return repository.getRestaurantFromName(name)
+
+
+        _cartState.value = cartState.value.copy(
+            restaurant = restaurant,
+            list = cartList
+        )
+
+
+
+
+        return restaurant
     }
 
     val list = mutableListOf<Restaurant>()
@@ -106,5 +113,20 @@ class RestaurantDetailViewModel @Inject constructor(
 
     }
 
+    fun increase(cartItem: CartItem) {
+        cartList.map {
+            if(it == cartItem){
+                it.noOfItems++
+            }
+        }
+    }
+
+    fun decrease(cartItem: CartItem) {
+        TODO("Not yet implemented")
+
+    }
+
 
 }
+
+

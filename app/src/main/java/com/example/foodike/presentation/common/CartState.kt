@@ -5,6 +5,6 @@ import com.example.foodike.domain.model.Restaurant
 
 data class CartState(
     val restaurant: Restaurant? = null,
-    val list: List<CartItem> = emptyList(),
+    val list: MutableList<CartItem> = mutableListOf()
 
     )
