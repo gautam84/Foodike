@@ -32,19 +32,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.foodike.R
 import com.example.foodike.data.data_source.menu2
-import com.example.foodike.domain.model.CartItem
 import com.example.foodike.domain.model.MenuItem
 import com.example.foodike.domain.model.Restaurant
-import com.example.foodike.presentation.common.RestaurantDetailViewModel
+import com.example.foodike.presentation.details.RestaurantDetailViewModel
 import com.example.foodike.presentation.components.getTimeInMins
 import kotlin.math.round
 
 @Composable
 fun Cart(
     navController: NavHostController,
-    viewModel: RestaurantDetailViewModel = hiltViewModel()
 ) {
-    val cartItems by viewModel.cartState
 
 
     val context = LocalContext.current as Activity
@@ -67,7 +64,6 @@ fun Cart(
         }
 
         ItemSection(
-            cartItems.list
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -205,68 +201,100 @@ fun DeliverySection(
 }
 
 @Composable
-fun ItemSection(
-    list: List<MenuItem>
-) {
+fun ItemSection() {
     Column(modifier = Modifier.padding(16.dp)) {
-
 
         Card(
             shape = RoundedCornerShape(24.dp),
             elevation = 16.dp
         ) {
-            LazyColumn(modifier = Modifier.padding(16.dp)) {
+         Column(Modifier.padding(16.dp))   {
+                LazyColumn() {
+
+                    item {
+                        CartItemCard(
+                            MenuItem(
+                                dish = "Fish and Chips",
+                                price = 3.95,
+                                rating = 4.7,
+                                noOfRatings = 12,
+                                isVegetarian = false
+                            ),
+                            0
+                        )
+
+                    }
+                    item {
+                        CartItemCard(
+                            MenuItem(
+                                dish = "Fish and Chips",
+                                price = 3.95,
+                                rating = 4.7,
+                                noOfRatings = 12,
+                                isVegetarian = false
+                            ),
+                            0
+                        )
+
+                    }
+                    item {
+                        CartItemCard(
+                            MenuItem(
+                                dish = "Fish and Chips",
+                                price = 3.95,
+                                rating = 4.7,
+                                noOfRatings = 12,
+                                isVegetarian = false
+                            ),
+                            0
+                        )
+
+                    }
 
 
-                items(list.size) {
-                    CartItemCard(
-                        list[it],
-                        0
-                    )
                 }
-
-            }
-            Divider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(0.dp, 8.dp)
-            )
-
-            val inputValue = remember { mutableStateOf("") }
-            val hintState = remember {
-                mutableStateOf(true)
-            }
-
-            Box {
-                BasicTextField(
-                    value = inputValue.value,
-                    onValueChange = { inputValue.value = it },
+                Divider(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(24.dp)
-                        .onFocusChanged {
-                            if (inputValue.value == "") {
-                                hintState.value = !it.isFocused
-                            }
-                        }
+                        .padding(0.dp, 8.dp)
                 )
 
-                if (hintState.value) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "Write instruction for restaurant...",
-                            modifier = Modifier.alpha(0.5f),
-                        )
-                        Icon(
-                            imageVector = Icons.Outlined.Edit,
-                            contentDescription = "Back",
-                            modifier = Modifier.alpha(0.5f),
-                        )
+                val inputValue = remember { mutableStateOf("") }
+                val hintState = remember {
+                    mutableStateOf(true)
+                }
 
+                Box {
+                    BasicTextField(
+                        value = inputValue.value,
+                        onValueChange = { inputValue.value = it },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(24.dp)
+                            .onFocusChanged {
+                                if (inputValue.value == "") {
+                                    hintState.value = !it.isFocused
+                                }
+                            }
+                    )
+
+                    if (hintState.value) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "Write instruction for restaurant...",
+                                modifier = Modifier.alpha(0.5f),
+                            )
+                            Icon(
+                                imageVector = Icons.Outlined.Edit,
+                                contentDescription = "Back",
+                                modifier = Modifier.alpha(0.5f),
+                            )
+
+                        }
                     }
                 }
             }
@@ -279,7 +307,7 @@ fun ItemSection(
 @Composable
 fun CartItemCard(
     menuItem: MenuItem,
-    quantity:Int
+    quantity: Int
 ) {
     Row(
         modifier = Modifier
@@ -322,7 +350,7 @@ fun CartItemCard(
                 Row {
                     Text(
                         text = "Add",
-                        modifier = Modifier.clickable {  },
+                        modifier = Modifier.clickable { },
                         color = MaterialTheme.colors.primary,
                         fontWeight = FontWeight.Bold
                     )
@@ -349,7 +377,7 @@ fun CartItemCard(
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        IconButton(onClick = {  }) {
+                        IconButton(onClick = { }) {
                             Icon(
                                 imageVector = Icons.Default.Remove,
                                 contentDescription = "Subtract",
@@ -357,7 +385,7 @@ fun CartItemCard(
                             )
                         }
                         Text(text = quantity.toString())
-                        IconButton(onClick = {  }) {
+                        IconButton(onClick = { }) {
                             Icon(
                                 imageVector = Icons.Filled.Add,
                                 contentDescription = "Add",
