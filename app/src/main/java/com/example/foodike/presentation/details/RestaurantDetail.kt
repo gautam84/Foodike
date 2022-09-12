@@ -307,15 +307,17 @@ fun RestaurantDetail(
 
         }
 
-        Column(modifier = Modifier.padding(16.dp)) {
-            FloatingActionButton(
-                onClick = {
-                    navController.navigate(Screen.Cart.route)
+       if(cartState.list.sumOf { it.noOfItems } != 0) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                FloatingActionButton(
+                    onClick = {
+                        navController.navigate(Screen.Cart.route)
 
-                },
-                backgroundColor = MaterialTheme.colors.primary
-            ) {
-                Icon(Icons.Outlined.ShoppingCart, "Cart")
+                    },
+                    backgroundColor = MaterialTheme.colors.primary
+                ) {
+                    Icon(Icons.Outlined.ShoppingCart, "Cart")
+                }
             }
         }
     }
