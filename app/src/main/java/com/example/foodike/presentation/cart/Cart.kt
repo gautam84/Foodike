@@ -32,16 +32,17 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.foodike.R
 import com.example.foodike.data.data_source.menu2
-import com.example.foodike.domain.model.MenuItem
+import com.example.foodike.domain.model.CartItem
 import com.example.foodike.domain.model.Restaurant
-import com.example.foodike.presentation.details.RestaurantDetailViewModel
 import com.example.foodike.presentation.components.getTimeInMins
 import kotlin.math.round
 
 @Composable
 fun Cart(
     navController: NavHostController,
+    viewModel: CartViewModel = hiltViewModel()
 ) {
+    val list by viewModel.cartState
 
 
     val context = LocalContext.current as Activity
@@ -64,7 +65,15 @@ fun Cart(
         }
 
         ItemSection(
-        )
+            list = list.list.filter {
+                it.noOfItems > 0
+            },
+            onDecreaseClick = { viewModel.decreaseQuantity(it) },
+            onIncreaseClick = { viewModel.increaseQuantity(it) },
+
+
+
+            )
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -201,57 +210,40 @@ fun DeliverySection(
 }
 
 @Composable
-fun ItemSection() {
+fun ItemSection(
+    list: List<CartItem>,
+    onIncreaseClick: (cartItem:CartItem) -> Unit,
+    onDecreaseClick: (cartItem:CartItem) -> Unit
+
+) {
     Column(modifier = Modifier.padding(16.dp)) {
 
         Card(
             shape = RoundedCornerShape(24.dp),
             elevation = 16.dp
         ) {
-         Column(Modifier.padding(16.dp))   {
-                LazyColumn() {
-
-                    item {
-                        CartItemCard(
-                            MenuItem(
-                                dish = "Fish and Chips",
-                                price = 3.95,
-                                rating = 4.7,
-                                noOfRatings = 12,
-                                isVegetarian = false
-                            ),
-                            0
-                        )
+            Column(Modifier.padding(16.dp)) {
+                if (list.isNotEmpty()) {
+                    LazyColumn() {
+                        items(list.size) {
+                            CartItemCard(
+                                cartItem = list[it],
+                                onIncreaseClick = { onIncreaseClick(list[it]) },
+                                onDecreaseClick = { onDecreaseClick(list[it]) }
+                            )
+                        }
 
                     }
-                    item {
-                        CartItemCard(
-                            MenuItem(
-                                dish = "Fish and Chips",
-                                price = 3.95,
-                                rating = 4.7,
-                                noOfRatings = 12,
-                                isVegetarian = false
-                            ),
-                            0
-                        )
-
+                } else {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(40.dp)
+                    ) {
+                        Text(text = "Empty")
                     }
-                    item {
-                        CartItemCard(
-                            MenuItem(
-                                dish = "Fish and Chips",
-                                price = 3.95,
-                                rating = 4.7,
-                                noOfRatings = 12,
-                                isVegetarian = false
-                            ),
-                            0
-                        )
-
-                    }
-
-
                 }
                 Divider(
                     modifier = Modifier
@@ -306,8 +298,9 @@ fun ItemSection() {
 
 @Composable
 fun CartItemCard(
-    menuItem: MenuItem,
-    quantity: Int
+    cartItem: CartItem,
+    onIncreaseClick: () -> Unit,
+    onDecreaseClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -322,7 +315,7 @@ fun CartItemCard(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (menuItem.isVegetarian) {
+            if (cartItem.menuItem.isVegetarian) {
                 Image(
                     modifier = Modifier.size(18.dp),
                     painter = painterResource(id = R.drawable.ic_veg),
@@ -336,11 +329,11 @@ fun CartItemCard(
                 )
             }
             Spacer(modifier = Modifier.width(8.dp))
-            Text(text = menuItem.dish)
+            Text(text = cartItem.menuItem.dish)
         }
 
         if (
-            quantity == 0
+            cartItem.noOfItems == 0
         ) {
             Column(
                 verticalArrangement = Arrangement.Center,
@@ -377,15 +370,19 @@ fun CartItemCard(
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        IconButton(onClick = { }) {
+                        IconButton(onClick = {
+                            onDecreaseClick()
+                        }) {
                             Icon(
                                 imageVector = Icons.Default.Remove,
                                 contentDescription = "Subtract",
                                 modifier = Modifier.size(16.dp)
                             )
                         }
-                        Text(text = quantity.toString())
-                        IconButton(onClick = { }) {
+                        Text(text = cartItem.noOfItems.toString())
+                        IconButton(onClick = {
+                            onIncreaseClick()
+                        }) {
                             Icon(
                                 imageVector = Icons.Filled.Add,
                                 contentDescription = "Add",
@@ -400,7 +397,7 @@ fun CartItemCard(
             }
         }
 
-        Text(text = "  $  ${menuItem.price}", overflow = TextOverflow.Ellipsis)
+        Text(text = "  $  ${cartItem.menuItem.price}", overflow = TextOverflow.Ellipsis)
 
 
     }
