@@ -22,6 +22,7 @@ class UserDataRepositoryImpl(context: Context) : UserDataRepository {
         val likedRestaurants = stringSetPreferencesKey(name = "liked_restaurants")
     }
 
+
     private val dataStore = context.dataStore
 
     override suspend fun updateLikedRestaurant(restaurant: Set<String>) {
