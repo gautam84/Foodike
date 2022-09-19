@@ -22,8 +22,6 @@ class RestaurantDetailViewModel @Inject constructor(
     private val cartRepository: CartRepository
 ) : ViewModel() {
 
-
-
     private val _cartState = mutableStateOf(
         CartState()
     )
