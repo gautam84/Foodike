@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.AppBarDefaults.ContentPadding
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
@@ -71,8 +72,7 @@ fun Home(
     LazyColumn(
         modifier =
         Modifier
-            .fillMaxWidth()
-            .padding(8.dp, 0.dp),
+            .fillMaxWidth(),
         state = scrollState,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.Start
@@ -87,7 +87,11 @@ fun Home(
             Spacer(modifier = Modifier.height(24.dp))
         }
         item {
-            SearchBar()
+            Column(
+                modifier = Modifier.padding(8.dp, 0.dp)
+            ) {
+                SearchBar()
+            }
             Spacer(modifier = Modifier.height(16.dp))
         }
         item {
@@ -268,19 +272,22 @@ fun FavouriteSection(
         )
         Spacer(modifier = Modifier.height(8.dp))
 
-        LazyRow {
-            items(list.size) {
-                FavouriteCard(restaurant = list[it], modifier = Modifier.clickable {
-                    navController.navigate(Screen.RestaurantDetails.withArgs(list[it].name))
+    }
 
-
-                })
-                if (it != (list.size - 1)) {
-                    Spacer(modifier = Modifier.width(12.dp))
-                }            }
-
-
+    LazyRow(
+        contentPadding = PaddingValues(
+            start = 8.dp,
+            end = 8.dp
+        ),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        items(list.size) {
+            FavouriteCard(restaurant = list[it], modifier = Modifier.clickable {
+                navController.navigate(Screen.RestaurantDetails.withArgs(list[it].name))
+            })
         }
+
+
     }
 }
 
@@ -316,17 +323,17 @@ fun RecommendedSection(list: List<FoodItem>) {
             fontWeight = FontWeight.Light
         )
         Spacer(modifier = Modifier.height(8.dp))
-
-        LazyRow() {
-            items(list.size) {
-                RecommendedCard(foodItem = list[it])
-                if (it != (list.size - 1)) {
-                    Spacer(modifier = Modifier.width(8.dp))
-                }
-            }
+    }
+    LazyRow(
+        contentPadding = PaddingValues(
+            start = 8.dp,
+            end = 8.dp
+        ),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        items(list.size) {
+            RecommendedCard(foodItem = list[it])
         }
-
-
     }
 }
 
@@ -353,7 +360,9 @@ fun RecommendedCard(
 @Composable
 fun TopSection(navController: NavHostController) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -390,7 +399,7 @@ fun GreetingSection(
 ) {
     val c: Calendar = Calendar.getInstance()
     val timeOfDay: Int = c.get(Calendar.HOUR_OF_DAY)
-    Column(modifier = Modifier.padding(8.dp, 0.dp)) {
+    Column(modifier = Modifier.padding(16.dp, 0.dp)) {
         Text(
             text = when (timeOfDay) {
                 in 0..11 -> {
@@ -419,21 +428,22 @@ fun GreetingSection(
 fun AdSection(
     adsList: List<Advertisement>
 ) {
-    Column(modifier = Modifier.padding(8.dp, 0.dp))
+    Column()
     {
 
         Spacer(modifier = Modifier.height(8.dp))
 
         LazyRow(
+            contentPadding = PaddingValues(
+                start = 8.dp,
+                end = 8.dp
+            ),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(adsList.size) {
                 AdCard(
                     adsList[it]
                 )
-                if (it != (adsList.size - 1)) {
-                    Spacer(modifier = Modifier.width(16.dp))
-                }
-
             }
         }
     }
