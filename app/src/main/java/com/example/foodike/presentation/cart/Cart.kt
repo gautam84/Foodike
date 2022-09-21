@@ -70,10 +70,7 @@ fun Cart(
             },
             onDecreaseClick = { viewModel.decreaseQuantity(it) },
             onIncreaseClick = { viewModel.increaseQuantity(it) },
-
-
-
-            )
+        )
 
         Spacer(modifier = Modifier.height(8.dp))
 

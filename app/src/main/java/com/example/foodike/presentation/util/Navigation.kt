@@ -112,12 +112,12 @@ fun SetupNavigation(startDestination: String) {
 
 
     val scrollState = rememberLazyListState()
-    val state = remember { derivedStateOf { scrollState.firstVisibleItemIndex == 0 } }
+    val state by remember { derivedStateOf { scrollState.firstVisibleItemIndex == 0 } }
 
 
     Scaffold(
         bottomBar = {
-            if ((currentRoute == Screen.Home.route || currentRoute == Screen.History.route) && state.value) {
+            if ((currentRoute == Screen.Home.route || currentRoute == Screen.History.route) && state) {
 
                 Column(
                     modifier = Modifier.padding(115.dp, 25.dp),
