@@ -91,8 +91,6 @@ fun Cart(
         BillSection(
             itemTotal = 6.09
         )
-
-
     }
 }
 
