@@ -420,7 +420,6 @@ fun CouponBar() {
                     )
                 },
 
-
                 modifier = Modifier
                     .fillMaxWidth()
                     .shadow(elevation = 16.dp, shape = CircleShape),
