@@ -24,7 +24,6 @@ class LoginViewModel @Inject constructor(
 
     fun changeEmail(mail: String) {
         _email.value = email.value.replace(email.value, mail)
-
     }
 
     fun changePassword(pass: String) {
