@@ -22,6 +22,7 @@ class LoginViewModel @Inject constructor(
     private val _password = mutableStateOf("")
     val password: State<String> = _password
 
+
     fun changeEmail(mail: String) {
         _email.value = email.value.replace(email.value, mail)
     }
