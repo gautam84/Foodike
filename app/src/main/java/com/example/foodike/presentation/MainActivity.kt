@@ -28,8 +28,6 @@ class MainActivity : ComponentActivity() {
             splashViewModel.isLoading.value
         }
 
-
-
         setContent {
             FoodikeTheme {
                 val screen by splashViewModel.startDestination

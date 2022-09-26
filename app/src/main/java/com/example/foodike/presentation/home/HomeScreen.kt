@@ -51,6 +51,8 @@ import com.example.foodike.presentation.util.Screen
 import java.util.*
 
 
+
+
 @Composable
 fun Home(
     scrollState: LazyListState,
@@ -120,8 +122,6 @@ fun Home(
                         navController.navigate(Screen.RestaurantDetails.withArgs(restaurantList[it].name))
                     }
             )
-
-
         }
         item {
             ThankYouSection()

@@ -24,11 +24,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.foodike.presentation.onboarding.util.OnboardingItem
 import com.example.foodike.presentation.util.Screen
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -50,9 +48,7 @@ fun OnBoarding(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-
             val context = LocalContext.current as Activity
-
             context.window.statusBarColor = MaterialTheme.colors.primary.toArgb()
             context.window.navigationBarColor = MaterialTheme.colors.primary.toArgb()
 
@@ -60,7 +56,7 @@ fun OnBoarding(
 
             val scope = rememberCoroutineScope()
 
-            val items = OnboardingItem.get()
+            val items = OnBoardingItem.get()
 
             val pagerState = rememberPagerState()
 
@@ -99,7 +95,7 @@ fun OnBoarding(
 }
 
 @Composable
-fun OnboardingPage(item: OnboardingItem) {
+fun OnboardingPage(item: OnBoardingItem) {
     Column(
         modifier = Modifier.padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
