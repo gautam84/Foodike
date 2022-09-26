@@ -140,7 +140,6 @@ fun BillSection(
                     Button(onClick = { /*TODO*/ }) {
                         Text(text = "Proceed to Pay")
                     }
-
                 }
 
             }
