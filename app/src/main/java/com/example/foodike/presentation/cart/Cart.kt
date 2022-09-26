@@ -104,14 +104,10 @@ fun Double.round(decimals: Int): Double {
 fun BillSection(
     itemTotal: Double
 ) {
-
     Column(modifier = Modifier.padding(16.dp)) {
-
-
         Card(
             shape = RoundedCornerShape(24.dp),
             elevation = 16.dp
-
         ) {
             Column(modifier = Modifier.padding(24.dp)) {
                 Row(
@@ -121,7 +117,6 @@ fun BillSection(
                     Text(text = "Bill  Details", fontWeight = FontWeight.Bold)
                 }
                 Spacer(modifier = Modifier.height(8.dp))
-
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -135,10 +130,7 @@ fun BillSection(
                         Text(text = "$$itemTotal")
                         Text(text = "$${((0.18) * itemTotal).round(2)}")
                         Text(text = "$${(itemTotal + ((0.18) * itemTotal).round(2)).round(2)}")
-
                     }
-
-
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(
