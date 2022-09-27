@@ -152,6 +152,7 @@ fun BottomSection(
     }
 }
 
+
 @Composable
 fun BoxScope.Indicators(size: Int, index: Int) {
     Row(
