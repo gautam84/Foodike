@@ -12,6 +12,10 @@
     <string name="forgot_password">forgot password?</string>
     <string name="coming_soon">Coming soon!</string>
     <string name="login">Login</string>
+    <string name="or_sign_in_with">or sign in with</string>
+    <string name="login_with_google">Login with Google</string>
+    <string name="login_with_facebook">Login with Facebook</string>
+    <string name="new_to_foodike">New to Foodike? Sign up</string>
 
 
 </resources>

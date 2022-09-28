@@ -10,6 +10,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -30,6 +31,7 @@ import androidx.navigation.NavHostController
 import com.example.foodike.R
 import com.example.foodike.presentation.util.Screen
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @Composable
@@ -39,11 +41,22 @@ fun LoginScreen(
     ) {
 
     val scaffoldState: ScaffoldState = rememberScaffoldState()
-    val coroutineScope: CoroutineScope = rememberCoroutineScope()
 
     val email by viewModel.email
     val password by viewModel.password
 
+    LaunchedEffect(key1 = true) {
+        viewModel.eventFlow.collectLatest { event ->
+            when(event) {
+                is UiEvent.ShowSnackbar -> {
+                    scaffoldState.snackbarHostState.showSnackbar(
+                        message = event.message,
+                        duration = SnackbarDuration.Short
+                    )
+                }
+            }
+        }
+    }
 
     Scaffold(scaffoldState = scaffoldState) {
         Column(
@@ -56,8 +69,6 @@ fun LoginScreen(
 
             context.window.statusBarColor = Color.Gray.toArgb()
             context.window.navigationBarColor = Color.White.toArgb()
-
-
 
             Text(
                 text = stringResource(R.string.welcome_back),
@@ -141,14 +152,6 @@ fun LoginScreen(
                             }
                         }
                     })
-
-//                        coroutineScope.launch {
-//                            scaffoldState.snackbarHostState.showSnackbar(
-//                                message = "Please enter correct email and password",
-//                                duration = SnackbarDuration.Short
-//                            )
-//                        }
-//                    }
                 }
             ) {
                 Text(
@@ -174,13 +177,12 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.width(16.dp))
 
                 Text(
-                    text = "or sign in with",
+                    text = stringResource(R.string.or_sign_in_with),
                     modifier = Modifier
                         .alpha(0.5f),
                     fontSize = 16.sp,
                 )
                 Spacer(modifier = Modifier.width(16.dp))
-
 
                 Divider(
                     modifier = Modifier
@@ -196,48 +198,39 @@ fun LoginScreen(
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.goog_icon),
-                    contentDescription = "google login",
+                    contentDescription = stringResource(R.string.login_with_google),
                     modifier = Modifier
                         .fillMaxSize(0.1f)
                         .clickable {
                             Toast
-                                .makeText(context, "Coming soon!", Toast.LENGTH_SHORT)
+                                .makeText(context, R.string.coming_soon, Toast.LENGTH_SHORT)
                                 .show()
                         }
                 )
                 Spacer(modifier = Modifier.width(16.dp))
-
                 Image(
                     painter = painterResource(id = R.drawable.fb_icon),
-                    contentDescription = "facebook login",
+                    contentDescription = stringResource(R.string.login_with_facebook),
                     modifier = Modifier
                         .fillMaxSize(0.1f)
                         .clickable {
                             Toast
-                                .makeText(context, "Coming soon!", Toast.LENGTH_SHORT)
+                                .makeText(context, R.string.coming_soon, Toast.LENGTH_SHORT)
                                 .show()
                         }
                 )
-
             }
             Spacer(modifier = Modifier.height(16.dp))
-
-
             Text(
-                text = "New to Foodika? Sign up",
+                text = stringResource(R.string.new_to_foodike),
                 modifier = Modifier
                     .alpha(0.5f)
                     .clickable {
                         Toast
-                            .makeText(context, "Coming soon!", Toast.LENGTH_SHORT)
+                            .makeText(context, R.string.coming_soon, Toast.LENGTH_SHORT)
                             .show()
                     },
             )
-
-
         }
-
     }
-
-
 }

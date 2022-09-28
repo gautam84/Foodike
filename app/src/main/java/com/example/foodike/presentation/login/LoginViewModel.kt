@@ -3,8 +3,12 @@ package com.example.foodike.presentation.login
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.foodike.domain.repository.LoginRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -27,6 +31,9 @@ class LoginViewModel @Inject constructor(
     )
     val password: State<FoodikeTextFieldState> = _password
 
+    private val _eventFlow = MutableSharedFlow<UiEvent>()
+    val eventFlow = _eventFlow.asSharedFlow()
+
 
 
     fun onEvent(event: LoginEvent) {
@@ -48,6 +55,15 @@ class LoginViewModel @Inject constructor(
                 if (email.value.text == "abcxyz@gmail.com" && password.value.text == "abcdef"){
                     repository.toggleLoginState()
                     event.onClick()
+                }
+                else {
+                    viewModelScope.launch{
+                        _eventFlow.emit(
+                            UiEvent.ShowSnackbar(
+                                message = "Please enter correct email and password"
+                            )
+                        )
+                    }
                 }
 
             }
