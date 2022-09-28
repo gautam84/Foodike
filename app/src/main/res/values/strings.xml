@@ -16,6 +16,8 @@
     <string name="login_with_google">Login with Google</string>
     <string name="login_with_facebook">Login with Facebook</string>
     <string name="new_to_foodike">New to Foodike? Sign up</string>
+    <string name="display_picture">Display picture</string>
+    <string name="log_out">Log Out</string>
 
 
 </resources>

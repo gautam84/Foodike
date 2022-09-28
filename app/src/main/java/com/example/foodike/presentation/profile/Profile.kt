@@ -14,6 +14,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -78,7 +79,7 @@ fun Profile(
                             .size(90.dp)
                             .clip(CircleShape),
                         painter = painterResource(id = R.drawable.ic_profile),
-                        contentDescription = "Display picture"
+                        contentDescription = stringResource(R.string.display_picture)
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
@@ -105,7 +106,7 @@ fun Profile(
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             ProfileCard(
                 title = "Saved Addresses",
@@ -118,26 +119,21 @@ fun Profile(
                 title = "Payments & Refunds",
                 subtext = "Information about refunds and payments",
                 onClick = {
-
                 }
             )
             ProfileCard(
                 title = "Online Ordering Help",
                 subtext = "Information about ordering food",
                 onClick = {
-
                 }
             )
             ProfileCard(
                 title = "About",
                 subtext = "About the app",
                 onClick = {
-
                 },
                 dividerVisibility = false
             )
-
-
         }
 
         Column(
@@ -151,17 +147,17 @@ fun Profile(
             Button(
                 modifier = Modifier.width(200.dp),
                 onClick = {
-                    navController.navigate(Screen.Onboarding.route){
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            inclusive = true
+                    viewModel.onEvent(ProfileEvent.PerformLogout {
+                        navController.navigate(Screen.Onboarding.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                inclusive = true
+                            }
                         }
-                    }
-
-                    viewModel.toggleLoginState()
+                    })
                 }
             ) {
                 Text(
-                    text = "Log Out",
+                    text = stringResource(R.string.log_out),
                     fontSize = 16.sp,
                 )
             }

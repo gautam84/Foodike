@@ -397,7 +397,7 @@ fun HistorySection() {
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colors.primary,
                             fontSize = 16.sp,
-                            modifier = Modifier.clickable {  }
+                            modifier = Modifier.clickable { }
                         )
                     }
 

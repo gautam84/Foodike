@@ -1,4 +1,4 @@
-package com.example.foodike.presentation.onboarding
+package com.example.foodike.presentation.onboarding.util
 
 import com.example.foodike.R
 
