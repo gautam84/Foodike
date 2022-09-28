@@ -35,7 +35,6 @@ class LoginViewModel @Inject constructor(
     val eventFlow = _eventFlow.asSharedFlow()
 
 
-
     fun onEvent(event: LoginEvent) {
         when (event) {
             is LoginEvent.EnteredEmail -> {
@@ -49,9 +48,7 @@ class LoginViewModel @Inject constructor(
                     text = event.value
                 )
             }
-
             is LoginEvent.PerformLogin -> {
-
                 if (email.value.text == "abcxyz@gmail.com" && password.value.text == "abcdef"){
                     repository.toggleLoginState()
                     event.onClick()
@@ -65,14 +62,7 @@ class LoginViewModel @Inject constructor(
                         )
                     }
                 }
-
             }
-
-
         }
-
-
     }
-
-
 }
