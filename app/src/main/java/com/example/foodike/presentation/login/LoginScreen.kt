@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -18,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
@@ -34,7 +36,6 @@ import kotlinx.coroutines.launch
 fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel(),
     navController: NavHostController,
-
     ) {
 
     val scaffoldState: ScaffoldState = rememberScaffoldState()
@@ -59,7 +60,7 @@ fun LoginScreen(
 
 
             Text(
-                text = "Welcome back!",
+                text = stringResource(R.string.welcome_back),
                 fontSize = 24.sp
             )
 
@@ -70,12 +71,12 @@ fun LoginScreen(
 
             ) {
                 TextField(
-                    value = email,
-                    onValueChange = { viewModel.changeEmail(it) },
+                    value = email.text,
+                    onValueChange = { viewModel.onEvent(LoginEvent.EnteredEmail(it)) },
                     modifier = Modifier.width(280.dp),
                     placeholder = {
                         Text(
-                            text = "Enter email or phone number",
+                            text = email.hint,
                             modifier = Modifier.alpha(0.5f)
                         )
                     },
@@ -94,12 +95,12 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 TextField(
-                    value = password,
-                    onValueChange = { viewModel.changePassword(it) },
+                    value = password.text,
+                    onValueChange = { viewModel.onEvent(LoginEvent.EnteredPassword(it)) },
                     modifier = Modifier.width(280.dp),
                     placeholder = {
                         Text(
-                            text = "Password",
+                            text = password.hint,
                             Modifier.alpha(0.5f)
                         )
                     },
@@ -111,19 +112,19 @@ fun LoginScreen(
                         unfocusedIndicatorColor = Color.Transparent,
                     ),
                     keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = ImeAction.Next
+                        imeAction = ImeAction.Done
                     ),
                     singleLine = true
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "forgot password?",
+                    text = stringResource(R.string.forgot_password),
                     modifier = Modifier
                         .alpha(0.5f)
                         .clickable {
                             Toast
-                                .makeText(context, "Coming soon!", Toast.LENGTH_SHORT)
+                                .makeText(context, R.string.coming_soon, Toast.LENGTH_SHORT)
                                 .show()
                         },
                     fontSize = 14.sp,
@@ -133,29 +134,25 @@ fun LoginScreen(
             Button(
                 modifier = Modifier.width(200.dp),
                 onClick = {
-                    if (email == "abcxyz@gmail.com" && password == "abcdef") {
+                    viewModel.onEvent(LoginEvent.PerformLogin {
                         navController.navigate(Screen.Home.route) {
                             popUpTo(navController.graph.findStartDestination().id) {
                                 inclusive = true
                             }
                         }
-                        viewModel.toggleLoginState()
-                    } else {
+                    })
 
-                        coroutineScope.launch {
-                            scaffoldState.snackbarHostState.showSnackbar(
-                                message = "Please enter correct email and password",
-                                duration = SnackbarDuration.Short
-                            )
-
-                        }
-                    }
-
-
+//                        coroutineScope.launch {
+//                            scaffoldState.snackbarHostState.showSnackbar(
+//                                message = "Please enter correct email and password",
+//                                duration = SnackbarDuration.Short
+//                            )
+//                        }
+//                    }
                 }
             ) {
                 Text(
-                    text = "Login",
+                    text = stringResource(R.string.login),
                     fontSize = 16.sp,
                 )
             }

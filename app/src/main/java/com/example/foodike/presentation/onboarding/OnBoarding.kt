@@ -47,12 +47,9 @@ fun OnBoarding(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             val context = LocalContext.current as Activity
             context.window.statusBarColor = MaterialTheme.colors.primary.toArgb()
             context.window.navigationBarColor = MaterialTheme.colors.primary.toArgb()
-
-
 
             val scope = rememberCoroutineScope()
 
