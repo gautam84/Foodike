@@ -12,6 +12,7 @@ import com.example.foodike.domain.model.FoodItem
 import com.example.foodike.domain.model.Restaurant
 import com.example.foodike.domain.repository.HomeRepository
 import com.example.foodike.domain.repository.UserDataRepository
+import com.example.foodike.presentation.login.FoodikeTextFieldState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.util.*
@@ -23,23 +24,48 @@ class HomeViewModel @Inject constructor(
     private val userDataRepository: UserDataRepository
 ) : ViewModel() {
 
-    private val _ads = mutableStateOf(listOf<Advertisement>())
-    val ads: State<List<Advertisement>> = _ads
+    private val _homeScreenState = mutableStateOf(
+        HomeScreenState()
+    )
+    val homeScreenState: State<HomeScreenState> = _homeScreenState
 
-    private val _restaurants = mutableStateOf(listOf<Restaurant>())
-    val restaurants: State<List<Restaurant>> = _restaurants
-
-    private val _food = mutableStateOf(listOf<FoodItem>())
-    val food: State<List<FoodItem>> = _food
 
 
     private val _likedRestaurants = mutableStateOf(mutableListOf<Restaurant>())
     val likedRestaurants: State<List<Restaurant>> = _likedRestaurants
 
     init {
-        loadAds()
-        loadRestaurants()
-        loadFoodItems()
+        viewModelScope.launch {
+
+            when (val result = repository.getAds()) {
+                is Results.Success -> _homeScreenState.value = homeScreenState.value.copy(
+                    adsList = result.data
+                )
+                is Results.Error -> {
+
+                }
+            }
+
+            when (val result = repository.getFoodItems()) {
+                is Results.Success -> _homeScreenState.value = homeScreenState.value.copy(
+                    foodList = result.data
+                )
+                is Results.Error -> {
+
+                }
+            }
+
+            when (val result = repository.getRestaurants()) {
+                is Results.Success -> _homeScreenState.value = homeScreenState.value.copy(
+                    restaurantList = result.data
+                )
+                is Results.Error -> {
+
+                }
+            }
+
+        }
+
 
         viewModelScope.launch {
             userDataRepository.getLikedRestaurants().collect {
@@ -51,48 +77,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun loadFoodItems() {
-        viewModelScope.launch {
-            viewModelScope.launch {
 
-                when (val result = repository.getFoodItems()) {
-
-                    is Results.Success -> _food.value = result.data
-                    is Results.Error -> {
-
-                    }
-                }
-            }
-        }
-    }
-
-    private fun loadRestaurants() {
-        viewModelScope.launch {
-            viewModelScope.launch {
-
-                when (val result = repository.getRestaurants()) {
-
-                    is Results.Success -> _restaurants.value = result.data
-                    is Results.Error -> {
-
-                    }
-                }
-            }
-        }
-
-    }
-
-    private fun loadAds() {
-        viewModelScope.launch {
-
-            when (val result = repository.getAds()) {
-
-                is Results.Success -> _ads.value = result.data
-                is Results.Error -> {
-
-                }
-            }
-        }
-    }
 
 }

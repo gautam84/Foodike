@@ -64,9 +64,7 @@ fun Home(
     context.window.statusBarColor = Color.Gray.toArgb()
     context.window.navigationBarColor = Color.White.toArgb()
 
-    val adsList by remember { viewModel.ads }
-    val restaurantList by remember { viewModel.restaurants }
-    val foodList by remember { viewModel.food }
+    val homeScreenState by viewModel.homeScreenState
 
     val likedList by viewModel.likedRestaurants
 
@@ -96,11 +94,11 @@ fun Home(
             Spacer(modifier = Modifier.height(16.dp))
         }
         item {
-            AdSection(adsList)
+            AdSection(homeScreenState.adsList)
             Spacer(modifier = Modifier.height(16.dp))
         }
         item {
-            RecommendedSection(foodList)
+            RecommendedSection(homeScreenState.foodList)
             Spacer(modifier = Modifier.height(16.dp))
         }
         if (likedList.isNotEmpty()) {
@@ -110,15 +108,19 @@ fun Home(
             }
         }
         item {
+            Spacer(modifier = Modifier.height(8.dp))
+            ChipBar()
+        }
+        item {
             MainSection()
         }
-        items(restaurantList.size) {
+        items(homeScreenState.restaurantList.size) {
             RestaurantCard(
-                restaurant = restaurantList[it],
+                restaurant = homeScreenState.restaurantList[it],
                 modifier = Modifier
                     .clip(RoundedCornerShape(8.dp))
                     .clickable {
-                        navController.navigate(Screen.RestaurantDetails.withArgs(restaurantList[it].name))
+                        navController.navigate(Screen.RestaurantDetails.withArgs(homeScreenState.restaurantList[it].name))
                     }
             )
         }
@@ -129,7 +131,6 @@ fun Home(
     }
 
 }
-
 
 
 @Composable
@@ -216,8 +217,6 @@ fun BottomBar(navController: NavHostController) {
 fun MainSection() {
     Column(modifier = Modifier.padding(8.dp, 0.dp))
     {
-        Spacer(modifier = Modifier.height(8.dp))
-        ChipBar()
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = "All around you..",
@@ -346,7 +345,7 @@ fun TopSection(navController: NavHostController) {
                     navController.navigate(Screen.Profile.route)
                 },
             painter = painterResource(id = R.drawable.ic_profile),
-            contentDescription = "Display picture"
+            contentDescription = stringResource(id = R.string.display_picture)
         )
 
 
@@ -354,7 +353,7 @@ fun TopSection(navController: NavHostController) {
             Row {
                 Icon(
                     imageVector = Icons.Outlined.LocationOn,
-                    contentDescription = "Location",
+                    contentDescription = stringResource(R.string.location),
 
                     )
                 Text(text = "Guwahati")

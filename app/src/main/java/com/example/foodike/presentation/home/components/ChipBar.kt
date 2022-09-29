@@ -2,9 +2,7 @@ package com.example.foodike.presentation.home.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.toggleable
@@ -50,7 +48,6 @@ fun Chip(
 ) {
     Surface(
         modifier = Modifier
-            .padding(4.dp)
             .border(BorderStroke(1.dp, Color.Black.copy(0.3f)), MaterialTheme.shapes.medium)
             ,
         shape = MaterialTheme.shapes.medium,
@@ -80,8 +77,13 @@ fun ChipGroup(
     selectedFilter: Filter? = null,
     onSelectedChanged: (String) -> Unit = {},
 ) {
-    Column() {
-        LazyRow {
+        LazyRow(
+            contentPadding = PaddingValues(
+                start = 8.dp,
+                end = 8.dp
+            ),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
             items(filters) {
                 Chip(
                     name = it.value,
@@ -91,7 +93,7 @@ fun ChipGroup(
                     },
                 )
             }
-        }
+
     }
 }
 

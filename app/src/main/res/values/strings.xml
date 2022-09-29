@@ -8,6 +8,7 @@
     <string name="onboardingText1">Choose from a range of restaurants and hotels near you</string>
     <string name="onboardingText2">Vaccinated delivery partners ensure the health and security of the customer</string>
     <string name="onboardingText3">Fast and easy to track delivery to ease the experience of the customer</string>
+
     <string name="welcome_back">Welcome back!</string>
     <string name="forgot_password">forgot password?</string>
     <string name="coming_soon">Coming soon!</string>
@@ -29,6 +30,7 @@
     <string name="with">\"With \"</string>
     <string name="love">Love</string>
     <string name="from_creator">\" from Gautam Hazarika\"</string>
+    <string name="location">Location</string>
 
 
 </resources>
