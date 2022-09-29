@@ -18,6 +18,14 @@
     <string name="new_to_foodike">New to Foodike? Sign up</string>
     <string name="display_picture">Display picture</string>
     <string name="log_out">Log Out</string>
+    <string name="saved_addresses">Saved Addresses</string>
+    <string name="add_edit_and_delete_saved_addresses">Add, edit and delete saved addresses</string>
+    <string name="payments_and_refunds"><![CDATA[Payments & Refunds]]></string>
+    <string name="information_about_refunds_and_payments">Information about refunds and payments</string>
+    <string name="online_ordering_help">Online Ordering Help</string>
+    <string name="information_about_ordering_food">Information about ordering food</string>
+    <string name="about">About</string>
+    <string name="about_the_app">About the app</string>
 
 
 </resources>

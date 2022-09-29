@@ -109,27 +109,27 @@ fun Profile(
             Spacer(modifier = Modifier.height(8.dp))
 
             ProfileCard(
-                title = "Saved Addresses",
-                subtext = "Add, edit and delete saved addresses",
+                title = stringResource(R.string.saved_addresses),
+                subtext = stringResource(R.string.add_edit_and_delete_saved_addresses),
                 onClick = {
 
                 }
             )
             ProfileCard(
-                title = "Payments & Refunds",
-                subtext = "Information about refunds and payments",
+                title = stringResource(R.string.payments_and_refunds),
+                subtext = stringResource(R.string.information_about_refunds_and_payments),
                 onClick = {
                 }
             )
             ProfileCard(
-                title = "Online Ordering Help",
-                subtext = "Information about ordering food",
+                title = stringResource(R.string.online_ordering_help),
+                subtext = stringResource(R.string.information_about_ordering_food),
                 onClick = {
                 }
             )
             ProfileCard(
-                title = "About",
-                subtext = "About the app",
+                title = stringResource(R.string.about),
+                subtext = stringResource(R.string.about_the_app),
                 onClick = {
                 },
                 dividerVisibility = false
@@ -176,7 +176,7 @@ fun ProfileCard(
         modifier = Modifier
             .padding(32.dp, 0.dp)
             .clickable {
-                onClick
+                onClick()
             }
     ) {
         Text(
