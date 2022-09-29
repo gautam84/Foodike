@@ -29,11 +29,6 @@ class HomeViewModel @Inject constructor(
     )
     val homeScreenState: State<HomeScreenState> = _homeScreenState
 
-
-
-    private val _likedRestaurants = mutableStateOf(mutableListOf<Restaurant>())
-    val likedRestaurants: State<List<Restaurant>> = _likedRestaurants
-
     init {
         viewModelScope.launch {
 
@@ -64,19 +59,17 @@ class HomeViewModel @Inject constructor(
                 }
             }
 
-        }
-
-
-        viewModelScope.launch {
             userDataRepository.getLikedRestaurants().collect {
-                it.forEach { name ->
-                    _likedRestaurants.value.add(repository.getRestaurantFromName(name)!!)
-                }
+                _homeScreenState.value = homeScreenState.value.copy(
+                    likedRestaurantList = it
+                )
+
             }
 
         }
-    }
 
+
+    }
 
 
 }

@@ -63,7 +63,7 @@ class RestaurantDetailViewModel @Inject constructor(
     }
 
 
-    val list = mutableListOf<Restaurant>()
+    var list = mutableListOf<Restaurant>()
 
     private val _isLiked = mutableStateOf(false)
     val likedRestaurants: State<Boolean> = _isLiked
@@ -75,9 +75,7 @@ class RestaurantDetailViewModel @Inject constructor(
     private fun getLikedRestaurants() {
         viewModelScope.launch {
             userDataRepository.getLikedRestaurants().collect {
-                it.forEach { name ->
-                    list.add(repository.getRestaurantFromName(name)!!)
-                }
+                list = it.toMutableList()
             }
 
         }

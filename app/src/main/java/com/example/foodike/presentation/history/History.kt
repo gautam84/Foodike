@@ -51,7 +51,7 @@ fun History(
     navHostController: NavHostController
 ) {
 
-    val list by viewModel.likedRestaurants
+    val state by viewModel.likedRestaurants
 
 
     val context = LocalContext.current as Activity
@@ -75,7 +75,7 @@ fun History(
             Tabs(pagerState = pagerState)
         }
         TabsContent(
-            pagerState = pagerState, list,
+            pagerState = pagerState, state.likedRestaurantList,
             navHostController = navHostController
         )
 

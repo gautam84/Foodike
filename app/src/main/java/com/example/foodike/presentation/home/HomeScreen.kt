@@ -66,7 +66,6 @@ fun Home(
 
     val homeScreenState by viewModel.homeScreenState
 
-    val likedList by viewModel.likedRestaurants
 
     LazyColumn(
         modifier =
@@ -101,9 +100,9 @@ fun Home(
             RecommendedSection(homeScreenState.foodList)
             Spacer(modifier = Modifier.height(16.dp))
         }
-        if (likedList.isNotEmpty()) {
+        if (homeScreenState.likedRestaurantList.isNotEmpty()) {
             item {
-                FavouriteSection(likedList, navController)
+                FavouriteSection(homeScreenState.likedRestaurantList, navController)
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }

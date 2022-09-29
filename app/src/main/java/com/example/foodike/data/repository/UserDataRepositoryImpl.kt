@@ -7,6 +7,8 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.example.foodike.data.data_source.restaurantList
+import com.example.foodike.domain.model.Restaurant
 import com.example.foodike.domain.repository.UserDataRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -31,7 +33,8 @@ class UserDataRepositoryImpl(context: Context) : UserDataRepository {
         }
     }
 
-    override suspend fun getLikedRestaurants(): Flow<Set<String>> {
+    override suspend fun getLikedRestaurants(): Flow<List<Restaurant>> {
+         val list = mutableListOf<Restaurant>()
         return dataStore.data
             .catch { exception ->
                 if (exception is IOException) {
@@ -42,7 +45,13 @@ class UserDataRepositoryImpl(context: Context) : UserDataRepository {
             }
             .map { preferences ->
                 val onBoardingState = preferences[PreferencesKey.likedRestaurants] ?: setOf()
-                onBoardingState
+                onBoardingState.forEach { name->
+                    restaurantList.find {
+                        it.name == name
+                    }?.let { list.add(it) }
+
+                }
+                list
             }
     }
 
