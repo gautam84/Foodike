@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -20,8 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.foodike.presentation.home.util.Filter
-import com.example.foodike.presentation.home.util.getAllCars
-import com.example.foodike.presentation.home.util.getCar
+import com.example.foodike.presentation.home.util.getAllTags
+import com.example.foodike.presentation.home.util.getTag
 
 
 @Composable
@@ -29,13 +28,13 @@ fun ChipBar() {
     val selectedFilter: MutableState<Filter?> = remember { mutableStateOf(null) }
 
     ChipGroup(
-        filters = getAllCars(),
+        filters = getAllTags(),
         selectedFilter = selectedFilter.value,
         onSelectedChanged = {
-            if (selectedFilter.value == getCar(it)) {
+            if (selectedFilter.value == getTag(it)) {
                 selectedFilter.value = null
             } else {
-                selectedFilter.value = getCar(it)
+                selectedFilter.value = getTag(it)
             }
         }
     )
@@ -77,7 +76,7 @@ fun Chip(
 
 @Composable
 fun ChipGroup(
-    filters: List<Filter> = getAllCars(),
+    filters: List<Filter> = getAllTags(),
     selectedFilter: Filter? = null,
     onSelectedChanged: (String) -> Unit = {},
 ) {

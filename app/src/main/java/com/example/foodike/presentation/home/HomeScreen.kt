@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -49,8 +50,6 @@ import com.example.foodike.presentation.home.components.ChipBar
 import com.example.foodike.presentation.home.components.FoodikeBottomNavigation
 import com.example.foodike.presentation.util.Screen
 import java.util.*
-
-
 
 
 @Composable
@@ -131,34 +130,7 @@ fun Home(
 
 }
 
-@Composable
-fun ThankYouSection() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(24.dp),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = "With ",
-            modifier = Modifier.alpha(0.5f),
-            fontFamily = FontFamily.Cursive,
-            fontSize = 24.sp
-        )
-        Icon(
-            imageVector = Icons.Filled.Favorite, contentDescription = "Favourite",
-            tint = Color.Red,
-            modifier = Modifier.size(32.dp)
-        )
-        Text(
-            text = " from Gautam Hazarika",
-            modifier = Modifier.alpha(0.5f),
-            fontFamily = FontFamily.Cursive,
-            fontSize = 24.sp
-        )
-    }
-}
+
 
 @Composable
 fun BottomBar(navController: NavHostController) {
@@ -489,5 +461,34 @@ fun AdCard(
 
     }
 
+}
+
+@Composable
+fun ThankYouSection() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(24.dp),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = stringResource(R.string.with),
+            modifier = Modifier.alpha(0.5f),
+            fontFamily = FontFamily.Cursive,
+            fontSize = 24.sp
+        )
+        Icon(
+            imageVector = Icons.Filled.Favorite, contentDescription = stringResource(R.string.love),
+            tint = Color.Red,
+            modifier = Modifier.size(32.dp)
+        )
+        Text(
+            text = stringResource(R.string.from_creator),
+            modifier = Modifier.alpha(0.5f),
+            fontFamily = FontFamily.Cursive,
+            fontSize = 24.sp
+        )
+    }
 }
 

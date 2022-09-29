@@ -8,14 +8,14 @@ enum class Filter(val value: String) {
 
 }
 
-fun getAllCars(): List<Filter> {
+fun getAllTags(): List<Filter> {
     return listOf(
         Filter.FASTDELIVERY, Filter.DISCOUNT, Filter.GREATDEALS,
         Filter.NONVEG
     )
 }
 
-fun getCar(value: String): Filter? {
+fun getTag(value: String): Filter? {
     val map = Filter.values().associateBy(Filter::value)
     return map[value]
 }
