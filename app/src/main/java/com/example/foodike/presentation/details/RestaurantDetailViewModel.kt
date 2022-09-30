@@ -64,75 +64,42 @@ class RestaurantDetailViewModel @Inject constructor(
                     vegExpandedState = !detailScreenState.value.vegExpandedState
                 )
             }
+            is DetailScreenEvent.ToggleLikedStatus -> {
+                if (detailScreenState.value.isLiked) {
+                    viewModelScope.launch {
+                        userDataRepository.getLikedRestaurants().collect {
+                            val likedList = it.toMutableList()
+                            likedList.remove(detailScreenState.value.restaurant!!)
+                            userDataRepository.updateLikedRestaurant(likedList.map { restaurant -> restaurant.name }
+                                .toSet())
+                        }
+                    }
+                } else {
+
+                    viewModelScope.launch {
+                        userDataRepository.getLikedRestaurants().collect {
+                            val likedList = it.toMutableList()
+                            likedList.add(detailScreenState.value.restaurant!!)
+                            userDataRepository.updateLikedRestaurant(likedList.map { restaurant -> restaurant.name }
+                                .toSet())
+                        }
+                    }
+                }
+            }
+            is DetailScreenEvent.IncreaseCartQuantity -> {
+                viewModelScope.launch {
+                    cartRepository.increaseQuantity(event.cartItem)
+                }
+            }
+            is DetailScreenEvent.DecreaseCartQuantity -> {
+                viewModelScope.launch {
+                    cartRepository.decreaseQuantity(event.cartItem)
+                }
+            }
 
 
         }
     }
-
-
-
-
-    fun increaseQuantity(cartItem: CartItem) {
-        viewModelScope.launch {
-            cartRepository.increaseQuantity(cartItem)
-        }
-    }
-
-    fun decreaseQuantity(cartItem: CartItem) {
-        viewModelScope.launch {
-            cartRepository.decreaseQuantity(cartItem)
-        }
-    }
-
-
-
-
-
-
-
-//
-//
-//    fun setLikeStatus(restaurant: Restaurant) {
-//        _isLiked.value = list.contains(restaurant)
-//
-//    }
-//
-//    fun addRestaurant(restaurant: Restaurant) {
-//        if (!list.contains(restaurant)) {
-//            list.add(restaurant)
-//        }
-//
-//        val nameList = mutableListOf<String>()
-//
-//        list.forEach {
-//            nameList.add(it.name)
-//        }
-//
-//        viewModelScope.launch {
-//            userDataRepository.updateLikedRestaurant(nameList.toSet())
-//        }
-//
-//    }
-//
-//    fun removeRestaurant(restaurant: Restaurant) {
-//        if (list.contains(restaurant)) {
-//            list.remove(restaurant)
-//        }
-//
-//
-//        val nameList = mutableListOf<String>()
-//
-//        list.forEach {
-//            nameList.add(it.name)
-//        }
-//
-//        viewModelScope.launch {
-//            userDataRepository.updateLikedRestaurant(nameList.toSet())
-//        }
-//
-//    }
-
-
 }
 
 

@@ -47,9 +47,6 @@ fun RestaurantDetail(
     val detailScreenState by viewModel.detailScreenState
 
 
-
-
-
     val rotationState by animateFloatAsState(
         targetValue = if (detailScreenState.recommendedExpandedState) 180f else 0f
     )
@@ -77,14 +74,7 @@ fun RestaurantDetail(
                         IconToggleButton(
                             checked = detailScreenState.isLiked,
                             onCheckedChange = {
-                                if (detailScreenState.isLiked) {
-//                                    viewModel.removeRestaurant(detailScreenState.restaurant!!)
-//                                    viewModel.setLikeStatus(detailScreenState.restaurant!!)
-
-                                } else {
-//                                    viewModel.addRestaurant(detailScreenState.restaurant!!)
-//                                    viewModel.setLikeStatus(detailScreenState.restaurant!!)
-                                }
+                                viewModel.onEvent(DetailScreenEvent.ToggleLikedStatus)
 
                             },
                         ) {
@@ -120,7 +110,8 @@ fun RestaurantDetail(
                 }
             }
             val recommendedList =
-                detailScreenState.menuList.shuffled().dropLast(detailScreenState.restaurant!!.menu.size - 5)
+                detailScreenState.menuList.shuffled()
+                    .dropLast(detailScreenState.restaurant!!.menu.size - 5)
 
 
 
@@ -166,8 +157,8 @@ fun RestaurantDetail(
                     MenuItemCard(
                         menuItem = recommendedList[it].menuItem,
                         noOfItems = recommendedList[it].noOfItems,
-                        onDecreaseClick = { viewModel.decreaseQuantity(recommendedList[it]) },
-                        onIncreaseClick = { viewModel.increaseQuantity(recommendedList[it]) }
+                        onDecreaseClick = { viewModel.onEvent(DetailScreenEvent.DecreaseCartQuantity(recommendedList[it])) },
+                        onIncreaseClick = {viewModel.onEvent(DetailScreenEvent.IncreaseCartQuantity(recommendedList[it])) }
 
 
                     )
@@ -228,8 +219,8 @@ fun RestaurantDetail(
                     MenuItemCard(
                         menuItem = nonVegList[it].menuItem,
                         noOfItems = nonVegList[it].noOfItems,
-                        onDecreaseClick = { viewModel.decreaseQuantity(recommendedList[it]) },
-                        onIncreaseClick = { viewModel.increaseQuantity(recommendedList[it]) }
+                        onDecreaseClick = { viewModel.onEvent(DetailScreenEvent.DecreaseCartQuantity(recommendedList[it])) },
+                        onIncreaseClick = {viewModel.onEvent(DetailScreenEvent.IncreaseCartQuantity(recommendedList[it])) }
                     )
                     if (it != (nonVegList.size - 1)) {
                         Divider(
@@ -286,8 +277,8 @@ fun RestaurantDetail(
                     MenuItemCard(
                         menuItem = vegList[it].menuItem,
                         noOfItems = vegList[it].noOfItems,
-                        onDecreaseClick = { viewModel.decreaseQuantity(recommendedList[it]) },
-                        onIncreaseClick = { viewModel.increaseQuantity(recommendedList[it]) }
+                        onDecreaseClick = { viewModel.onEvent(DetailScreenEvent.DecreaseCartQuantity(recommendedList[it])) },
+                        onIncreaseClick = {viewModel.onEvent(DetailScreenEvent.IncreaseCartQuantity(recommendedList[it])) }
                     )
                     if (it != (vegList.size - 1)) {
                         Divider(
