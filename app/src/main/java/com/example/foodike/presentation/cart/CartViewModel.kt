@@ -17,6 +17,7 @@ import javax.inject.Inject
 class CartViewModel @Inject constructor(
     private val cartRepository: CartRepository
 ) : ViewModel(){
+
     private val _cartState = mutableStateOf(
         CartState()
     )
@@ -34,15 +35,21 @@ class CartViewModel @Inject constructor(
         }
     }
 
-    fun increaseQuantity(cartItem: CartItem) {
-        viewModelScope.launch {
-            cartRepository.increaseQuantity(cartItem)
+    fun onEvent(event: CartEvent){
+        when(event){
+            is CartEvent.IncreaseCartQuantity -> {
+                viewModelScope.launch {
+                    cartRepository.increaseQuantity(event.cartItem)
+                }
+            }
+            is CartEvent.DecreaseCartQuantity -> {
+                viewModelScope.launch {
+                    cartRepository.decreaseQuantity(event.cartItem)
+                }
+            }
+
         }
     }
 
-    fun decreaseQuantity(cartItem: CartItem) {
-        viewModelScope.launch {
-            cartRepository.decreaseQuantity(cartItem)
-        }
-    }
+
 }

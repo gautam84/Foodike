@@ -68,8 +68,8 @@ fun Cart(
             list = list.list.filter {
                 it.noOfItems > 0
             },
-            onDecreaseClick = { viewModel.decreaseQuantity(it) },
-            onIncreaseClick = { viewModel.increaseQuantity(it) },
+            onDecreaseClick = { viewModel.onEvent(CartEvent.DecreaseCartQuantity(it)) },
+            onIncreaseClick = { viewModel.onEvent(CartEvent.IncreaseCartQuantity(it)) },
         )
 
         Spacer(modifier = Modifier.height(8.dp))
