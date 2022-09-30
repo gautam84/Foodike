@@ -41,29 +41,25 @@ fun RestaurantDetail(
     viewModel: RestaurantDetailViewModel = hiltViewModel()
 ) {
 
-    val restaurant = viewModel.getRestaurantFromName(name)!!
-
-    viewModel.setLikeStatus(restaurant)
-
-    val cartState by viewModel.cartState
+    viewModel.onEvent(DetailScreenEvent.SetRestaurant(name))
 
 
-    val isFavorite by viewModel.likedRestaurants
+    val detailScreenState by viewModel.detailScreenState
 
 
-    var expandedState by remember { mutableStateOf(true) }
+
+
+
     val rotationState by animateFloatAsState(
-        targetValue = if (expandedState) 180f else 0f
+        targetValue = if (detailScreenState.recommendedExpandedState) 180f else 0f
     )
 
-    var expandedStateNonVeg by remember { mutableStateOf(true) }
     val rotationStateNonVeg by animateFloatAsState(
-        targetValue = if (expandedStateNonVeg) 180f else 0f
+        targetValue = if (detailScreenState.nonVegExpandedState) 180f else 0f
     )
 
-    var expandedStateVeg by remember { mutableStateOf(true) }
     val rotationStateVeg by animateFloatAsState(
-        targetValue = if (expandedStateVeg) 180f else 0f
+        targetValue = if (detailScreenState.vegExpandedState) 180f else 0f
     )
 
 
@@ -79,20 +75,20 @@ fun RestaurantDetail(
                     }
                     Row {
                         IconToggleButton(
-                            checked = isFavorite,
+                            checked = detailScreenState.isLiked,
                             onCheckedChange = {
-                                if (isFavorite) {
-                                    viewModel.removeRestaurant(restaurant)
-                                    viewModel.setLikeStatus(restaurant)
+                                if (detailScreenState.isLiked) {
+//                                    viewModel.removeRestaurant(detailScreenState.restaurant!!)
+//                                    viewModel.setLikeStatus(detailScreenState.restaurant!!)
 
                                 } else {
-                                    viewModel.addRestaurant(restaurant)
-                                    viewModel.setLikeStatus(restaurant)
+//                                    viewModel.addRestaurant(detailScreenState.restaurant!!)
+//                                    viewModel.setLikeStatus(detailScreenState.restaurant!!)
                                 }
 
                             },
                         ) {
-                            if (isFavorite) {
+                            if (detailScreenState.isLiked) {
                                 Icon(
                                     imageVector = Icons.Filled.Favorite,
                                     contentDescription = "Favourite",
@@ -118,12 +114,13 @@ fun RestaurantDetail(
             item {
                 Column(modifier = Modifier.padding(16.dp)) {
                     RestaurantDetailCard(
-                        restaurant
+                        detailScreenState.restaurant!!
                     )
 
                 }
             }
-            val recommendedList = cartState.list.shuffled().dropLast(restaurant.menu.size - 5)
+            val recommendedList =
+                detailScreenState.menuList.shuffled().dropLast(detailScreenState.restaurant!!.menu.size - 5)
 
 
 
@@ -152,7 +149,7 @@ fun RestaurantDetail(
                             .alpha(ContentAlpha.medium)
                             .rotate(rotationState),
                         onClick = {
-                            expandedState = !expandedState
+                            viewModel.onEvent(DetailScreenEvent.ToggleRecommendedSectionExpandedState)
                         }) {
                         Icon(
                             imageVector = Icons.Default.ArrowDropDown,
@@ -163,7 +160,7 @@ fun RestaurantDetail(
                 }
 
             }
-            if (expandedState) {
+            if (detailScreenState.recommendedExpandedState) {
 
                 items(recommendedList.size) {
                     MenuItemCard(
@@ -186,7 +183,7 @@ fun RestaurantDetail(
 
             }
 
-            val nonVegList = cartState.list.filter {
+            val nonVegList = detailScreenState.menuList.filter {
                 !it.menuItem.isVegetarian
             }
 
@@ -214,7 +211,7 @@ fun RestaurantDetail(
                             .alpha(ContentAlpha.medium)
                             .rotate(rotationStateNonVeg),
                         onClick = {
-                            expandedStateNonVeg = !expandedStateNonVeg
+                            viewModel.onEvent(DetailScreenEvent.ToggleNonVegSectionExpandedState)
                         }) {
                         Icon(
                             imageVector = Icons.Default.ArrowDropDown,
@@ -225,7 +222,7 @@ fun RestaurantDetail(
                 }
 
             }
-            if (expandedStateNonVeg) {
+            if (detailScreenState.nonVegExpandedState) {
 
                 items(nonVegList.size) {
                     MenuItemCard(
@@ -244,7 +241,7 @@ fun RestaurantDetail(
                 }
             }
 
-            val vegList = cartState.list.filter {
+            val vegList = detailScreenState.menuList.filter {
                 it.menuItem.isVegetarian
             }
 
@@ -272,7 +269,7 @@ fun RestaurantDetail(
                             .alpha(ContentAlpha.medium)
                             .rotate(rotationStateVeg),
                         onClick = {
-                            expandedStateVeg = !expandedStateVeg
+                            viewModel.onEvent(DetailScreenEvent.ToggleVegSectionExpandedState)
                         }) {
                         Icon(
                             imageVector = Icons.Default.ArrowDropDown,
@@ -283,7 +280,7 @@ fun RestaurantDetail(
                 }
 
             }
-            if (expandedStateVeg) {
+            if (detailScreenState.vegExpandedState) {
 
                 items(vegList.size) {
                     MenuItemCard(
@@ -307,7 +304,7 @@ fun RestaurantDetail(
 
         }
 
-       if(cartState.list.sumOf { it.noOfItems } != 0) {
+        if (detailScreenState.menuList.sumOf { it.noOfItems } != 0) {
             Column(modifier = Modifier.padding(16.dp)) {
                 FloatingActionButton(
                     onClick = {

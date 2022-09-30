@@ -11,8 +11,11 @@ import com.example.foodike.domain.repository.CartRepository
 import com.example.foodike.domain.repository.HomeRepository
 import com.example.foodike.domain.repository.UserDataRepository
 import com.example.foodike.presentation.cart.CartState
+import com.example.foodike.presentation.login.LoginEvent
+import com.example.foodike.presentation.login.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,33 +25,52 @@ class RestaurantDetailViewModel @Inject constructor(
     private val cartRepository: CartRepository
 ) : ViewModel() {
 
-    private val _cartState = mutableStateOf(
-        CartState()
-    )
-
-    val cartState: State<CartState> = _cartState
+    private val _detailScreenState = mutableStateOf(DetailScreenState())
+    val detailScreenState: State<DetailScreenState> = _detailScreenState
 
 
-    fun getRestaurantFromName(name: String): Restaurant? {
-
-        loadCartList(name)
-        return repository.getRestaurantFromName(name)
-    }
-
-    private fun loadCartList(
-        name: String
-    ) {
-        viewModelScope.launch {
-            cartRepository.setCartItems(repository.getRestaurantFromName(name)!!)
-            cartRepository.getCartItems().collect {
-                _cartState.value = cartState.value.copy(
-                    restaurant = repository.getRestaurantFromName(name)!!,
-                    list = it.toMutableList()
+    fun onEvent(event: DetailScreenEvent) {
+        when (event) {
+            is DetailScreenEvent.SetRestaurant -> {
+                viewModelScope.launch {
+                    _detailScreenState.value = detailScreenState.value.copy(
+                        restaurant = repository.getRestaurantFromName(event.restaurant),
+                    )
+                    cartRepository.setCartItems(repository.getRestaurantFromName(event.restaurant)!!)
+                    cartRepository.getCartItems().collect {
+                        _detailScreenState.value = detailScreenState.value.copy(
+                            menuList = it
+                        )
+                    }
+                    userDataRepository.getLikedRestaurants().collect {
+                        _detailScreenState.value = detailScreenState.value.copy(
+                            isLiked = it.contains(repository.getRestaurantFromName(event.restaurant)!!)
+                        )
+                    }
+                }
+            }
+            is DetailScreenEvent.ToggleRecommendedSectionExpandedState -> {
+                _detailScreenState.value = detailScreenState.value.copy(
+                    recommendedExpandedState = !detailScreenState.value.recommendedExpandedState
                 )
             }
-        }
+            is DetailScreenEvent.ToggleNonVegSectionExpandedState -> {
+                _detailScreenState.value = detailScreenState.value.copy(
+                    nonVegExpandedState = !detailScreenState.value.nonVegExpandedState
+                )
+            }
+            is DetailScreenEvent.ToggleVegSectionExpandedState -> {
+                _detailScreenState.value = detailScreenState.value.copy(
+                    vegExpandedState = !detailScreenState.value.vegExpandedState
+                )
+            }
 
+
+        }
     }
+
+
+
 
     fun increaseQuantity(cartItem: CartItem) {
         viewModelScope.launch {
@@ -63,64 +85,52 @@ class RestaurantDetailViewModel @Inject constructor(
     }
 
 
-    var list = mutableListOf<Restaurant>()
-
-    private val _isLiked = mutableStateOf(false)
-    val likedRestaurants: State<Boolean> = _isLiked
-
-    init {
-        getLikedRestaurants()
-    }
-
-    private fun getLikedRestaurants() {
-        viewModelScope.launch {
-            userDataRepository.getLikedRestaurants().collect {
-                list = it.toMutableList()
-            }
-
-        }
-    }
 
 
-    fun setLikeStatus(restaurant: Restaurant) {
-        _isLiked.value = list.contains(restaurant)
-
-    }
-
-    fun addRestaurant(restaurant: Restaurant) {
-        if (!list.contains(restaurant)) {
-            list.add(restaurant)
-        }
-
-        val nameList = mutableListOf<String>()
-
-        list.forEach {
-            nameList.add(it.name)
-        }
-
-        viewModelScope.launch {
-            userDataRepository.updateLikedRestaurant(nameList.toSet())
-        }
-
-    }
-
-    fun removeRestaurant(restaurant: Restaurant) {
-        if (list.contains(restaurant)) {
-            list.remove(restaurant)
-        }
 
 
-        val nameList = mutableListOf<String>()
 
-        list.forEach {
-            nameList.add(it.name)
-        }
-
-        viewModelScope.launch {
-            userDataRepository.updateLikedRestaurant(nameList.toSet())
-        }
-
-    }
+//
+//
+//    fun setLikeStatus(restaurant: Restaurant) {
+//        _isLiked.value = list.contains(restaurant)
+//
+//    }
+//
+//    fun addRestaurant(restaurant: Restaurant) {
+//        if (!list.contains(restaurant)) {
+//            list.add(restaurant)
+//        }
+//
+//        val nameList = mutableListOf<String>()
+//
+//        list.forEach {
+//            nameList.add(it.name)
+//        }
+//
+//        viewModelScope.launch {
+//            userDataRepository.updateLikedRestaurant(nameList.toSet())
+//        }
+//
+//    }
+//
+//    fun removeRestaurant(restaurant: Restaurant) {
+//        if (list.contains(restaurant)) {
+//            list.remove(restaurant)
+//        }
+//
+//
+//        val nameList = mutableListOf<String>()
+//
+//        list.forEach {
+//            nameList.add(it.name)
+//        }
+//
+//        viewModelScope.launch {
+//            userDataRepository.updateLikedRestaurant(nameList.toSet())
+//        }
+//
+//    }
 
 
 }
