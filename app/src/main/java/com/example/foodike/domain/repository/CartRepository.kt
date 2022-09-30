@@ -11,6 +11,4 @@ interface CartRepository {
     suspend fun getCartItems(): Flow<List<CartItem>>
     suspend fun increaseQuantity(cartItem: CartItem)
     suspend fun decreaseQuantity(cartItem: CartItem)
-
-
 }
