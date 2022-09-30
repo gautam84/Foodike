@@ -10,21 +10,29 @@ import kotlinx.coroutines.flow.flow
 class CartRepositoryImpl : CartRepository {
 
     private val cartList = MutableStateFlow<MutableSet<CartItem>>(mutableSetOf())
+    private var currentRestaurant: Restaurant? = null
 
 
-    override suspend fun setCartItems(restaurant: Restaurant) {
-        restaurant.menu.forEach {
-            cartList.value.add(CartItem(it, 0))
+    override suspend fun setRestaurant(restaurant: Restaurant) {
+        currentRestaurant = restaurant
+    }
+
+    override suspend fun getSavedRestaurant(): Flow<Restaurant> = flow {
+        if (currentRestaurant != null) {
+            emit(currentRestaurant!!)
         }
     }
 
-    override suspend fun getCartItems(): Flow<List<CartItem>> = flow {
+    override suspend fun getCartItems(restaurant: Restaurant): Flow<List<CartItem>> = flow {
+        restaurant.menu.forEach {
+            cartList.value.add(CartItem(it, 0))
+        }
         emit(cartList.value.toMutableList())
     }
 
     override suspend fun increaseQuantity(cartItem: CartItem) {
         cartList.value.map {
-            if (it== cartItem){
+            if (it == cartItem) {
                 it.noOfItems++
             }
         }
@@ -34,7 +42,7 @@ class CartRepositoryImpl : CartRepository {
     override suspend fun decreaseQuantity(cartItem: CartItem) {
         if (cartItem.noOfItems > 0) {
             cartList.value.map {
-                if (it== cartItem){
+                if (it == cartItem) {
                     it.noOfItems--
                 }
             }

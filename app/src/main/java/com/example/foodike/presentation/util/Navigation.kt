@@ -84,16 +84,9 @@ fun NavigationGraph(
             OnBoarding(navController = navController)
         }
         composable(
-            route = Screen.RestaurantDetails.route + "/{name}",
-            arguments = listOf(
-                navArgument("name") {
-                    type = NavType.StringType
-                    defaultValue = ""
-                    nullable = false
-                })
-        ) { entry ->
+            route = Screen.RestaurantDetails.route,
+        ) {
             RestaurantDetail(
-                name = entry.arguments?.getString("name")!!,
                 navController = navController
             )
         }

@@ -36,13 +36,9 @@ import com.example.foodike.presentation.util.Screen
 
 @Composable
 fun RestaurantDetail(
-    name: String,
     navController: NavHostController,
     viewModel: RestaurantDetailViewModel = hiltViewModel()
 ) {
-
-    viewModel.onEvent(DetailScreenEvent.SetRestaurant(name))
-
 
     val detailScreenState by viewModel.detailScreenState
 

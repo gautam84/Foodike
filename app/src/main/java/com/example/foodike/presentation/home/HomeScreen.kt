@@ -102,7 +102,11 @@ fun Home(
         }
         if (homeScreenState.likedRestaurantList.isNotEmpty()) {
             item {
-                FavouriteSection(homeScreenState.likedRestaurantList, navController)
+                FavouriteSection(homeScreenState.likedRestaurantList) {
+                    viewModel.onEvent(HomeScreenEvent.SelectRestaurant(it) {
+                        navController.navigate(Screen.RestaurantDetails.route)
+                    })
+                }
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }
@@ -119,7 +123,9 @@ fun Home(
                 modifier = Modifier
                     .clip(RoundedCornerShape(8.dp))
                     .clickable {
-                        navController.navigate(Screen.RestaurantDetails.withArgs(homeScreenState.restaurantList[it].name))
+                        viewModel.onEvent(HomeScreenEvent.SelectRestaurant(homeScreenState.restaurantList[it]) {
+                            navController.navigate(Screen.RestaurantDetails.route)
+                        })
                     }
             )
         }
@@ -231,7 +237,7 @@ fun MainSection() {
 @Composable
 fun FavouriteSection(
     list: List<Restaurant>,
-    navController: NavHostController
+    onClick: (restaurant: Restaurant) -> Unit
 ) {
     Column(modifier = Modifier.padding(8.dp, 0.dp))
     {
@@ -253,7 +259,7 @@ fun FavouriteSection(
     ) {
         items(list.size) {
             FavouriteCard(restaurant = list[it], modifier = Modifier.clickable {
-                navController.navigate(Screen.RestaurantDetails.withArgs(list[it].name))
+                onClick(list[it])
             })
         }
 

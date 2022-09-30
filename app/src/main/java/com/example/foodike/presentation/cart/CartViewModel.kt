@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.foodike.data.data_source.restaurantList
 import com.example.foodike.domain.model.CartItem
 import com.example.foodike.domain.repository.CartRepository
 import com.example.foodike.domain.repository.HomeRepository
@@ -16,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CartViewModel @Inject constructor(
     private val cartRepository: CartRepository
-) : ViewModel(){
+) : ViewModel() {
 
     private val _cartState = mutableStateOf(
         CartState()
@@ -25,18 +26,21 @@ class CartViewModel @Inject constructor(
     val cartState: State<CartState> = _cartState
 
     init {
-        viewModelScope.launch{
-            cartRepository.getCartItems().collect {
-                _cartState.value = cartState.value.copy(
-                    restaurant = null,
-                    list = it.toMutableList()
-                )
+        viewModelScope.launch {
+            cartRepository.getSavedRestaurant().collect { restaurant ->
+                cartRepository.getCartItems(restaurant).collect {
+                    _cartState.value = cartState.value.copy(
+                        restaurant = restaurant,
+                        list = it.toMutableList()
+                    )
+                }
             }
+
         }
     }
 
-    fun onEvent(event: CartEvent){
-        when(event){
+    fun onEvent(event: CartEvent) {
+        when (event) {
             is CartEvent.IncreaseCartQuantity -> {
                 viewModelScope.launch {
                     cartRepository.increaseQuantity(event.cartItem)
