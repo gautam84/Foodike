@@ -28,7 +28,7 @@ class CartViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             cartRepository.getSavedRestaurant().collect { restaurant ->
-                cartRepository.getCartItems(restaurant).collect {
+                cartRepository.getCartItems().collect {
                     _cartState.value = cartState.value.copy(
                         restaurant = restaurant,
                         list = it.toMutableList()

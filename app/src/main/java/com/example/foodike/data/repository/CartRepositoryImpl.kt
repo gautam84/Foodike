@@ -1,5 +1,6 @@
 package com.example.foodike.data.repository
 
+import com.example.foodike.data.data_source.menu1
 import com.example.foodike.domain.model.CartItem
 import com.example.foodike.domain.model.Restaurant
 import com.example.foodike.domain.repository.CartRepository
@@ -15,6 +16,9 @@ class CartRepositoryImpl : CartRepository {
 
     override suspend fun setRestaurant(restaurant: Restaurant) {
         currentRestaurant = restaurant
+        restaurant.menu.forEach {
+            cartList.value.add(CartItem(it, 0))
+        }
     }
 
     override suspend fun getSavedRestaurant(): Flow<Restaurant> = flow {
@@ -23,10 +27,7 @@ class CartRepositoryImpl : CartRepository {
         }
     }
 
-    override suspend fun getCartItems(restaurant: Restaurant): Flow<List<CartItem>> = flow {
-        restaurant.menu.forEach {
-            cartList.value.add(CartItem(it, 0))
-        }
+    override suspend fun getCartItems(): Flow<List<CartItem>> = flow {
         emit(cartList.value.toMutableList())
     }
 

@@ -1,9 +1,11 @@
 package com.example.foodike.presentation.details
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.foodike.data.data_source.menu1
 import com.example.foodike.data.data_source.restaurantList
 import com.example.foodike.data.repository.Results
 import com.example.foodike.domain.model.CartItem
@@ -32,6 +34,13 @@ class RestaurantDetailViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+
+            cartRepository.getCartItems().collect {
+                _detailScreenState.value = detailScreenState.value.copy(
+                    menuList = it
+                )
+            }
+
             cartRepository.getSavedRestaurant().collect { restaurant ->
                 _detailScreenState.value = detailScreenState.value.copy(
                     restaurant = restaurant,
@@ -48,14 +57,11 @@ class RestaurantDetailViewModel @Inject constructor(
 
             }
 
-            cartRepository.getCartItems(detailScreenState.value.restaurant!!).collect {
-                _detailScreenState.value = detailScreenState.value.copy(
-                    menuList = it
-                )
-            }
-
 
         }
+
+
+
     }
 
 
