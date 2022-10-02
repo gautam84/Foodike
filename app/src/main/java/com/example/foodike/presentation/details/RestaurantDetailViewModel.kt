@@ -1,25 +1,14 @@
 package com.example.foodike.presentation.details
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.foodike.data.data_source.menu1
-import com.example.foodike.data.data_source.restaurantList
-import com.example.foodike.data.repository.Results
-import com.example.foodike.domain.model.CartItem
-import com.example.foodike.domain.model.Restaurant
 import com.example.foodike.domain.repository.CartRepository
 import com.example.foodike.domain.repository.HomeRepository
 import com.example.foodike.domain.repository.UserDataRepository
-import com.example.foodike.presentation.cart.CartState
-import com.example.foodike.presentation.login.LoginEvent
-import com.example.foodike.presentation.login.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,7 +26,9 @@ class RestaurantDetailViewModel @Inject constructor(
 
             cartRepository.getCartItems().collect {
                 _detailScreenState.value = detailScreenState.value.copy(
-                    menuList = it
+                    menuList = it,
+                    recommendedList = it.shuffled()
+                    .dropLast(it.size - 5)
                 )
             }
 

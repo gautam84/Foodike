@@ -9,4 +9,4 @@ data class HomeScreenState(
     val foodList: List<FoodItem> = emptyList(),
     val likedRestaurantList : List<Restaurant> = emptyList(),
     val restaurantList : List<Restaurant> = emptyList(),
-    )
+)

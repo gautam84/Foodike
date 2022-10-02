@@ -46,7 +46,7 @@ class HomeViewModel @Inject constructor(
 
             when (val result = repository.getRestaurants()) {
                 is Results.Success -> _homeScreenState.value = homeScreenState.value.copy(
-                    restaurantList = result.data
+                    restaurantList = result.data,
                 )
                 is Results.Error -> {
 

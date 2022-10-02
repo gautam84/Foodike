@@ -1,6 +1,5 @@
 package com.example.foodike.data.repository
 
-import com.example.foodike.data.data_source.menu1
 import com.example.foodike.domain.model.CartItem
 import com.example.foodike.domain.model.Restaurant
 import com.example.foodike.domain.repository.CartRepository

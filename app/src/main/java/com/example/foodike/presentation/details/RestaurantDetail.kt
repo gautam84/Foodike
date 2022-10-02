@@ -106,8 +106,7 @@ fun RestaurantDetail(
                 }
             }
             val recommendedList =
-                detailScreenState.menuList.shuffled()
-                    .dropLast(detailScreenState.restaurant!!.menu.size - 5)
+                detailScreenState.recommendedList
 
 
 

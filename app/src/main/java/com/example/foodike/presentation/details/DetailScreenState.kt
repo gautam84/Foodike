@@ -9,5 +9,8 @@ data class DetailScreenState(
     val nonVegExpandedState: Boolean = true,
     val vegExpandedState: Boolean = true,
     val isLiked: Boolean = false,
-    val menuList: List<CartItem> = emptyList()
+    val menuList: List<CartItem> = emptyList(),
+    val recommendedList: List<CartItem> = emptyList()
+
+
 )
