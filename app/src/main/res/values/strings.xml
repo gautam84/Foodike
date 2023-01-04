@@ -27,9 +27,9 @@
     <string name="information_about_ordering_food">Information about ordering food</string>
     <string name="about">About</string>
     <string name="about_the_app">About the app</string>
-    <string name="with">\"With \"</string>
+    <string name="with">\With \</string>
     <string name="love">Love</string>
-    <string name="from_creator">\" from Gautam Hazarika\"</string>
+    <string name="from_creator">\ from Gautam Hazarika\</string>
     <string name="location">Location</string>
 
 
