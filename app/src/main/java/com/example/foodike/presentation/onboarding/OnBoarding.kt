@@ -112,7 +112,9 @@ fun OnboardingPage(item: OnBoardingItem) {
             text = stringResource(id = item.title),
             color = Color.White,
             fontSize = 24.sp,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center
+
         )
         Text(
             text = stringResource(id = item.text),
