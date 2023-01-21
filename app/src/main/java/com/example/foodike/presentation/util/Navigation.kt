@@ -1,5 +1,6 @@
 package com.example.foodike.presentation.util
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -94,6 +95,7 @@ fun NavigationGraph(
 
 }
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun SetupNavigation(startDestination: String) {
 
