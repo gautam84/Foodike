@@ -4,11 +4,9 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -16,19 +14,21 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.example.foodike.presentation.cart.Cart
-import com.example.foodike.presentation.history.History
-import com.example.foodike.presentation.home.BottomBar
-import com.example.foodike.presentation.home.Home
 import com.example.foodike.presentation.details.RestaurantDetail
+import com.example.foodike.presentation.history.History
+import com.example.foodike.presentation.home.Home
+import com.example.foodike.presentation.home.components.FoodikeBottomNavigation
 import com.example.foodike.presentation.login.LoginScreen
 import com.example.foodike.presentation.onboarding.OnBoarding
 import com.example.foodike.presentation.profile.Profile
@@ -149,4 +149,81 @@ fun SetupNavigation(startDestination: String) {
 }
 
 
+@Composable
+fun BottomBar(navController: NavHostController) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
+    FoodikeBottomNavigation(
+        backgroundColor = Color(0xFFE1E1E1)
+
+    ) {
+        BottomNavigationItem(
+            icon =
+            {
+                Icon(
+                    imageVector = Icons.Filled.Home,
+                    contentDescription = stringResource(com.example.foodike.R.string.home),
+                )
+            },
+
+            selectedContentColor = Color.Black,
+            unselectedContentColor = Color.White,
+            alwaysShowLabel = false,
+            selected = currentRoute == Screen.Home.route,
+
+            onClick = {
+                navController.navigate(Screen.Home.route) {
+                    // Pop up to the start destination of the graph to
+                    // avoid building up a large stack of destinations
+                    // on the back stack as users select items
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
+                    }
+                    // Avoid multiple copies of the same destination when
+                    // reselecting the same item
+                    launchSingleTop = true
+                    // Restore state when reselecting a previously selected item
+                    restoreState = true
+                }
+            }
+        )
+
+        Row() {
+            Spacer(modifier = Modifier.width(56.dp))
+        }
+
+
+        BottomNavigationItem(
+            icon =
+            {
+                Icon(
+                    painter = painterResource(com.example.foodike.R.drawable.ic_baseline_assignment_24),
+                    contentDescription = stringResource(com.example.foodike.R.string.history),
+                )
+            },
+
+            selectedContentColor = Color.Black,
+            unselectedContentColor = Color.White,
+            alwaysShowLabel = false,
+            selected = currentRoute == Screen.History.route,
+            onClick = {
+                navController.navigate(Screen.History.route) {
+                    // Pop up to the start destination of the graph to
+                    // avoid building up a large stack of destinations
+                    // on the back stack as users select items
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
+                    }
+                    // Avoid multiple copies of the same destination when
+                    // reselecting the same item
+                    launchSingleTop = true
+                    // Restore state when reselecting a previously selected item
+                    restoreState = true
+                }
+            }
+        )
+
+    }
+
+}

@@ -85,8 +85,5 @@ dependencies {
     // DataStore Preferences
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
-    // DataStore Preferences
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
-
     implementation "com.google.accompanist:accompanist-flowlayout:0.28.0"
 }

@@ -63,7 +63,7 @@ fun Cart(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 IconButton(onClick = { navController.navigateUp() }) {
-                    Icon(imageVector = Icons.Outlined.Close, contentDescription = "Back")
+                    Icon(imageVector = Icons.Outlined.Close, contentDescription = stringResource(id = R.string.back))
                 }
             }
         }
