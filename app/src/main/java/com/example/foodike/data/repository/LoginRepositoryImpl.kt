@@ -1,4 +1,3 @@
-package com.example.foodike.data.repository
 /**
  *
  *	MIT License
@@ -24,6 +23,9 @@ package com.example.foodike.data.repository
  *	SOFTWARE.
  *
  **/
+
+package com.example.foodike.data.repository
+
 import android.content.Context
 import com.example.foodike.domain.repository.LoginRepository
 
