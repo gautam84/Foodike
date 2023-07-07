@@ -20,10 +20,6 @@ Onboarding | Login | Home | Details | History | Cart | Profile
   asynchronously.
 - [Flow](https://kotlinlang.org/docs/reference/coroutines/flow.html) - A flow is an asynchronous
   version of a Sequence, a type of collection whose values are lazily produced.
-- [Jetpack DataStore](https://developer.android.com/topic/libraries/architecture/datastore) -
-  Jetpack DataStore is a data storage solution that allows you to store key-value pairs or typed
-  objects with protocol buffers. DataStore uses Kotlin coroutines and Flow to store data
-  asynchronously, consistently, and transactionally
 - [Android Architecture Components](https://developer.android.com/topic/libraries/architecture) -
   Collection of libraries that help you design robust, testable, and maintainable apps.
   - [Stateflow](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow) - StateFlow is a
