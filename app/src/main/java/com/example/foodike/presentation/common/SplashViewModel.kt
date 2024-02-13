@@ -26,14 +26,22 @@
 
 package com.example.foodike.presentation.common
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.foodike.domain.repository.LoginRepository
 import com.example.foodike.presentation.util.Screen
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class SplashViewModel @Inject constructor(
@@ -47,13 +55,20 @@ class SplashViewModel @Inject constructor(
     val startDestination: State<String> = _startDestination
 
     init {
-        if (repository.readLoginState()) {
+
+        val loginState = runBlocking {
+            repository.loginState.first()
+        }
+
+        if (loginState) {
             _startDestination.value = Screen.Home.route
 
         } else {
             _startDestination.value = Screen.Onboarding.route
 
         }
+
+
         _isLoading.value = false
 
 

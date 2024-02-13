@@ -76,8 +76,10 @@ class LoginViewModel @Inject constructor(
             }
             is LoginEvent.PerformLogin -> {
                 if (email.value.text == "abcxyz@gmail.com" && password.value.text == "abcdef"){
-                    repository.toggleLoginState()
-                    event.onClick()
+                  viewModelScope.launch  {
+                        repository.toggleLoginState()
+                        event.onClick()
+                    }
                 }
                 else {
                     viewModelScope.launch{
