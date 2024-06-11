@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.foodike.R
 import com.example.foodike.domain.model.Restaurant
+import com.example.foodike.presentation.common.getTimeInMins
 import java.lang.StringBuilder
 import java.util.concurrent.TimeUnit
 
@@ -98,7 +99,7 @@ fun RestaurantCard(
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                     )
-                    Text(text = " ${getTimeInMins(restaurant.timeInMillis)}")
+                    Text(text = restaurant.timeInMillis.getTimeInMins())
                 }
                 Text(
                     text = restaurant.variety,
@@ -120,24 +121,6 @@ fun RestaurantCard(
 
 }
 
-fun getTimeInMins(timeInMillis: Long): String {
-    var millis = timeInMillis
-    require(millis >= 0) { "Less than a minute" }
-    val days: Long = TimeUnit.MILLISECONDS.toDays(millis)
-    millis -= TimeUnit.DAYS.toMillis(days)
-    val hours: Long = TimeUnit.MILLISECONDS.toHours(millis)
-    millis -= TimeUnit.HOURS.toMillis(hours)
-    val minutes: Long = TimeUnit.MILLISECONDS.toMinutes(millis)
-    millis -= TimeUnit.MINUTES.toMillis(minutes)
-    val sb = StringBuilder(64)
-    if (hours > 0) {
-        sb.append(hours)
-        sb.append(" Hr ")
-    }
-    sb.append(minutes)
-    sb.append(" Min ")
-    return sb.toString()
-}
 
 fun getCustomerInfo(noOfRatings: Int): String {
     return when {

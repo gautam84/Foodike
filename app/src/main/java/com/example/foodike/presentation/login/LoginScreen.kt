@@ -31,10 +31,23 @@ import android.app.Activity
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.Divider
+import androidx.compose.material.Scaffold
+import androidx.compose.material.ScaffoldState
+import androidx.compose.material.SnackbarDuration
+import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -54,6 +67,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.example.foodike.R
+import com.example.foodike.presentation.login.components.FoodikeTextField
 import com.example.foodike.presentation.util.Screen
 import kotlinx.coroutines.flow.collectLatest
 
@@ -62,7 +76,7 @@ import kotlinx.coroutines.flow.collectLatest
 fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel(),
     navController: NavHostController,
-    ) {
+) {
 
     val scaffoldState: ScaffoldState = rememberScaffoldState()
 
@@ -71,11 +85,10 @@ fun LoginScreen(
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
-            when(event) {
+            when (event) {
                 is UiEvent.ShowSnackbar -> {
                     scaffoldState.snackbarHostState.showSnackbar(
-                        message = event.message,
-                        duration = SnackbarDuration.Short
+                        message = event.message, duration = SnackbarDuration.Short
                     )
                 }
             }
@@ -95,8 +108,7 @@ fun LoginScreen(
             context.window.navigationBarColor = Color.White.toArgb()
 
             Text(
-                text = stringResource(R.string.welcome_back),
-                fontSize = 24.sp
+                text = stringResource(R.string.welcome_back), fontSize = 24.sp
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -105,52 +117,26 @@ fun LoginScreen(
                 horizontalAlignment = Alignment.End
 
             ) {
-                TextField(
+                FoodikeTextField(
                     value = email.text,
                     onValueChange = { viewModel.onEvent(LoginEvent.EnteredEmail(it)) },
-                    modifier = Modifier.width(280.dp),
-                    placeholder = {
-                        Text(
-                            text = email.hint,
-                            modifier = Modifier.alpha(0.5f)
-                        )
-                    },
-                    shape = RoundedCornerShape(9.dp),
-                    colors = TextFieldDefaults.textFieldColors(
-                        cursorColor = Color.White,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                    ),
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = ImeAction.Next
-                    ),
-                    singleLine = true
+                    hint = email.hint
                 )
+
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                TextField(
+                FoodikeTextField(
                     value = password.text,
                     onValueChange = { viewModel.onEvent(LoginEvent.EnteredPassword(it)) },
-                    modifier = Modifier.width(280.dp),
-                    placeholder = {
-                        Text(
-                            text = password.hint,
-                            Modifier.alpha(0.5f)
-                        )
-                    },
+                    hint = password.hint,
                     visualTransformation = PasswordVisualTransformation(),
-                    shape = RoundedCornerShape(9.dp),
-                    colors = TextFieldDefaults.textFieldColors(
-                        cursorColor = Color.White,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                    ),
                     keyboardOptions = KeyboardOptions.Default.copy(
                         imeAction = ImeAction.Done
                     ),
-                    singleLine = true
                 )
+
+
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
@@ -166,18 +152,15 @@ fun LoginScreen(
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
-            Button(
-                modifier = Modifier.width(200.dp),
-                onClick = {
-                    viewModel.onEvent(LoginEvent.PerformLogin {
-                        navController.navigate(Screen.Home.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                inclusive = true
-                            }
+            Button(modifier = Modifier.width(200.dp), onClick = {
+                viewModel.onEvent(LoginEvent.PerformLogin {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            inclusive = true
                         }
-                    })
-                }
-            ) {
+                    }
+                })
+            }) {
                 Text(
                     text = stringResource(R.string.login),
                     fontSize = 16.sp,
@@ -202,8 +185,7 @@ fun LoginScreen(
 
                 Text(
                     text = stringResource(R.string.or_sign_in_with),
-                    modifier = Modifier
-                        .alpha(0.5f),
+                    modifier = Modifier.alpha(0.5f),
                     fontSize = 16.sp,
                 )
                 Spacer(modifier = Modifier.width(16.dp))
@@ -216,12 +198,11 @@ fun LoginScreen(
             }
 
             Row(
-                modifier = Modifier
-                    .fillMaxWidth(), horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.goog_icon),
+                Image(painter = painterResource(id = R.drawable.goog_icon),
                     contentDescription = stringResource(R.string.login_with_google),
                     modifier = Modifier
                         .fillMaxSize(0.1f)
@@ -229,11 +210,9 @@ fun LoginScreen(
                             Toast
                                 .makeText(context, R.string.coming_soon, Toast.LENGTH_SHORT)
                                 .show()
-                        }
-                )
+                        })
                 Spacer(modifier = Modifier.width(16.dp))
-                Image(
-                    painter = painterResource(id = R.drawable.fb_icon),
+                Image(painter = painterResource(id = R.drawable.fb_icon),
                     contentDescription = stringResource(R.string.login_with_facebook),
                     modifier = Modifier
                         .fillMaxSize(0.1f)
@@ -241,8 +220,7 @@ fun LoginScreen(
                             Toast
                                 .makeText(context, R.string.coming_soon, Toast.LENGTH_SHORT)
                                 .show()
-                        }
-                )
+                        })
             }
             Spacer(modifier = Modifier.height(16.dp))
             Text(

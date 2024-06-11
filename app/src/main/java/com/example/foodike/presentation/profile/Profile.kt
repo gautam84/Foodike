@@ -28,9 +28,23 @@ package com.example.foodike.presentation.profile
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.Divider
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.runtime.Composable
@@ -48,6 +62,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.example.foodike.R
+import com.example.foodike.presentation.profile.components.ProfileCard
 import com.example.foodike.presentation.util.Screen
 
 @Composable
@@ -191,36 +206,3 @@ fun Profile(
     }
 }
 
-@Composable
-fun ProfileCard(
-    title: String,
-    subtext: String,
-    onClick: () -> Unit,
-    dividerVisibility: Boolean = true
-) {
-    Column(
-        modifier = Modifier
-            .padding(32.dp, 0.dp)
-            .clickable {
-                onClick()
-            }
-    ) {
-        Text(
-            text = title,
-            fontSize = 20.sp
-        )
-        Text(
-            text = subtext,
-            modifier = Modifier.alpha(0.5f)
-        )
-        if (dividerVisibility) {
-            Divider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(0.dp, 8.dp)
-            )
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-
-    }
-}
