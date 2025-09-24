@@ -55,6 +55,7 @@ You need to have [Android Studio Beta 3 or above](https://developer.android.com/
 Wanna reach out to me? DM me at 👇
 
 Drop a mail to:- gautamhazarika01@gmail.com
+
 My Portfolio:- www.gautamhz.com
 
 ## Donation 💰
