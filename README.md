@@ -71,7 +71,7 @@ If this project help you reduce time to develop, you can give me a cup of coffee
 
 MIT License
 
-Copyright (c) 2023 Gautam Hazarika
+Copyright (c) 2026 Gautam Hazarika
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
