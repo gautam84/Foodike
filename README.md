@@ -3,6 +3,9 @@
 # 🍔 Foodike
 Foodike is a simple, easy-to-use food delivery app. It is built using Android-Jetpack Compose and is built on the principle of MVVM with Modern Android Architecture Components.
 
+## Demo 
+![](https://github.com/gautam84/Foodike/blob/master/art/demo.gif)
+
 ## Screenshots 📱 
 Onboarding | Login | Home | Details | History | Cart | Profile
 --- | --- | --- | --- |--- |--- |--- 
@@ -46,6 +49,8 @@ Onboarding | Login | Home | Details | History | Cart | Profile
 
 This app uses [***MVVM (Model View
 View-Model)***](https://developer.android.com/jetpack/docs/guide#recommended-app-arch) architecture.
+
+![](https://github.com/gautam84/Foodike/blob/master/art/mvvm.png)
 
 ## Build-tool 🧰
 You need to have [Android Studio Beta 3 or above](https://developer.android.com/studio/preview) to build this project.
