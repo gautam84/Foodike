@@ -24,17 +24,10 @@
  *
  **/
 
-buildscript {
-    ext {
-        compose_ui_version = '1.2.0'
-        accompanist_version = '0.24.2-alpha'
-
-    }
-}// Top-level build file where you can add configuration options common to all sub-projects/modules.
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
-    id 'com.android.application' version '8.5.0' apply false
-    id 'com.android.library' version '8.5.0' apply false
-    id 'org.jetbrains.kotlin.android' version '1.7.0' apply false
-    id 'com.google.dagger.hilt.android' version '2.44' apply false
-
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.hilt.android) apply false
 }
