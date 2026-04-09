@@ -100,3 +100,13 @@ SOFTWARE.
 
 ```
 
+## Backend:
+
+I am building the backend in full kotlin using ktor [here](https://github.com/gautam84/foodike-backend).
+
+
+## Next Steps:
+
+- Integrate the backend to the android app.
+- Update every piece of code to the latest version.
+- Write unit tests, integration tests and UI/End-to-End tests.
